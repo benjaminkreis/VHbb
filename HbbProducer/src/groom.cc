@@ -33,9 +33,10 @@ double rcut_factor=0.5;
 //n-subjettiness
 double beta = 1.0; // power for angular dependence, e.g. beta = 1 --> linear k-means, beta = 2 --> quadratic/classic k-means                                                    
 double Rcut = 10000.0; // maximum R particles can be from axis to be included in jet (large value for no cutoff) 
+
 //---------------------------------------------------------------------------------------------------------------------------------
 
-void groom(pat::Jet iJet, Hbb::Jet* oJet, double R){
+void groom(pat::Jet iJet, Hbb::Jet& oJet, double R){
   
   reco::Jet::Constituents constituents=iJet.getJetConstituents();
 
@@ -61,11 +62,13 @@ void groom(pat::Jet iJet, Hbb::Jet* oJet, double R){
   Filter trimmer(JetDefinition(cambridge_algorithm, Rtrim), SelectorPtFractionMin(ptfrac) );
   PseudoJet trimmedJet = trimmer(theJet);
   
-  oJet->trimmedMass=trimmedJet.m();
+  oJet.trimmedMass=trimmedJet.m();
 
   vector<PseudoJet> fjSubjets = trimmedJet.pieces();
   for (size_t i = 0; i < fjSubjets.size(); i++){
-    oJet->trimmedSubjets.push_back(new Hbb::Jet(fjSubjets[i].pt(), fjSubjets[i].eta(), fjSubjets[i].phi(), fjSubjets[i].m()));
+    Hbb::SubJet sj=Hbb::SubJet(fjSubjets[i].pt(), fjSubjets[i].eta(), fjSubjets[i].phi(), fjSubjets[i].m());
+    sj.R=Rtrim;
+    oJet.trimmedSubJets.push_back(sj);
   }
 
   //------------------------------------
@@ -75,11 +78,13 @@ void groom(pat::Jet iJet, Hbb::Jet* oJet, double R){
   Filter filter(JetDefinition(cambridge_algorithm, Rfilt), SelectorNHardest(Nfilt));
   PseudoJet filteredJet = filter(theJet);
 
-  oJet->filteredMass=filteredJet.m();
+  oJet.filteredMass=filteredJet.m();
 
   fjSubjets = filteredJet.pieces();
   for (size_t i = 0; i < fjSubjets.size(); i++){
-    oJet->filteredSubjets.push_back(new Hbb::Jet(fjSubjets[i].pt(), fjSubjets[i].eta(), fjSubjets[i].phi(), fjSubjets[i].m()));
+    Hbb::SubJet sj=Hbb::SubJet(fjSubjets[i].pt(), fjSubjets[i].eta(), fjSubjets[i].phi(), fjSubjets[i].m());
+    sj.R=Rfilt;
+    oJet.filteredSubJets.push_back(sj);
   }
 
   //------------------------------------
@@ -89,11 +94,13 @@ void groom(pat::Jet iJet, Hbb::Jet* oJet, double R){
   Pruner pruner(cambridge_algorithm, zcut, rcut_factor);
   PseudoJet prunedJet = pruner(theJet);
 
-  oJet->prunedMass=prunedJet.m();
+  oJet.prunedMass=prunedJet.m();
   
   fjSubjets = prunedJet.pieces();
   for (size_t i = 0; i < fjSubjets.size(); i++){
-    oJet->prunedSubjets.push_back(new Hbb::Jet(fjSubjets[i].pt(), fjSubjets[i].eta(), fjSubjets[i].phi(), fjSubjets[i].m()));
+    Hbb::SubJet sj=Hbb::SubJet(fjSubjets[i].pt(), fjSubjets[i].eta(), fjSubjets[i].phi(), fjSubjets[i].m());
+    //sj.R=
+    oJet.prunedSubJets.push_back(sj);
   }
 
   //------------------------------------
@@ -103,7 +110,7 @@ void groom(pat::Jet iJet, Hbb::Jet* oJet, double R){
   
   Njettiness nSubOnePass(Njettiness::onepass_kt_axes,paraNsub);
   
-  oJet->tau1 = nSubOnePass.getTau(1,fjConstituents);
-  oJet->tau2 = nSubOnePass.getTau(2,fjConstituents);
-  oJet->tau3 = nSubOnePass.getTau(3,fjConstituents);
+  oJet.tau1 = nSubOnePass.getTau(1,fjConstituents);
+  oJet.tau2 = nSubOnePass.getTau(2,fjConstituents);
+  oJet.tau3 = nSubOnePass.getTau(3,fjConstituents);
 }

@@ -101,46 +101,6 @@ process.ak15PFJetsCHSFiltered = process.ak8PFJetsCHSFiltered.clone(rParam = 1.5)
 from PhysicsTools.PatAlgos.tools.jetTools import addJetCollection
 from PhysicsTools.PatAlgos.tools.jetTools import switchJetCollection
 
-"""
-process.ak3PFchsL1L2L3 = cms.ESProducer("JetCorrectionESChain",
-                                        correctors = cms.vstring('ak3PFCHSL1Offset', 
-                                                                 'ak3PFCHSL2Relative', 
-                                                                 'ak3PFCHSL3Absolute')
-                                        )
-
-process.ak3PFCHSL1Offset = cms.ESProducer("L1OffsetCorrectionESProducer",
-                                          minVtxNdof = cms.int32(4),
-                                          vertexCollection = cms.string('unpackedTracksAndVertices'),
-                                          algorithm = cms.string('AK3PFCHS'),
-                                          level = cms.string('L1Offset'),
-                                          useCondDB = cms.untracked.bool(True)
-                                          )
-
-process.ak3PFCHSL2Relative = cms.ESProducer("LXXXCorrectionESProducer",
-                                            algorithm = cms.string('AK3PFCHS'),
-                                            level = cms.string('L2Relative'),
-                                            useCondDB = cms.untracked.bool(True)
-                                            )
-
-process.ak3PFCHSL3Absolute = cms.ESProducer("LXXXCorrectionESProducer",
-                                            algorithm = cms.string('AK3PFCHS'),
-                                            level = cms.string('L3Absolute'),
-                                            useCondDB = cms.untracked.bool(True)
-                                            )
-"""
-"""
-addJetCollection(
-    process,
-    labelName = 'AK3PFCHS',
-    jetSource = cms.InputTag('ak3PFJetsCHS'),
-    algo = 'ak3',
-    rParam = 0.3,
-    jetCorrections = ('AK3PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
-    trackSource = cms.InputTag('unpackedTracksAndVertices'),
-    pvSource = cms.InputTag('unpackedTracksAndVertices'),
-    btagDiscriminators = ['combinedSecondaryVertexBJetTags'],
-    )
-"""
 addJetCollection(
     process,
     labelName = 'AK4PFCHS',
@@ -152,43 +112,7 @@ addJetCollection(
     pvSource = cms.InputTag('unpackedTracksAndVertices'),
     btagDiscriminators = ['combinedSecondaryVertexBJetTags'],
     )
-"""
-addJetCollection(
-    process,
-    labelName = 'AK5PFCHS',
-    jetSource = cms.InputTag('ak5PFJetsCHS'),
-    algo = 'ak5',
-    rParam = 0.5,
-    jetCorrections = ('AK5PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
-    trackSource = cms.InputTag('unpackedTracksAndVertices'),
-    pvSource = cms.InputTag('unpackedTracksAndVertices'),
-    btagDiscriminators = ['combinedSecondaryVertexBJetTags'],
-    )
 
-addJetCollection(
-    process,
-    labelName = 'AK6PFCHS',
-    jetSource = cms.InputTag('ak6PFJetsCHS'),
-    algo = 'ak6',
-    rParam = 0.6,
-    jetCorrections = ('AK6PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
-    trackSource = cms.InputTag('unpackedTracksAndVertices'),
-    pvSource = cms.InputTag('unpackedTracksAndVertices'),
-    btagDiscriminators = ['combinedSecondaryVertexBJetTags'],
-    )
-
-addJetCollection(
-    process,
-    labelName = 'AK7PFCHS',
-    jetSource = cms.InputTag('ak7PFJetsCHS'),
-    algo = 'ak7',
-    rParam = 0.7,
-    jetCorrections = ('AK7PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
-    trackSource = cms.InputTag('unpackedTracksAndVertices'),
-    pvSource = cms.InputTag('unpackedTracksAndVertices'),
-    btagDiscriminators = ['combinedSecondaryVertexBJetTags'],
-    )
-"""
 addJetCollection(
     process,
     labelName = 'AK8PFCHS',
@@ -200,19 +124,7 @@ addJetCollection(
     pvSource = cms.InputTag('unpackedTracksAndVertices'),
     btagDiscriminators = ['combinedSecondaryVertexBJetTags'],
     )
-"""
-addJetCollection(
-    process,
-    labelName = 'AK9PFCHS',
-    jetSource = cms.InputTag('ak9PFJetsCHS'),
-    algo = 'ak9',
-    rParam = 0.9,
-    jetCorrections = ('AK9PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
-    trackSource = cms.InputTag('unpackedTracksAndVertices'),
-    pvSource = cms.InputTag('unpackedTracksAndVertices'),
-    btagDiscriminators = ['combinedSecondaryVertexBJetTags'],
-    )
-"""
+
 addJetCollection(
     process,
     labelName = 'AK10PFCHS',
@@ -417,6 +329,57 @@ for module in [process.patJetCorrFactorsAK8PFCHSFiltered, process.patJetCorrFact
 for module in [process.patJetGenJetMatchAK8PFCHSFiltered, process.patJetGenJetMatchAK10PFCHSFiltered, process.patJetGenJetMatchAK12PFCHSFiltered, process.patJetGenJetMatchAK15PFCHSFiltered,
                process.patJetGenJetMatchAK8PFCHSFilteredSubjets, process.patJetGenJetMatchAK10PFCHSFilteredSubjets, process.patJetGenJetMatchAK12PFCHSFilteredSubjets, process.patJetGenJetMatchAK15PFCHSFilteredSubjets]:
     module.matched = 'ak3GenJets'
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#JECs for telescoping
+
+process.load('JetMETCorrections/Configuration/JetCorrectionServices_cff')
+#process.load('JetMETCorrections/Configuration/JetCorrectionProducers_cff')
+
+#L1Offset correction is bad, we want L1Fastjet
+process.ak1PFchsL1Fastjet   = process.ak4PFCHSL1Fastjet.clone( algorithm = 'AK1PFchs' )
+process.ak2PFchsL1Fastjet   = process.ak4PFCHSL1Fastjet.clone( algorithm = 'AK2PFchs' )
+process.ak3PFchsL1Fastjet   = process.ak4PFCHSL1Fastjet.clone( algorithm = 'AK3PFchs' )
+process.ak4PFchsL1Fastjet   = process.ak4PFCHSL1Fastjet.clone( algorithm = 'AK4PFchs' )
+process.ak5PFchsL1Fastjet   = process.ak4PFCHSL1Fastjet.clone( algorithm = 'AK5PFchs' )
+process.ak6PFchsL1Fastjet   = process.ak4PFCHSL1Fastjet.clone( algorithm = 'AK6PFchs' )
+process.ak7PFchsL1Fastjet   = process.ak4PFCHSL1Fastjet.clone( algorithm = 'AK7PFchs' )
+process.ak8PFchsL1Fastjet   = process.ak4PFCHSL1Fastjet.clone( algorithm = 'AK8PFchs' )
+process.ak9PFchsL1Fastjet   = process.ak4PFCHSL1Fastjet.clone( algorithm = 'AK9PFchs' )
+process.ak10PFchsL1Fastjet  = process.ak4PFCHSL1Fastjet.clone( algorithm = 'AK10PFchs')
+
+process.ak1PFchsL2Relative  = process.ak4PFCHSL2Relative.clone( algorithm = 'AK1PFchs' )
+process.ak2PFchsL2Relative  = process.ak4PFCHSL2Relative.clone( algorithm = 'AK2PFchs' )
+process.ak3PFchsL2Relative  = process.ak4PFCHSL2Relative.clone( algorithm = 'AK3PFchs' )
+process.ak4PFchsL2Relative  = process.ak4PFCHSL2Relative.clone( algorithm = 'AK4PFchs' )
+process.ak5PFchsL2Relative  = process.ak4PFCHSL2Relative.clone( algorithm = 'AK5PFchs' )
+process.ak6PFchsL2Relative  = process.ak4PFCHSL2Relative.clone( algorithm = 'AK6PFchs' )
+process.ak7PFchsL2Relative  = process.ak4PFCHSL2Relative.clone( algorithm = 'AK7PFchs' )
+process.ak8PFchsL2Relative  = process.ak4PFCHSL2Relative.clone( algorithm = 'AK8PFchs' )
+process.ak9PFchsL2Relative  = process.ak4PFCHSL2Relative.clone( algorithm = 'AK9PFchs' )
+process.ak10PFchsL2Relative = process.ak4PFCHSL2Relative.clone( algorithm = 'AK10PFchs')
+
+process.ak1PFCHSL3Absolute  = process.ak4PFCHSL3Absolute.clone( algorithm = 'AK1PFchs' )
+process.ak2PFCHSL3Absolute  = process.ak4PFCHSL3Absolute.clone( algorithm = 'AK2PFchs' )
+process.ak3PFCHSL3Absolute  = process.ak4PFCHSL3Absolute.clone( algorithm = 'AK3PFchs' )
+process.ak4PFCHSL3Absolute  = process.ak4PFCHSL3Absolute.clone( algorithm = 'AK4PFchs' )
+process.ak5PFCHSL3Absolute  = process.ak4PFCHSL3Absolute.clone( algorithm = 'AK5PFchs' )
+process.ak6PFCHSL3Absolute  = process.ak4PFCHSL3Absolute.clone( algorithm = 'AK6PFchs' )
+process.ak7PFCHSL3Absolute  = process.ak4PFCHSL3Absolute.clone( algorithm = 'AK7PFchs' )
+process.ak8PFCHSL3Absolute  = process.ak4PFCHSL3Absolute.clone( algorithm = 'AK8PFchs' )
+process.ak9PFCHSL3Absolute  = process.ak4PFCHSL3Absolute.clone( algorithm = 'AK9PFchs' )
+process.ak10PFCHSL3Absolute = process.ak4PFCHSL3Absolute.clone( algorithm = 'AK10PFchs')
+
+process.ak1PFCHSL1L2L3      = process.ak4PFCHSL1L2L3.clone( correctors = ['ak1PFchsL1Fastjet', 'ak1PFchsL2Relative', 'ak1PFCHSL3Absolute'] )
+process.ak2PFCHSL1L2L3      = process.ak4PFCHSL1L2L3.clone( correctors = ['ak2PFchsL1Fastjet', 'ak2PFchsL2Relative', 'ak2PFCHSL3Absolute'] )
+process.ak3PFCHSL1L2L3      = process.ak4PFCHSL1L2L3.clone( correctors = ['ak3PFchsL1Fastjet', 'ak3PFchsL2Relative', 'ak3PFCHSL3Absolute'] )
+process.ak4PFCHSL1L2L3      = process.ak4PFCHSL1L2L3.clone( correctors = ['ak4PFchsL1Fastjet', 'ak4PFchsL2Relative', 'ak4PFCHSL3Absolute'] )
+process.ak5PFCHSL1L2L3      = process.ak4PFCHSL1L2L3.clone( correctors = ['ak5PFchsL1Fastjet', 'ak5PFchsL2Relative', 'ak5PFCHSL3Absolute'] )
+process.ak6PFCHSL1L2L3      = process.ak4PFCHSL1L2L3.clone( correctors = ['ak6PFchsL1Fastjet', 'ak6PFchsL2Relative', 'ak6PFCHSL3Absolute'] )
+process.ak7PFCHSL1L2L3      = process.ak4PFCHSL1L2L3.clone( correctors = ['ak7PFchsL1Fastjet', 'ak7PFchsL2Relative', 'ak7PFCHSL3Absolute'] )
+process.ak8PFCHSL1L2L3      = process.ak4PFCHSL1L2L3.clone( correctors = ['ak8PFchsL1Fastjet', 'ak8PFchsL2Relative', 'ak8PFCHSL3Absolute'] )
+process.ak9PFCHSL1L2L3      = process.ak4PFCHSL1L2L3.clone( correctors = ['ak9PFchsL1Fastjet', 'ak9PFchsL2Relative', 'ak9PFCHSL3Absolute'] )
+process.ak10PFCHSL1L2L3     = process.ak4PFCHSL1L2L3.clone( correctors = ['ak10PFchsL1Fastjet','ak10PFchsL2Relative','ak10PFCHSL3Absolute'])
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 process.load('RecoJets.JetProducers.jettoolbox_cff')
