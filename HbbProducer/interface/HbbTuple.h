@@ -13,7 +13,6 @@ namespace Hbb
   struct Object
   {
     TLorentzVector lv;
-    //std::vector<Object*> daughters;
 
   Object() :
     lv(TLorentzVector())
@@ -31,21 +30,50 @@ namespace Hbb
     }
 
   };
+
+  //---------------------------------------------------------------------------------
   
+  struct SubJet:Object
+  {
+    float area, R;
+    
+    
+  SubJet() : Object()
+      {
+	this->initialize();
+      }
+    
+  SubJet(TLorentzVector theLV) : Object(theLV)
+    {
+      this->initialize();
+    }
+    
+  SubJet(double pT, double eta, double phi, double m) : Object(pT, eta, phi, m)
+      {
+	this->initialize();
+      }
+    
+    void initialize(){
+      area=-9999;
+      R=-9999;
+    }
+
+  };
+
   //---------------------------------------------------------------------------------
   
   struct Jet:Object
   {
-    float area;
+    float area, R;
     float tau1, tau2, tau3;
     float prunedMass, trimmedMass, filteredMass;
     float qJetsVolatility;
     float csv;
     float Nconstit;
 
-    std::vector<Jet*> trimmedSubjets;
-    std::vector<Jet*> filteredSubjets;
-    std::vector<Jet*> prunedSubjets;
+    std::vector<SubJet> trimmedSubJets;
+    std::vector<SubJet> filteredSubJets;
+    std::vector<SubJet> prunedSubJets;
     
   Jet() : Object()
       {
@@ -64,6 +92,7 @@ namespace Hbb
     
     void initialize(){
       area=-9999;
+      R=-9999;
       tau1=-9999; 
       tau2=-9999;
       tau3=-9999;
@@ -132,8 +161,9 @@ namespace Hbb
   struct Higgs:Object
   {
 
-    float csv;
-    
+    std::vector<Jet> daughters;
+
+    float csv;    
     
   Higgs() : Object()
       {

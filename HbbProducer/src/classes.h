@@ -19,6 +19,11 @@ namespace {
     std::vector<Hbb::Jet> dummy10;
     edm::Wrapper<std::vector<Hbb::Jet> > dummy11;
 
+    Hbb::SubJet dummy40;
+    edm::Wrapper<Hbb::SubJet> dummy41;
+    std::vector<Hbb::SubJet> dummy42;
+    edm::Wrapper<std::vector<Hbb::SubJet> > dummy43;
+
     Hbb::Lepton dummy36;
     edm::Wrapper<Hbb::Lepton> dummy37;
     std::vector<Hbb::Lepton> dummy38;

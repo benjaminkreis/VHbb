@@ -14,13 +14,19 @@
   <class name="edm::Wrapper<std::vector<Hbb::Object> >"/>
   
   <class name="Hbb::Jet" ClassVersion="10">
-    <version ClassVersion="10" checksum="2066397767"/>
+    <version ClassVersion="10" checksum="1852492049"/>
   </class>
   <class name="std::vector<Hbb::Jet>"/>
-  <class name="std::vector<Hbb::Jet*>"/> 
   <class pattern="edm::Wrapper<Hbb::Jet>"/>
   <class name="edm::Wrapper<std::vector<Hbb::Jet> >"/>
   
+  <class name="Hbb::SubJet" ClassVersion="10">
+    <version ClassVersion="10" checksum="2643004651"/>
+  </class>
+  <class name="std::vector<Hbb::SubJet>"/>
+  <class pattern="edm::Wrapper<Hbb::SubJet>"/>
+  <class name="edm::Wrapper<std::vector<Hbb::SubJet> >"/>
+
   <class name="Hbb::Lepton" ClassVersion="10">
     <version ClassVersion="10" checksum="396129940"/>
   </class>
@@ -57,7 +63,7 @@
   <class name="edm::Wrapper<std::vector<Hbb::V> >"/>
 
   <class name="Hbb::Higgs" ClassVersion="10">
-    <version ClassVersion="10" checksum="3620500067"/>
+    <version ClassVersion="10" checksum="861980076"/>
   </class>
   <class name="std::vector<Hbb::Higgs>"/>
   <class pattern="edm::Wrapper<Hbb::Higgs>"/>
