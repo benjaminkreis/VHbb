@@ -68,6 +68,8 @@ namespace Hbb
     float tau1, tau2, tau3;
     float prunedMass, trimmedMass, filteredMass;
     float qJetsVolatility;
+    float csv;
+    float Nconstit;
 
     std::vector<SubJet> trimmedSubJets;
     std::vector<SubJet> filteredSubJets;
@@ -98,6 +100,8 @@ namespace Hbb
       trimmedMass=-9999;
       filteredMass=-9999;
       qJetsVolatility=-9999;
+      csv=-9999;
+      Nconstit=-9999;
     }
     
   };
@@ -155,6 +159,16 @@ namespace Hbb
 
   struct Higgs:Object {
     std::vector<Jet> daughters;
+    float csv; 
+  
+  Higgs() : Object()
+      {
+	this->initialize();
+      }
+
+    void initialize(){
+      csv=-9999;
+    }
   };
 
   //---------------------------------------------------------------------------------
