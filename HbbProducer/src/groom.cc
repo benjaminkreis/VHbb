@@ -23,7 +23,7 @@ double Rtrim = 0.2;
 double ptfrac = 0.05;
 
 //filtering
-double Rfilt = 0.2;
+double Rfilt = 0.3;
 double Nfilt = 3;
 
 //pruning
@@ -38,15 +38,23 @@ double Rcut = 10000.0; // maximum R particles can be from axis to be included in
 
 void groom(pat::Jet iJet, Hbb::Jet& oJet, double R){
   
+  oJet.csv = iJet.bDiscriminator("combinedSecondaryVertexBJetTags");
+
   reco::Jet::Constituents constituents=iJet.getJetConstituents();
+
+  double nconstit = 0.0;
 
   vector<PseudoJet> fjConstituents;
   for(auto constituentItr=constituents.begin(); constituentItr!=constituents.end(); ++constituentItr){
     edm::Ptr<reco::Candidate> constituent=*constituentItr;
 
+    nconstit = nconstit + 1;
+
     fjConstituents.push_back(PseudoJet(constituent->px(), constituent->py(), constituent->pz(), constituent->energy()));
   }
-  
+
+  oJet.Nconstit = nconstit;
+
   JetDefinition jet_def(cambridge_algorithm, R);
   // the use of a ClusterSequenceArea (instead of a plain ClusterSequence)
   // is only needed because we will later combine filtering with area-based
