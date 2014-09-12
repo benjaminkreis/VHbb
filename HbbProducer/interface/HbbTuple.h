@@ -30,6 +30,37 @@ namespace Hbb
     }
 
   };
+
+  //---------------------------------------------------------------------------------
+  
+  struct GenParticle:Object
+  {
+    int pdgId, status, motherId;
+    
+  GenParticle() : Object()
+      {
+	this->initialize();
+      }
+
+  GenParticle(TLorentzVector theLV) : Object(theLV)
+      {
+	lv.SetPtEtaPhiM(theLV.Pt(), theLV.Eta(), theLV.Phi(), theLV.M());
+	this->initialize();
+      }
+
+  GenParticle(double pT, double eta, double phi, double m) : Object(pT, eta, phi, m)
+      {
+	lv.SetPtEtaPhiM(pT, eta, phi, m);
+	this->initialize();
+      }
+
+    void initialize(){
+      pdgId=-9999;
+      status=-9999;
+      motherId=-9999;
+    }
+
+  };
   
   //---------------------------------------------------------------------------------
   
@@ -194,12 +225,15 @@ namespace Hbb
     std::vector<Tau> Taus;
 
     std::vector<Higgs> Higgses;
+
+    std::vector<GenParticle> GenParticles;
     
   Tuple() : 
     rho(-9999), 
       AK4PFCHS(std::vector<Jet>()), AK8PFCHS(std::vector<Jet>()), AK10PFCHS(std::vector<Jet>()), AK12PFCHS(std::vector<Jet>()), AK15PFCHS(std::vector<Jet>()),
       Electrons(std::vector<Electron>()), Muons(std::vector<Muon>()),Taus(std::vector<Tau>()),
-      Higgses(std::vector<Higgs>())
+      Higgses(std::vector<Higgs>()),
+      GenParticles(std::vector<GenParticle>())
     {
     }
   };

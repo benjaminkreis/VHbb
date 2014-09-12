@@ -19,16 +19,6 @@ namespace {
     std::vector<Hbb::Jet> dummy10;
     edm::Wrapper<std::vector<Hbb::Jet> > dummy11;
 
-    Hbb::SubJet dummy40;
-    edm::Wrapper<Hbb::SubJet> dummy41;
-    std::vector<Hbb::SubJet> dummy42;
-    edm::Wrapper<std::vector<Hbb::SubJet> > dummy43;
-
-    Hbb::Lepton dummy36;
-    edm::Wrapper<Hbb::Lepton> dummy37;
-    std::vector<Hbb::Lepton> dummy38;
-    edm::Wrapper<std::vector<Hbb::Lepton> > dummy39;
-
     Hbb::Electron dummy12;
     edm::Wrapper<Hbb::Electron> dummy13;
     std::vector<Hbb::Electron> dummy14;
@@ -58,6 +48,21 @@ namespace {
     edm::Wrapper<Hbb::MET> dummy33;
     std::vector<Hbb::MET> dummy34;
     edm::Wrapper<std::vector<Hbb::MET> > dummy35;    
+
+    Hbb::Lepton dummy36;
+    edm::Wrapper<Hbb::Lepton> dummy37;
+    std::vector<Hbb::Lepton> dummy38;
+    edm::Wrapper<std::vector<Hbb::Lepton> > dummy39;
+
+    Hbb::SubJet dummy40;
+    edm::Wrapper<Hbb::SubJet> dummy41;
+    std::vector<Hbb::SubJet> dummy42;
+    edm::Wrapper<std::vector<Hbb::SubJet> > dummy43;
+    
+    Hbb::GenParticle dummy44;
+    edm::Wrapper<Hbb::GenParticle> dummy45;
+    std::vector<Hbb::GenParticle> dummy46;
+    edm::Wrapper<std::vector<Hbb::GenParticle> > dummy47;
     
   };
 }
