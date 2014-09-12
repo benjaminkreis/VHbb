@@ -213,6 +213,7 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //gen particles
 
+  vector<Hbb::GenParticle> outputs;
   for (auto input=genParticles->begin(); input!=genParticles->end(); ++input){
     Hbb::GenParticle output=Hbb::GenParticle(input->pt(), input->eta(), input->phi(), input->mass());
     output.pdgId=input->pdgId();
@@ -222,8 +223,9 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     if (mom)
       output.motherId=mom->pdgId();
 
-    _output.GenParticles.push_back(output);
+    outputs.push_back(output);
   }
+  _output.GenParticles=outputs;
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //AK4 Jets
