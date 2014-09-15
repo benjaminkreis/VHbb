@@ -6,7 +6,7 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True),
                                      allowUnscheduled = cms.untracked.bool(True) 
                                      )
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(2) )
 process.source = cms.Source("PoolSource",
                             fileNames = cms.untracked.vstring('file:/eos/uscms/store/user/jstupak/ZH_HToBB_ZToLL_M-125_13TeV_powheg-herwigpp/Spring14dr-PU_S14_POSTLS170_V6AN1-v1/140622_185946/0000/miniAOD-prod_PAT_1.root'
                                                               )

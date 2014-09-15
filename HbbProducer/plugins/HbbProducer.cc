@@ -64,7 +64,7 @@ private:
   //virtual void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) override;
   
   edm::InputTag _rhoSource;
-  edm::InputTag _packedCandidateSource;
+  edm::InputTag _packedCandidateSource, _genParticleSource;
   edm::InputTag _AK4Source, _AK8Source, _AK10Source, _AK12Source, _AK15Source;
   edm::InputTag _AK8PackedSource, _AK10PackedSource, _AK12PackedSource, _AK15PackedSource;
   edm::InputTag _muonSource;
@@ -93,6 +93,7 @@ HbbProducer::HbbProducer(const edm::ParameterSet& iConfig)
   _rhoSource=edm::InputTag(iConfig.getParameter<edm::InputTag>("rhoSource"));
 
   _packedCandidateSource=edm::InputTag(iConfig.getParameter<edm::InputTag>("packedCandidateSource"));
+  _genParticleSource=edm::InputTag(iConfig.getParameter<edm::InputTag>("genParticleSource"));
 
   _AK4Source=edm::InputTag(iConfig.getParameter<edm::InputTag>("AK4Source"));
   _AK8Source=edm::InputTag(iConfig.getParameter<edm::InputTag>("AK8Source"));
@@ -135,6 +136,9 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   edm::Handle< edm::PtrVector<reco::Candidate> > packedCandidates;
   iEvent.getByLabel(_packedCandidateSource, packedCandidates);
+
+  edm::Handle< edm::View<reco::GenParticle> > genParticles;
+  iEvent.getByLabel(_genParticleSource, genParticles);
   
   map< string, h_patJets > fatJetInputs=map< string, h_patJets >();
   map< string, v_HbbJets* > fatJetOutputs=map< string, v_HbbJets* >();
@@ -205,6 +209,23 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   //Event quantities
 
   _output.rho=*rho;
+
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //gen particles
+
+  vector<Hbb::GenParticle> outputs;
+  for (auto input=genParticles->begin(); input!=genParticles->end(); ++input){
+    Hbb::GenParticle output=Hbb::GenParticle(input->pt(), input->eta(), input->phi(), input->mass());
+    output.pdgId=input->pdgId();
+    output.status=input->status();
+
+    const reco::Candidate *mom=input->mother();
+    if (mom)
+      output.motherId=mom->pdgId();
+
+    outputs.push_back(output);
+  }
+  _output.GenParticles=outputs;
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //AK4 Jets
