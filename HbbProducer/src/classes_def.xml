@@ -14,7 +14,7 @@
   <class name="edm::Wrapper<std::vector<Hbb::Object> >"/>
   
   <class name="Hbb::Jet" ClassVersion="10">
-    <version ClassVersion="10" checksum="1852492049"/>
+    <version ClassVersion="10" checksum="2723362239"/>
   </class>
   <class name="std::vector<Hbb::Jet>"/>
   <class pattern="edm::Wrapper<Hbb::Jet>"/>
