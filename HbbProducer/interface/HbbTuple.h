@@ -66,7 +66,7 @@ namespace Hbb
   {
     float area, R;
     float tau1, tau2, tau3;
-    float prunedMass, trimmedMass, filteredMass;
+    float prunedMass, trimmedMass, filteredMass, mdtMass, butterMass;
     float qJetsVolatility;
     float csv;
     float Nconstit;
@@ -74,6 +74,8 @@ namespace Hbb
     std::vector<SubJet> trimmedSubJets;
     std::vector<SubJet> filteredSubJets;
     std::vector<SubJet> prunedSubJets;
+    std::vector<SubJet> mdtSubJets;
+    std::vector<SubJet> butterSubJets;
     
   Jet() : Object()
       {
@@ -99,6 +101,8 @@ namespace Hbb
       prunedMass=-9999;
       trimmedMass=-9999;
       filteredMass=-9999;
+      mdtMass=-9999;
+      butterMass=-9999;
       qJetsVolatility=-9999;
       csv=-9999;
       Nconstit=-9999;
