@@ -146,8 +146,8 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   h_patJets AK4jets;
   iEvent.getByLabel(_AK4Source,AK4jets);
   fatJetInputs.insert(pair<string,h_patJets >(string("AK4"),AK4jets));
-  fatJetOutputs.insert(pair<string, v_HbbJets* >(string("AK4"),&_output.AK4PFCHS));
-  
+  fatJetOutputs.insert(pair<string, v_HbbJets* >(string("AK4"),&_output.AK4PFCHS));  
+
   h_patJets AK8jets;
   iEvent.getByLabel(_AK8Source,AK8jets);
   fatJetInputs.insert(pair<string,h_patJets >(string("AK8"),AK8jets));
@@ -167,7 +167,6 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   iEvent.getByLabel(_AK15Source,AK15jets);
   fatJetInputs.insert(pair<string,h_patJets >(string("AK15"),AK15jets));
   fatJetOutputs.insert(pair<string, v_HbbJets* >(string("AK15"),&_output.AK15PFCHS));
-
   /*
   h_patJets AK8jets;
   iEvent.getByLabel(_AK8Source,AK8jets);
@@ -215,15 +214,15 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   vector<Hbb::GenParticle> outputs;
   for (auto input=genParticles->begin(); input!=genParticles->end(); ++input){
-    Hbb::GenParticle output=Hbb::GenParticle(input->pt(), input->eta(), input->phi(), input->mass());
-    output.pdgId=input->pdgId();
-    output.status=input->status();
+     Hbb::GenParticle output=Hbb::GenParticle(input->pt(), input->eta(), input->phi(), input->mass());
+     output.pdgId=input->pdgId();
+     output.status=input->status();
 
-    const reco::Candidate *mom=input->mother();
-    if (mom)
-      output.motherId=mom->pdgId();
+     const reco::Candidate *mom=input->mother();
+     if (mom)
+        output.motherId=mom->pdgId();
 
-    outputs.push_back(output);
+     outputs.push_back(output);
   }
   _output.GenParticles=outputs;
 
@@ -232,13 +231,17 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   pat::Jet d1, d2;
   double maxPT2=0;
-  for(auto jet1=AK4jets->begin(); jet1!=AK4jets->end()-1; ++jet1){
+  for(auto jet1=AK4jets->begin(); jet1!=AK4jets->end()-1 && AK4jets->size()>0; ++jet1){
+
+    //Hbb::Jet jet=Hbb::Jet(inputJet->pt(), inputJet->eta(), inputJet->phi(), inputJet->mass());
+    //outputJets.push_back(jet);
+
     for(auto jet2=jet1+1; jet2!=AK4jets->end(); ++jet2){
-      
+
       double pT2=pow(jet1->px()+jet2->px(),2)+pow(jet1->py()+jet2->py(),2);
       if (pT2>maxPT2){
-	d1=*jet1;
-	d2=*jet2;
+      	d1=*jet1;
+      	d2=*jet2;
       }
     }
   }
@@ -258,16 +261,16 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     v_HbbJets outputJets;
     for(auto inputJet=inputJets->begin(); inputJet!=inputJets->end(); ++inputJet){
 
-      double jetpt = inputJet->pt();
+       double jetpt = inputJet->pt();
 
-      if (jetpt > 10) {
-	
-	Hbb::Jet jet=Hbb::Jet(inputJet->pt(), inputJet->eta(), inputJet->phi(), inputJet->mass());
+       if (jetpt > 10) {
       
-	groom(*inputJet, jet, radius);
-	
-	outputJets.push_back(jet);
-      }
+      Hbb::Jet jet=Hbb::Jet(inputJet->pt(), inputJet->eta(), inputJet->phi(), inputJet->mass());
+      
+      groom(*inputJet, jet, radius);
+
+      outputJets.push_back(jet);
+       }
     }
     *fatJetOutputs[name]=outputJets;
   }

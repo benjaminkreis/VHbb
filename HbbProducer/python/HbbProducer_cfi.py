@@ -4,9 +4,9 @@ HbbProducer = cms.EDProducer('HbbProducer',
                              rhoSource=cms.InputTag('fixedGridRhoFastjetAll'),
 
                              packedCandidateSource=cms.InputTag('chs'),
-                             genParticleSource=cms.InputTag('prunedGenParticles'),
-                             
-                             AK4Source =cms.InputTag('patJetsAK4PFCHS'),
+							 genParticleSource=cms.InputTag('prunedGenParticles'),
+							 
+                             AK4Source =cms.InputTag('selectedPatJetsAK4PFCHS'),
                              AK8Source =cms.InputTag('patJetsAK8PFCHS'),
                              AK10Source=cms.InputTag('patJetsAK10PFCHS'),
                              AK12Source=cms.InputTag('patJetsAK12PFCHS'),
