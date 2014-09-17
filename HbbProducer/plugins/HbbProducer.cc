@@ -64,7 +64,7 @@ private:
   //virtual void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) override;
   
   edm::InputTag _rhoSource;
-  edm::InputTag _packedCandidateSource;
+  edm::InputTag _packedCandidateSource, _genParticleSource;
   edm::InputTag _AK4Source, _AK8Source, _AK10Source, _AK12Source, _AK15Source;
   edm::InputTag _AK8PackedSource, _AK10PackedSource, _AK12PackedSource, _AK15PackedSource;
   edm::InputTag _muonSource;
@@ -93,6 +93,7 @@ HbbProducer::HbbProducer(const edm::ParameterSet& iConfig)
   _rhoSource=edm::InputTag(iConfig.getParameter<edm::InputTag>("rhoSource"));
 
   _packedCandidateSource=edm::InputTag(iConfig.getParameter<edm::InputTag>("packedCandidateSource"));
+  _genParticleSource=edm::InputTag(iConfig.getParameter<edm::InputTag>("genParticleSource"));
 
   _AK4Source=edm::InputTag(iConfig.getParameter<edm::InputTag>("AK4Source"));
   _AK8Source=edm::InputTag(iConfig.getParameter<edm::InputTag>("AK8Source"));
@@ -135,32 +136,38 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   edm::Handle< edm::PtrVector<reco::Candidate> > packedCandidates;
   iEvent.getByLabel(_packedCandidateSource, packedCandidates);
+
+  edm::Handle< edm::View<reco::GenParticle> > genParticles;
+  iEvent.getByLabel(_genParticleSource, genParticles);
   
   map< string, h_patJets > fatJetInputs=map< string, h_patJets >();
   map< string, v_HbbJets* > fatJetOutputs=map< string, v_HbbJets* >();
 
   h_patJets AK4jets;
   iEvent.getByLabel(_AK4Source,AK4jets);
+  fatJetInputs.insert(pair<string,h_patJets >(string("AK4"),AK4jets));
+  fatJetOutputs.insert(pair<string, v_HbbJets* >(string("AK4"),&_output.AK4PFCHS));
   
   h_patJets AK8jets;
-  iEvent.getByLabel(_AK8PackedSource,AK8jets);
+  iEvent.getByLabel(_AK8Source,AK8jets);
   fatJetInputs.insert(pair<string,h_patJets >(string("AK8"),AK8jets));
   fatJetOutputs.insert(pair<string, v_HbbJets* >(string("AK8"),&_output.AK8PFCHS));
 
   h_patJets AK10jets;
-  iEvent.getByLabel(_AK10PackedSource,AK10jets);
+  iEvent.getByLabel(_AK10Source,AK10jets);
   fatJetInputs.insert(pair<string,h_patJets >(string("AK10"),AK10jets));
   fatJetOutputs.insert(pair<string, v_HbbJets* >(string("AK10"),&_output.AK10PFCHS));
   
   h_patJets AK12jets;
-  iEvent.getByLabel(_AK12PackedSource,AK12jets);
+  iEvent.getByLabel(_AK12Source,AK12jets);
   fatJetInputs.insert(pair<string,h_patJets >(string("AK12"),AK12jets));
   fatJetOutputs.insert(pair<string, v_HbbJets* >(string("AK12"),&_output.AK12PFCHS));
   
   h_patJets AK15jets;
-  iEvent.getByLabel(_AK15PackedSource,AK15jets);
+  iEvent.getByLabel(_AK15Source,AK15jets);
   fatJetInputs.insert(pair<string,h_patJets >(string("AK15"),AK15jets));
   fatJetOutputs.insert(pair<string, v_HbbJets* >(string("AK15"),&_output.AK15PFCHS));
+
   /*
   h_patJets AK8jets;
   iEvent.getByLabel(_AK8Source,AK8jets);
@@ -204,6 +211,23 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   _output.rho=*rho;
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //gen particles
+
+  vector<Hbb::GenParticle> outputs;
+  for (auto input=genParticles->begin(); input!=genParticles->end(); ++input){
+    Hbb::GenParticle output=Hbb::GenParticle(input->pt(), input->eta(), input->phi(), input->mass());
+    output.pdgId=input->pdgId();
+    output.status=input->status();
+
+    const reco::Candidate *mom=input->mother();
+    if (mom)
+      output.motherId=mom->pdgId();
+
+    outputs.push_back(output);
+  }
+  _output.GenParticles=outputs;
+
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //AK4 Jets
 
   pat::Jet d1, d2;
@@ -233,12 +257,17 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     v_HbbJets outputJets;
     for(auto inputJet=inputJets->begin(); inputJet!=inputJets->end(); ++inputJet){
-      
-      Hbb::Jet jet=Hbb::Jet(inputJet->pt(), inputJet->eta(), inputJet->phi(), inputJet->mass());
-      
-      groom(*inputJet, jet, radius);
 
-      outputJets.push_back(jet);
+      double jetpt = inputJet->pt();
+
+      if (jetpt > 10) {
+	
+	Hbb::Jet jet=Hbb::Jet(inputJet->pt(), inputJet->eta(), inputJet->phi(), inputJet->mass());
+      
+	groom(*inputJet, jet, radius);
+	
+	outputJets.push_back(jet);
+      }
     }
     *fatJetOutputs[name]=outputJets;
   }

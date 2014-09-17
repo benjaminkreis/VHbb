@@ -30,6 +30,37 @@ namespace Hbb
     }
 
   };
+
+  //---------------------------------------------------------------------------------
+  
+  struct GenParticle:Object
+  {
+    int pdgId, status, motherId;
+    
+  GenParticle() : Object()
+      {
+	this->initialize();
+      }
+
+  GenParticle(TLorentzVector theLV) : Object(theLV)
+      {
+	lv.SetPtEtaPhiM(theLV.Pt(), theLV.Eta(), theLV.Phi(), theLV.M());
+	this->initialize();
+      }
+
+  GenParticle(double pT, double eta, double phi, double m) : Object(pT, eta, phi, m)
+      {
+	lv.SetPtEtaPhiM(pT, eta, phi, m);
+	this->initialize();
+      }
+
+    void initialize(){
+      pdgId=-9999;
+      status=-9999;
+      motherId=-9999;
+    }
+
+  };
   
   //---------------------------------------------------------------------------------
   
@@ -66,12 +97,16 @@ namespace Hbb
   {
     float area, R;
     float tau1, tau2, tau3;
-    float prunedMass, trimmedMass, filteredMass;
+    float prunedMass, trimmedMass, filteredMass, mdtMass, butterMass;
     float qJetsVolatility;
+    float csv;
+    float Nconstit;
 
     std::vector<SubJet> trimmedSubJets;
     std::vector<SubJet> filteredSubJets;
     std::vector<SubJet> prunedSubJets;
+    std::vector<SubJet> mdtSubJets;
+    std::vector<SubJet> butterSubJets;
     
   Jet() : Object()
       {
@@ -97,7 +132,11 @@ namespace Hbb
       prunedMass=-9999;
       trimmedMass=-9999;
       filteredMass=-9999;
+      mdtMass=-9999;
+      butterMass=-9999;
       qJetsVolatility=-9999;
+      csv=-9999;
+      Nconstit=-9999;
     }
     
   };
@@ -155,6 +194,16 @@ namespace Hbb
 
   struct Higgs:Object {
     std::vector<Jet> daughters;
+    float csv; 
+  
+  Higgs() : Object()
+      {
+	this->initialize();
+      }
+
+    void initialize(){
+      csv=-9999;
+    }
   };
 
   //---------------------------------------------------------------------------------
@@ -180,12 +229,15 @@ namespace Hbb
     std::vector<Tau> Taus;
 
     std::vector<Higgs> Higgses;
+
+    std::vector<GenParticle> GenParticles;
     
   Tuple() : 
     rho(-9999), 
       AK4PFCHS(std::vector<Jet>()), AK8PFCHS(std::vector<Jet>()), AK10PFCHS(std::vector<Jet>()), AK12PFCHS(std::vector<Jet>()), AK15PFCHS(std::vector<Jet>()),
       Electrons(std::vector<Electron>()), Muons(std::vector<Muon>()),Taus(std::vector<Tau>()),
-      Higgses(std::vector<Higgs>())
+      Higgses(std::vector<Higgs>()),
+      GenParticles(std::vector<GenParticle>())
     {
     }
   };
