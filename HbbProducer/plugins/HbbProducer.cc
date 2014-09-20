@@ -20,6 +20,7 @@
 // system include files
 #include <memory>
 #include <vector>
+#include <ctime>
 
 // cmssw include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -36,11 +37,9 @@
 #include "VHbb/HbbProducer/interface/HbbTuple.h"
 #include "VHbb/HbbProducer/src/telescope.cc"
 #include "VHbb/HbbProducer/src/groom.cc"
+#include "VHbb/HbbProducer/src/helpers.cc"
 
 using namespace std;
-
-typedef edm::Handle< edm::View< pat::Jet > > h_patJets;
-typedef vector<Hbb::Jet> v_HbbJets;
 
 //
 // class declaration
@@ -64,9 +63,10 @@ private:
   //virtual void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) override;
   
   edm::InputTag _rhoSource;
-  edm::InputTag _packedCandidateSource, _genParticleSource;
+  edm::InputTag _packedCandidateSource, _prunedGenParticleSource, _packedGenParticleSource;
   edm::InputTag _AK4Source, _AK8Source, _AK10Source, _AK12Source, _AK15Source;
   edm::InputTag _AK8PackedSource, _AK10PackedSource, _AK12PackedSource, _AK15PackedSource;
+  edm::InputTag _AK4GenSource;
   edm::InputTag _muonSource;
   
   Hbb::Tuple _output;
@@ -93,7 +93,9 @@ HbbProducer::HbbProducer(const edm::ParameterSet& iConfig)
   _rhoSource=edm::InputTag(iConfig.getParameter<edm::InputTag>("rhoSource"));
 
   _packedCandidateSource=edm::InputTag(iConfig.getParameter<edm::InputTag>("packedCandidateSource"));
-  _genParticleSource=edm::InputTag(iConfig.getParameter<edm::InputTag>("genParticleSource"));
+
+  _prunedGenParticleSource=edm::InputTag(iConfig.getParameter<edm::InputTag>("prunedGenParticleSource"));
+  _packedGenParticleSource=edm::InputTag(iConfig.getParameter<edm::InputTag>("packedGenParticleSource"));
 
   _AK4Source=edm::InputTag(iConfig.getParameter<edm::InputTag>("AK4Source"));
   _AK8Source=edm::InputTag(iConfig.getParameter<edm::InputTag>("AK8Source"));
@@ -105,6 +107,8 @@ HbbProducer::HbbProducer(const edm::ParameterSet& iConfig)
   _AK10PackedSource=edm::InputTag(iConfig.getParameter<edm::InputTag>("AK10PackedSource"));
   _AK12PackedSource=edm::InputTag(iConfig.getParameter<edm::InputTag>("AK12PackedSource"));
   _AK15PackedSource=edm::InputTag(iConfig.getParameter<edm::InputTag>("AK15PackedSource"));
+
+  _AK4GenSource=edm::InputTag(iConfig.getParameter<edm::InputTag>("AK4GenSource"));
 
   _muonSource=edm::InputTag(iConfig.getParameter<edm::InputTag>("muonSource"));
 
@@ -130,23 +134,30 @@ HbbProducer::~HbbProducer()
 void
 HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
+  clock_t start=clock();
+  
+  _output=Hbb::Tuple();
 
   edm::Handle<double> rho;
   iEvent.getByLabel(_rhoSource,rho);
 
-  edm::Handle< edm::PtrVector<reco::Candidate> > packedCandidates;
+  edm::Handle< edm::View<reco::Candidate> > packedCandidates;
   iEvent.getByLabel(_packedCandidateSource, packedCandidates);
 
-  edm::Handle< edm::View<reco::GenParticle> > genParticles;
-  iEvent.getByLabel(_genParticleSource, genParticles);
+  edm::Handle< edm::View<reco::GenParticle> > prunedGenParticles;
+  iEvent.getByLabel(_prunedGenParticleSource, prunedGenParticles);
   
+  edm::Handle< edm::View<reco::Candidate> > packedGenParticles;
+  iEvent.getByLabel(_packedGenParticleSource, packedGenParticles);
+
   map< string, h_patJets > fatJetInputs=map< string, h_patJets >();
   map< string, v_HbbJets* > fatJetOutputs=map< string, v_HbbJets* >();
 
   h_patJets AK4jets;
   iEvent.getByLabel(_AK4Source,AK4jets);
-  fatJetInputs.insert(pair<string,h_patJets >(string("AK4"),AK4jets));
-  fatJetOutputs.insert(pair<string, v_HbbJets* >(string("AK4"),&_output.AK4PFCHS));  
+
+  //h_patJets AK4GenJets;
+  //iEvent.getByLabel(_AK4GenSource,AK4GenJets);
 
   h_patJets AK8jets;
   iEvent.getByLabel(_AK8Source,AK8jets);
@@ -204,6 +215,9 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   edm::Handle< edm::View< pat::Muon > > inputMuons;
   iEvent.getByLabel(_muonSource,inputMuons);
 
+  clock_t setup=clock();
+  //cout<<"Setup time: "<<(setup-start)/(double)(CLOCKS_PER_SEC/1000)<<endl;
+
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   //Event quantities
 
@@ -212,84 +226,144 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //gen particles
 
-  vector<Hbb::GenParticle> outputs;
-  for (auto input=genParticles->begin(); input!=genParticles->end(); ++input){
-     Hbb::GenParticle output=Hbb::GenParticle(input->pt(), input->eta(), input->phi(), input->mass());
-     output.pdgId=input->pdgId();
-     output.status=input->status();
-
-     const reco::Candidate *mom=input->mother();
-     if (mom)
+  if(prunedGenParticles->size()>0){
+    for (auto input=prunedGenParticles->begin(); input!=prunedGenParticles->end(); ++input){
+      Hbb::GenParticle output=Hbb::GenParticle(input->pt(), input->eta(), input->phi(), input->mass());
+      output.pdgId=input->pdgId();
+      output.status=input->status();
+      
+      const reco::Candidate *mom=input->mother();
+      if (mom)
         output.motherId=mom->pdgId();
+      
+      int n = input->numberOfDaughters();
+      for(int i=0; i<n; i++) {
+	const reco::Candidate *daughter=input->daughter(i);
+	output.daughterIds.push_back(daughter->pdgId());
+      }
 
-     outputs.push_back(output);
+      if((output.pdgId==23||output.pdgId==24) && (output.daughterIds[0]==25||output.daughterIds[1]==25)) 
+	_output.genVstar=output;
+      if((output.pdgId==23||output.pdgId==24) && (abs(output.daughterIds[0])==11||
+						  abs(output.daughterIds[0])==12||
+						  abs(output.daughterIds[0])==13||
+						  abs(output.daughterIds[0])==14||
+						  abs(output.daughterIds[0])==15||
+						  abs(output.daughterIds[0])==16||
+						  abs(output.daughterIds[0])==1||
+						  abs(output.daughterIds[0])==2||
+						  abs(output.daughterIds[0])==3||
+						  abs(output.daughterIds[0])==4||
+						  abs(output.daughterIds[0])==5||
+						  abs(output.daughterIds[0])==6))                       
+	_output.genV=output;
+      if( output.pdgId==25                    && abs(output.daughterIds[0])==5)                         
+	_output.genHiggs=output;
+      if((output.pdgId==11||output.pdgId==12||output.pdgId==13||output.pdgId==14||output.pdgId==15||output.pdgId==16) && (output.motherId==24||output.motherId==25)) 
+	_output.genLepton=output;
+      if((output.pdgId==-11||output.pdgId==-12||output.pdgId==-13||output.pdgId==-14||output.pdgId==-15||output.pdgId==-16) && (output.motherId==24||output.motherId==25)) 
+	_output.genAntiLepton=output;
+      if(output.pdgId==5 && output.motherId==25) 
+	_output.genB=output;
+      if(output.pdgId==-5 && output.motherId==25) 
+	_output.genAntiB=output;
+
+      _output.GenParticles.push_back(output);
+    }
   }
-  _output.GenParticles=outputs;
+  
+  clock_t gen=clock();
+  //cout<<"Gen time: "<<(gen-setup)/(double)(CLOCKS_PER_SEC/1000)<<endl;
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //AK4 Jets
 
-  pat::Jet d1, d2;
-  double maxPT2=0;
-  for(auto jet1=AK4jets->begin(); jet1!=AK4jets->end()-1 && AK4jets->size()>0; ++jet1){
-
-    //Hbb::Jet jet=Hbb::Jet(inputJet->pt(), inputJet->eta(), inputJet->phi(), inputJet->mass());
-    //outputJets.push_back(jet);
-
-    for(auto jet2=jet1+1; jet2!=AK4jets->end(); ++jet2){
-
-      double pT2=pow(jet1->px()+jet2->px(),2)+pow(jet1->py()+jet2->py(),2);
-      if (pT2>maxPT2){
-      	d1=*jet1;
-      	d2=*jet2;
-      }
-    }
+  for(auto jet1=AK4jets->begin(); jet1!=AK4jets->end(); ++jet1){
+    Hbb::Jet jet=Hbb::Jet(jet1->pt(), jet1->eta(), jet1->phi(), jet1->mass());
+    _output.AK4PFCHS.push_back(jet);
   }
 
-  vector<Hbb::Higgs> theHiggses=telescope(d1, d2, packedCandidates, iEvent, iSetup);
-  _output.Higgses=theHiggses;
+  if(AK4jets->size()>1){
+    pat::Jet *d1=new pat::Jet();
+    pat::Jet *d2=new pat::Jet();
+    getHiggsCandidate(AK4jets, d1, d2);
+    vector<Hbb::Higgs> theHiggses=telescope(*d1, *d2, packedCandidates, iEvent, iSetup);
+    _output.Higgses=theHiggses;
+
+    theHiggses=telescope(_output.genB, _output.genAntiB, packedGenParticles, iEvent, iSetup);
+    _output.GenHiggses=theHiggses;
+
+  }
+  
+  clock_t ak4=clock();
+  //cout<<"AK4 time: "<<(ak4-gen)/(double)(CLOCKS_PER_SEC/1000)<<endl;
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  //fat jets
+  //AK4 Gen Jets
+  /*
+  if(AK4GenJets->size()>0){
+    for(auto jet1=AK4GenJets->begin(); jet1!=AK4GenJets->end(); ++jet1){
+      Hbb::Jet jet=Hbb::Jet(jet1->pt(), jet1->eta(), jet1->phi(), jet1->mass());
+      _output.AK4PFCHS.push_back(jet);
+    }
+  }
 
+  if(AK4GenJets->size()>1){
+    pat::Jet *d1=new pat::Jet();
+    pat::Jet *d2=new pat::Jet();
+    getHiggsCandidate(AK4GenJets, d1, d2);
+    vector<Hbb::Higgs> theHiggses=telescope(*d1, *d2, packedCandidates, iEvent, iSetup);
+    _output.Higgses=theHiggses;
+  }
+  */
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //fat jets
+  
   for(auto fatJetCollection=fatJetInputs.begin(); fatJetCollection!=fatJetInputs.end(); ++fatJetCollection){
+    
     string name=fatJetCollection->first;
     h_patJets inputJets=fatJetCollection->second;
-
+    
     double radius=.1*std::atof(name.substr(2).c_str());
-
+    
     v_HbbJets outputJets;
     for(auto inputJet=inputJets->begin(); inputJet!=inputJets->end(); ++inputJet){
-
-       double jetpt = inputJet->pt();
-
-       if (jetpt > 10) {
       
       Hbb::Jet jet=Hbb::Jet(inputJet->pt(), inputJet->eta(), inputJet->phi(), inputJet->mass());
-      
       groom(*inputJet, jet, radius);
-
       outputJets.push_back(jet);
-       }
     }
+
     *fatJetOutputs[name]=outputJets;
   }
+
+  clock_t fat=clock();
+  //cout<<"Fat jet time: "<<(fat-ak4)/(double)(CLOCKS_PER_SEC/1000)<<endl;
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //Muons
 
-  for(auto inputMuon=inputMuons->begin(); inputMuon!=inputMuons->end(); ++inputMuon){
-    Hbb::Muon muon=Hbb::Muon();
-    muon.lv.SetPtEtaPhiM(inputMuon->pt(), inputMuon->eta(), inputMuon->phi(), inputMuon->mass());
-    muon.charge=inputMuon->charge();
-    _output.Muons.push_back(muon);
+  if(inputMuons->size()>0){
+    
+    for(auto inputMuon=inputMuons->begin(); inputMuon!=inputMuons->end(); ++inputMuon){
+      Hbb::Muon muon=Hbb::Muon();
+      muon.lv.SetPtEtaPhiM(inputMuon->pt(), inputMuon->eta(), inputMuon->phi(), inputMuon->mass());
+      muon.charge=inputMuon->charge();
+      _output.Muons.push_back(muon);
+    }
   }
+
+  clock_t muons=clock();
+  //cout<<"Muon time: "<<(muons-fat)/(double)(CLOCKS_PER_SEC/1000)<<endl;
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   auto_ptr<Hbb::Tuple> pOut(new Hbb::Tuple(_output));
   iEvent.put(pOut);
 
+  clock_t output=clock();
+  //cout<<"output time: "<<(output-muons)/(double)(CLOCKS_PER_SEC/1000)<<endl;
+  //cout<<endl;
 }
   
 // ------------ method called once each job just before starting event loop  ------------

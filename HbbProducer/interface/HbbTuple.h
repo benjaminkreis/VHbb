@@ -36,6 +36,7 @@ namespace Hbb
   struct GenParticle:Object
   {
     int pdgId, status, motherId;
+    std::vector<int> daughterIds;
     
   GenParticle() : Object()
       {
@@ -58,6 +59,7 @@ namespace Hbb
       pdgId=-9999;
       status=-9999;
       motherId=-9999;
+      daughterIds=std::vector<int>();
     }
 
   };
@@ -229,7 +231,15 @@ namespace Hbb
     std::vector<Tau> Taus;
 
     std::vector<Higgs> Higgses;
+    std::vector<Higgs> GenHiggses;
 
+    GenParticle genVstar;
+    GenParticle genV;
+    GenParticle genHiggs;
+    GenParticle genLepton;
+    GenParticle genAntiLepton;
+    GenParticle genB;
+    GenParticle genAntiB;
     std::vector<GenParticle> GenParticles;
     
   Tuple() : 

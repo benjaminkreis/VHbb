@@ -1,6 +1,6 @@
 <lcgdict>
   <class name="Hbb::Tuple" ClassVersion="10">
-    <version ClassVersion="10" checksum="2790915301"/>
+    <version ClassVersion="10" checksum="3324275566"/>
   </class>
   <class name="std::vector<Hbb::Tuple>"/>
   <class pattern="edm::Wrapper<Hbb::Tuple>"/>
@@ -77,7 +77,7 @@
   <class name="edm::Wrapper<std::vector<Hbb::MET> >"/>
 
   <class name="Hbb::GenParticle" ClassVersion="10">
-    <version ClassVersion="10" checksum="1157725646"/>
+    <version ClassVersion="10" checksum="17475534"/>
   </class>
   <class name="std::vector<Hbb::GenParticle>"/>
   <class pattern="edm::Wrapper<Hbb::GenParticle>"/>

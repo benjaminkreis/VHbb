@@ -4,18 +4,21 @@ HbbProducer = cms.EDProducer('HbbProducer',
                              rhoSource=cms.InputTag('fixedGridRhoFastjetAll'),
 
                              packedCandidateSource=cms.InputTag('chs'),
-							 genParticleSource=cms.InputTag('prunedGenParticles'),
-							 
-                             AK4Source =cms.InputTag('selectedPatJetsAK4PFCHS'),
-                             AK8Source =cms.InputTag('patJetsAK8PFCHS'),
-                             AK10Source=cms.InputTag('patJetsAK10PFCHS'),
-                             AK12Source=cms.InputTag('patJetsAK12PFCHS'),
-                             AK15Source=cms.InputTag('patJetsAK15PFCHS'),
+                             prunedGenParticleSource=cms.InputTag('prunedGenParticles'),
+                             packedGenParticleSource=cms.InputTag('packedGenParticles'),
 
-                             AK8PackedSource =cms.InputTag('patJetsAK8PFCHSFilteredPacked'),
-                             AK10PackedSource=cms.InputTag('patJetsAK10PFCHSFilteredPacked'),
-                             AK12PackedSource=cms.InputTag('patJetsAK12PFCHSFilteredPacked'),
-                             AK15PackedSource=cms.InputTag('patJetsAK15PFCHSFilteredPacked'),
+                             AK4Source =cms.InputTag('goodPatJetsAK4PFCHS'),
+                             AK8Source =cms.InputTag('goodPatJetsAK8PFCHS'),
+                             AK10Source=cms.InputTag('goodPatJetsAK10PFCHS'),
+                             AK12Source=cms.InputTag('goodPatJetsAK12PFCHS'),
+                             AK15Source=cms.InputTag('goodPatJetsAK15PFCHS'),
+
+                             AK8PackedSource =cms.InputTag('goodPatJetsAK8PFCHSFilteredPacked'),
+                             AK10PackedSource=cms.InputTag('goodPatJetsAK10PFCHSFilteredPacked'),
+                             AK12PackedSource=cms.InputTag('goodPatJetsAK12PFCHSFilteredPacked'),
+                             AK15PackedSource=cms.InputTag('goodPatJetsAK15PFCHSFilteredPacked'),
+                             
+                             AK4GenSource =cms.InputTag('ak4GenJets'),
                              
                              muonSource=cms.InputTag('selectedMuons'),
 )

@@ -6,7 +6,7 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True),
                                      allowUnscheduled = cms.untracked.bool(True) 
                                      )
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(2) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20) )
 process.source = cms.Source("PoolSource",
                             fileNames = cms.untracked.vstring('file:/eos/uscms/store/user/jstupak/ZH_HToBB_ZToLL_M-125_13TeV_powheg-herwigpp/Spring14dr-PU_S14_POSTLS170_V6AN1-v1/140622_185946/0000/miniAOD-prod_PAT_1.root'
                                                               )
@@ -329,6 +329,38 @@ for module in [process.patJetCorrFactorsAK8PFCHSFiltered, process.patJetCorrFact
 for module in [process.patJetGenJetMatchAK8PFCHSFiltered, process.patJetGenJetMatchAK10PFCHSFiltered, process.patJetGenJetMatchAK12PFCHSFiltered, process.patJetGenJetMatchAK15PFCHSFiltered,
                process.patJetGenJetMatchAK8PFCHSFilteredSubjets, process.patJetGenJetMatchAK10PFCHSFilteredSubjets, process.patJetGenJetMatchAK12PFCHSFilteredSubjets, process.patJetGenJetMatchAK15PFCHSFilteredSubjets]:
     module.matched = 'ak3GenJets'
+
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+process.selectedPatJetsAK4PFCHS = cms.EDFilter("PATJetSelector",
+                                               src = cms.InputTag("patJetsAK4PFCHS"),
+                                               cut = cms.string("pt > 15.0")
+                                               )
+process.selectedPatJetsAK8PFCHS =process.selectedPatJetsAK4PFCHS.clone(cut="pt > 150.0", src="patJetsAK8PFCHS")
+process.selectedPatJetsAK10PFCHS=process.selectedPatJetsAK4PFCHS.clone(cut="pt > 150.0", src="patJetsAK10PFCHS")
+process.selectedPatJetsAK12PFCHS=process.selectedPatJetsAK4PFCHS.clone(cut="pt > 150.0", src="patJetsAK12PFCHS")
+process.selectedPatJetsAK15PFCHS=process.selectedPatJetsAK4PFCHS.clone(cut="pt > 150.0", src="patJetsAK15PFCHS")
+
+process.selectedPatJetsAK8PFCHSFilteredPacked =process.selectedPatJetsAK4PFCHS.clone(cut="pt > 150.0", src="patJetsAK8PFCHSFilteredPacked")
+process.selectedPatJetsAK10PFCHSFilteredPacked=process.selectedPatJetsAK4PFCHS.clone(cut="pt > 150.0", src="patJetsAK10PFCHSFilteredPacked")
+process.selectedPatJetsAK12PFCHSFilteredPacked=process.selectedPatJetsAK4PFCHS.clone(cut="pt > 150.0", src="patJetsAK12PFCHSFilteredPacked")
+process.selectedPatJetsAK15PFCHSFilteredPacked=process.selectedPatJetsAK4PFCHS.clone(cut="pt > 150.0", src="patJetsAK15PFCHSFilteredPacked")
+
+from PhysicsTools.SelectorUtils.pfJetIDSelector_cfi import pfJetIDSelector
+process.goodPatJetsAK4PFCHS = cms.EDFilter("PFJetIDSelectionFunctorFilter",
+                                           filterParams = pfJetIDSelector.clone(),
+                                           src = cms.InputTag("selectedPatJetsAK4PFCHS")
+                                           )
+process.goodPatJetsAK8PFCHS=process.goodPatJetsAK4PFCHS.clone(src="selectedPatJetsAK8PFCHS")
+process.goodPatJetsAK10PFCHS=process.goodPatJetsAK4PFCHS.clone(src="selectedPatJetsAK10PFCHS")
+process.goodPatJetsAK12PFCHS=process.goodPatJetsAK4PFCHS.clone(src="selectedPatJetsAK12PFCHS")
+process.goodPatJetsAK15PFCHS=process.goodPatJetsAK4PFCHS.clone(src="selectedPatJetsAK15PFCHS")
+
+process.goodPatJetsAK8PFCHSFilteredPacked =process.goodPatJetsAK4PFCHS.clone(src="selectedPatJetsAK8PFCHSFilteredPacked")
+process.goodPatJetsAK10PFCHSFilteredPacked=process.goodPatJetsAK4PFCHS.clone(src="selectedPatJetsAK10PFCHSFilteredPacked")
+process.goodPatJetsAK12PFCHSFilteredPacked=process.goodPatJetsAK4PFCHS.clone(src="selectedPatJetsAK12PFCHSFilteredPacked")
+process.goodPatJetsAK15PFCHSFilteredPacked=process.goodPatJetsAK4PFCHS.clone(src="selectedPatJetsAK15PFCHSFilteredPacked")
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #JECs for telescoping
