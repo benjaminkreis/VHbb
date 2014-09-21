@@ -284,10 +284,10 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   }
 
   if(AK4jets->size()>1){
-    pat::Jet *d1=new pat::Jet();
-    pat::Jet *d2=new pat::Jet();
+    pat::Jet d1=pat::Jet();
+    pat::Jet d2=pat::Jet();
     getHiggsCandidate(AK4jets, d1, d2);
-    vector<Hbb::Higgs> theHiggses=telescope(*d1, *d2, packedCandidates, iEvent, iSetup);
+    vector<Hbb::Higgs> theHiggses=telescope(d1, d2, packedCandidates, iEvent, iSetup);
     _output.Higgses=theHiggses;
 
     theHiggses=telescope(_output.genB, _output.genAntiB, packedGenParticles, iEvent, iSetup);
@@ -309,10 +309,10 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   }
 
   if(AK4GenJets->size()>1){
-    pat::Jet *d1=new pat::Jet();
-    pat::Jet *d2=new pat::Jet();
+    pat::Jet d1=pat::Jet();
+    pat::Jet d2=pat::Jet();
     getHiggsCandidate(AK4GenJets, d1, d2);
-    vector<Hbb::Higgs> theHiggses=telescope(*d1, *d2, packedCandidates, iEvent, iSetup);
+    vector<Hbb::Higgs> theHiggses=telescope(d1, d2, packedCandidates, iEvent, iSetup);
     _output.Higgses=theHiggses;
   }
   */
