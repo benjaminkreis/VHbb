@@ -221,6 +221,8 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   //Event quantities
 
+  //cout<<"Rho"<<endl;
+
   _output.rho=*rho;
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -228,37 +230,53 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   if(prunedGenParticles->size()>0){
     for (auto input=prunedGenParticles->begin(); input!=prunedGenParticles->end(); ++input){
+      //cout<<"Gen particle loop"<<endl;
       Hbb::GenParticle output=Hbb::GenParticle(input->pt(), input->eta(), input->phi(), input->mass());
       output.pdgId=input->pdgId();
       output.status=input->status();
       
+      //cout<<"Mom"<<endl;
       const reco::Candidate *mom=input->mother();
-      if (mom)
-        output.motherId=mom->pdgId();
+      if (mom) output.motherId=mom->pdgId();
       
+      //cout<<"daughter"<<endl;
       int n = input->numberOfDaughters();
       for(int i=0; i<n; i++) {
 	const reco::Candidate *daughter=input->daughter(i);
-	output.daughterIds.push_back(daughter->pdgId());
+	if (daughter) output.daughterIds.push_back(daughter->pdgId());
       }
 
-      if((output.pdgId==23||output.pdgId==24) && (output.daughterIds[0]==25||output.daughterIds[1]==25)) 
-	_output.genVstar=output;
-      if((output.pdgId==23||output.pdgId==24) && (abs(output.daughterIds[0])==11||
-						  abs(output.daughterIds[0])==12||
-						  abs(output.daughterIds[0])==13||
-						  abs(output.daughterIds[0])==14||
-						  abs(output.daughterIds[0])==15||
-						  abs(output.daughterIds[0])==16||
-						  abs(output.daughterIds[0])==1||
-						  abs(output.daughterIds[0])==2||
-						  abs(output.daughterIds[0])==3||
-						  abs(output.daughterIds[0])==4||
-						  abs(output.daughterIds[0])==5||
-						  abs(output.daughterIds[0])==6))                       
-	_output.genV=output;
-      if( output.pdgId==25                    && abs(output.daughterIds[0])==5)                         
+      //cout<<"Special particles"<<endl;
+      if(output.daughterIds.size()>0) {
+	if((output.pdgId==23||output.pdgId==24) && output.daughterIds[0]==25)
+	  _output.genVstar=output;
+      }
+      else {
+	if(output.daughterIds.size()>1) {
+	  if ((output.pdgId==23||output.pdgId==24) && output.daughterIds[1]==25)
+	    _output.genVstar=output;
+	}
+      }
+
+      if(output.daughterIds.size()>0) {
+	if((output.pdgId==23||output.pdgId==24) && (abs(output.daughterIds[0])==11||
+						    abs(output.daughterIds[0])==12||
+						    abs(output.daughterIds[0])==13||
+						    abs(output.daughterIds[0])==14||
+						    abs(output.daughterIds[0])==15||
+						    abs(output.daughterIds[0])==16||
+						    abs(output.daughterIds[0])==1||
+						    abs(output.daughterIds[0])==2||
+						    abs(output.daughterIds[0])==3||
+						    abs(output.daughterIds[0])==4||
+						    abs(output.daughterIds[0])==5||
+						    abs(output.daughterIds[0])==6))                       
+	  _output.genV=output;
+	
+	if( output.pdgId==25                     && abs(output.daughterIds[0])==5)
 	_output.genHiggs=output;
+      }
+
       if((output.pdgId==11||output.pdgId==12||output.pdgId==13||output.pdgId==14||output.pdgId==15||output.pdgId==16) && (output.motherId==24||output.motherId==25)) 
 	_output.genLepton=output;
       if((output.pdgId==-11||output.pdgId==-12||output.pdgId==-13||output.pdgId==-14||output.pdgId==-15||output.pdgId==-16) && (output.motherId==24||output.motherId==25)) 
