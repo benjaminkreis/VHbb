@@ -134,7 +134,7 @@ HbbProducer::~HbbProducer()
 void
 HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
-  clock_t start=clock();
+  //clock_t start=clock();
   
   _output=Hbb::Tuple();
 
@@ -215,7 +215,7 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   edm::Handle< edm::View< pat::Muon > > inputMuons;
   iEvent.getByLabel(_muonSource,inputMuons);
 
-  clock_t setup=clock();
+  //clock_t setup=clock();
   //cout<<"Setup time: "<<(setup-start)/(double)(CLOCKS_PER_SEC/1000)<<endl;
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -272,7 +272,7 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
   }
   
-  clock_t gen=clock();
+  //clock_t gen=clock();
   //cout<<"Gen time: "<<(gen-setup)/(double)(CLOCKS_PER_SEC/1000)<<endl;
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -295,7 +295,7 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   }
   
-  clock_t ak4=clock();
+  //clock_t ak4=clock();
   //cout<<"AK4 time: "<<(ak4-gen)/(double)(CLOCKS_PER_SEC/1000)<<endl;
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -337,7 +337,7 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     *fatJetOutputs[name]=outputJets;
   }
 
-  clock_t fat=clock();
+  //clock_t fat=clock();
   //cout<<"Fat jet time: "<<(fat-ak4)/(double)(CLOCKS_PER_SEC/1000)<<endl;
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -353,7 +353,7 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
   }
 
-  clock_t muons=clock();
+  //clock_t muons=clock();
   //cout<<"Muon time: "<<(muons-fat)/(double)(CLOCKS_PER_SEC/1000)<<endl;
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -361,7 +361,7 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   auto_ptr<Hbb::Tuple> pOut(new Hbb::Tuple(_output));
   iEvent.put(pOut);
 
-  clock_t output=clock();
+  //clock_t output=clock();
   //cout<<"output time: "<<(output-muons)/(double)(CLOCKS_PER_SEC/1000)<<endl;
   //cout<<endl;
 }
