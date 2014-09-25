@@ -295,8 +295,8 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   for(auto inputJet=AK4jets->begin(); inputJet!=AK4jets->end(); ++inputJet){
     Hbb::Jet outputJet=Hbb::Jet(inputJet->pt(), inputJet->eta(), inputJet->phi(), inputJet->mass());
     outputJet.R = 0.4;
-    outputJet.area = jet1->jetArea();
-    outputJet.csv = jet1->bDiscriminator("combinedSecondaryVertexBJetTags");
+    outputJet.area = inputJet->jetArea();
+    outputJet.csv = inputJet->bDiscriminator("combinedSecondaryVertexBJetTags");
     _output.AK4PFCHS.push_back(outputJet);
   }
   
