@@ -230,23 +230,19 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   if(prunedGenParticles->size()>0){
     for (auto input=prunedGenParticles->begin(); input!=prunedGenParticles->end(); ++input){
-      //cout<<"Gen particle loop"<<endl;
       Hbb::GenParticle output=Hbb::GenParticle(input->pt(), input->eta(), input->phi(), input->mass());
       output.pdgId=input->pdgId();
       output.status=input->status();
       
-      //cout<<"Mom"<<endl;
       const reco::Candidate *mom=input->mother();
       if (mom) output.motherId=mom->pdgId();
       
-      //cout<<"daughter"<<endl;
       int n = input->numberOfDaughters();
       for(int i=0; i<n; i++) {
 	const reco::Candidate *daughter=input->daughter(i);
 	if (daughter) output.daughterIds.push_back(daughter->pdgId());
       }
 
-      //cout<<"Special particles"<<endl;
       if(output.daughterIds.size()>0) {
 	if((output.pdgId==23||output.pdgId==24) && output.daughterIds[0]==25)
 	  _output.genVstar=output;
@@ -286,7 +282,7 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       if(output.pdgId==-5 && output.motherId==25) 
 	_output.genAntiB=output;
 
-      _output.GenParticles.push_back(output);
+      _output.genParticles.push_back(output);
     }
   }
   
@@ -295,22 +291,28 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //AK4 Jets
-
-  for(auto jet1=AK4jets->begin(); jet1!=AK4jets->end(); ++jet1){
-    Hbb::Jet jet=Hbb::Jet(jet1->pt(), jet1->eta(), jet1->phi(), jet1->mass());
-    _output.AK4PFCHS.push_back(jet);
+  for(auto inputJet=AK4jets->begin(); inputJet!=AK4jets->end(); ++inputJet){
+    Hbb::Jet outputJet=Hbb::Jet(inputJet->pt(), inputJet->eta(), inputJet->phi(), inputJet->mass());
+    _output.AK4PFCHS.push_back(outputJet);
   }
-
+  
   if(AK4jets->size()>1){
     pat::Jet d1=pat::Jet();
     pat::Jet d2=pat::Jet();
     getHiggsCandidate(AK4jets, d1, d2);
-    vector<Hbb::Higgs> theHiggses=telescope(d1, d2, packedCandidates, iEvent, iSetup);
-    _output.Higgses=theHiggses;
+    
+    Hbb::Jet j1=Hbb::Jet(d1.pt(), d1.eta(), d1.phi(), d1.mass());
+    Hbb::Jet j2=Hbb::Jet(d2.pt(), d2.eta(), d2.phi(), d2.mass());
+    Hbb::Higgs h=Hbb::Higgs(j1.lv+j2.lv);
+    h.daughters.push_back(j1);
+    h.daughters.push_back(j2);
+    _output.theHiggs=h;
 
-    theHiggses=telescope(_output.genB, _output.genAntiB, packedGenParticles, iEvent, iSetup);
-    _output.GenHiggses=theHiggses;
+    vector<Hbb::Higgs> teleHiggs=telescope(d1, d2, packedCandidates, iEvent, iSetup);
+    _output.TeleHiggs=teleHiggs;
 
+    teleHiggs=telescope(_output.genB, _output.genAntiB, packedGenParticles, iEvent, iSetup);
+    _output.genTeleHiggs=teleHiggs;
   }
   
   //clock_t ak4=clock();
@@ -367,12 +369,28 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       Hbb::Muon muon=Hbb::Muon();
       muon.lv.SetPtEtaPhiM(inputMuon->pt(), inputMuon->eta(), inputMuon->phi(), inputMuon->mass());
       muon.charge=inputMuon->charge();
+      muon.isolation=(inputMuon->pfIsolationR04().sumChargedHadronPt + max(0., inputMuon->pfIsolationR04().sumNeutralHadronEt + inputMuon->pfIsolationR04().sumPhotonEt - 0.5*inputMuon->pfIsolationR04().sumPUPt))/inputMuon->pt();
       _output.Muons.push_back(muon);
     }
   }
 
   //clock_t muons=clock();
   //cout<<"Muon time: "<<(muons-fat)/(double)(CLOCKS_PER_SEC/1000)<<endl;
+
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  if(_output.Muons.size()==2){
+    if(_output.Muons[0].charge!=_output.Muons[1].charge){
+      Hbb::V theV=Hbb::V(_output.Muons[0].lv+_output.Muons[1].lv);
+      if(75<theV.lv.M() && theV.lv.M()<105){
+	theV.daughters.push_back(_output.Muons[0]);
+	theV.daughters.push_back(_output.Muons[1]);
+	_output.theV=theV;
+      }
+    }
+  }
+
+  if(_output.theHiggs.lv.Pt()>0 && _output.theV.lv.Pt()>0) _output.theVstar=Hbb::V(_output.theHiggs.lv+_output.theV.lv);
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

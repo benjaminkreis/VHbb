@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 HbbProducer = cms.EDProducer('HbbProducer',
                              rhoSource=cms.InputTag('fixedGridRhoFastjetAll'),
 
-                             packedCandidateSource=cms.InputTag('chs'),
+                             packedCandidateSource=cms.InputTag('pfNoMuonCHS'),
                              prunedGenParticleSource=cms.InputTag('prunedGenParticles'),
                              packedGenParticleSource=cms.InputTag('packedGenParticles'),
 

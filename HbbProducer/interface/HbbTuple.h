@@ -148,9 +148,10 @@ namespace Hbb
   struct Lepton:Object
   {
     int charge;
+    double isolation;
     
   Lepton() : Object(),
-      charge(-9999)
+      charge(-9999), isolation(-9999)
       {
       }
 
@@ -188,8 +189,29 @@ namespace Hbb
 
   //---------------------------------------------------------------------------------
 
-  struct V:Object
-  {
+  struct V:Object {
+    std::vector<Object> daughters;
+
+  V() : Object()
+      {
+        this->initialize();
+      }
+
+  V(TLorentzVector theLV) : Object(theLV)
+    {
+      lv.SetPtEtaPhiM(theLV.Pt(), theLV.Eta(), theLV.Phi(), theLV.M());
+      this->initialize();
+    }
+
+  V(double pT, double eta, double phi, double m) : Object(pT, eta, phi, m)
+      {
+        lv.SetPtEtaPhiM(pT, eta, phi, m);
+        this->initialize();
+      }
+
+    void initialize(){
+      daughters=std::vector<Object>();
+    }
   };
 
   //---------------------------------------------------------------------------------
@@ -203,6 +225,18 @@ namespace Hbb
 	this->initialize();
       }
 
+  Higgs(TLorentzVector theLV) : Object(theLV)
+    {
+      lv.SetPtEtaPhiM(theLV.Pt(), theLV.Eta(), theLV.Phi(), theLV.M());
+      this->initialize();
+    }
+
+  Higgs(double pT, double eta, double phi, double m) : Object(pT, eta, phi, m)
+      {
+        lv.SetPtEtaPhiM(pT, eta, phi, m);
+        this->initialize();
+      }
+    
     void initialize(){
       csv=-9999;
     }
@@ -230,8 +264,12 @@ namespace Hbb
     std::vector<Muon> Muons;
     std::vector<Tau> Taus;
 
-    std::vector<Higgs> Higgses;
-    std::vector<Higgs> GenHiggses;
+    V theVstar;
+    V theV;
+    Higgs theHiggs;
+
+    std::vector<Higgs> TeleHiggs;
+    std::vector<Higgs> genTeleHiggs;
 
     GenParticle genVstar;
     GenParticle genV;
@@ -240,14 +278,14 @@ namespace Hbb
     GenParticle genAntiLepton;
     GenParticle genB;
     GenParticle genAntiB;
-    std::vector<GenParticle> GenParticles;
+    std::vector<GenParticle> genParticles;
     
   Tuple() : 
-    rho(-9999), 
+      eventClassification(-9999), rho(-9999),
       AK4PFCHS(std::vector<Jet>()), AK8PFCHS(std::vector<Jet>()), AK10PFCHS(std::vector<Jet>()), AK12PFCHS(std::vector<Jet>()), AK15PFCHS(std::vector<Jet>()),
       Electrons(std::vector<Electron>()), Muons(std::vector<Muon>()),Taus(std::vector<Tau>()),
-      Higgses(std::vector<Higgs>()),
-      GenParticles(std::vector<GenParticle>())
+      TeleHiggs(std::vector<Higgs>()), genTeleHiggs(std::vector<Higgs>()),
+      genParticles(std::vector<GenParticle>())
     {
     }
   };

@@ -1,5 +1,6 @@
 <lcgdict>
-  <class name="Hbb::Tuple" ClassVersion="10">
+  <class name="Hbb::Tuple" ClassVersion="11">
+    <version ClassVersion="11" checksum="2335065851"/>
     <version ClassVersion="10" checksum="3324275566"/>
   </class>
   <class name="std::vector<Hbb::Tuple>"/>
@@ -27,7 +28,8 @@
   <class pattern="edm::Wrapper<Hbb::SubJet>"/>
   <class name="edm::Wrapper<std::vector<Hbb::SubJet> >"/>
 
-  <class name="Hbb::Lepton" ClassVersion="10">
+  <class name="Hbb::Lepton" ClassVersion="11">
+    <version ClassVersion="11" checksum="4002713751"/>
     <version ClassVersion="10" checksum="396129940"/>
   </class>
   <class name="std::vector<Hbb::Lepton>"/>
@@ -55,7 +57,8 @@
   <class pattern="edm::Wrapper<Hbb::Tau>"/>
   <class name="edm::Wrapper<std::vector<Hbb::Tau> >"/>
 
-  <class name="Hbb::V" ClassVersion="10">
+  <class name="Hbb::V" ClassVersion="11">
+    <version ClassVersion="11" checksum="3249600074"/>
     <version ClassVersion="10" checksum="824873305"/>
   </class>
   <class name="std::vector<Hbb::V>"/>

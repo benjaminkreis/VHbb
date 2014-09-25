@@ -8,11 +8,14 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True),
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20) )
 process.source = cms.Source("PoolSource",
-                            fileNames = cms.untracked.vstring('file:/eos/uscms/store/user/jstupak/ZH_HToBB_ZToLL_M-125_13TeV_powheg-herwigpp/Spring14dr-PU_S14_POSTLS170_V6AN1-v1/140622_185946/0000/miniAOD-prod_PAT_1.root'
-                                                              )
+                            fileNames = cms.untracked.vstring(
+        'file:/eos/uscms/store/user/jstupak/ZH_HToBB_ZToLL_M-125_13TeV_powheg-herwigpp/Spring14dr-PU_S14_POSTLS170_V6AN1-v1/140622_185946/0000/miniAOD-prod_PAT_1.root'
+        #'/store/mc/Spring14miniaod/DYJetsToMuMu_PtZ-180_M-50_13TeV-madgraph/MINIAODSIM/PU20bx25_POSTLS170_V5-v1/00000/AAF5494B-9707-E411-90D7-AC162DABCAF8.root'
+        )
                             )
 
-theGlobalTag='PLS170_V6AN1::All'
+theGlobalTag='PLS170_V6AN1::All'   #PU_S14
+#theGlobalTag='PLS170_V7AN1::All'   #PU20bx25
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
 
@@ -27,7 +30,8 @@ process.load('Configuration.StandardSequences.MagneticField_38T_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.GlobalTag.globaltag = theGlobalTag
 
-process.chs = cms.EDFilter('CandPtrSelector', src = cms.InputTag('packedPFCandidates'), cut = cms.string('fromPV'))
+process.pfCHS = cms.EDFilter('CandPtrSelector', src = cms.InputTag('packedPFCandidates'), cut = cms.string('fromPV'))
+process.pfNoMuonCHS =  cms.EDProducer("CandPtrProjector", src = cms.InputTag("pfCHS"), veto = cms.InputTag("selectedMuons"))
 
 #2012 Tight muon: https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideMuonId#Tight_Muon
 #missing dZ cut - JS
@@ -40,9 +44,10 @@ process.selectedMuons = cms.EDFilter("PATMuonSelector",
                                                       'globalTrack.normalizedChi2 < 10.0 &'
                                                       'globalTrack.hitPattern.numberOfValidMuonHits > 0 &'
                                                       'numberOfMatchedStations > 1 &'
-                                                      'abs(dB) < 0.02 &'
+                                                      'abs(dB) < 0.2 &' #This was 0.02 before, ooops.  I think this is right - JS
                                                       'innerTrack.hitPattern.numberOfValidPixelHits > 0 &'
-                                                      'innerTrack.hitPattern.trackerLayersWithMeasurement > 5'
+                                                      'innerTrack.hitPattern.trackerLayersWithMeasurement > 5 &'
+                                                      '(pfIsolationR04.sumChargedHadronPt+ max(0.,pfIsolationR04.sumNeutralHadronEt+pfIsolationR04.sumPhotonEt-0.5*pfIsolationR04.sumPUPt))/pt < 0.12'
                                                       )
                                      )
 
@@ -68,7 +73,7 @@ process.load('RecoJets.Configuration.RecoGenJets_cff')
 process.fixedGridRhoFastjetAll.pfCandidatesTag = 'packedPFCandidates'
 
 process.ak4PFJets.src = 'packedPFCandidates'
-process.ak4PFJetsCHS.src = 'chs'
+process.ak4PFJetsCHS.src = 'pfNoMuonCHS'
 
 process.ak8PFJetsCHS  = process.ak4PFJetsCHS.clone(rParam = 0.8)
 process.ak10PFJetsCHS = process.ak4PFJetsCHS.clone(rParam = 1.0)
@@ -82,9 +87,9 @@ process.ak10GenJets = process.ak4GenJets.clone(rParam = 1.0)
 process.ak12GenJets = process.ak4GenJets.clone(rParam = 1.2)
 process.ak15GenJets = process.ak4GenJets.clone(rParam = 1.5)
 
-process.ak8PFJetsCHSPruned.src = 'chs'
-process.ak8PFJetsCHSTrimmed.src = 'chs'
-process.ak8PFJetsCHSFiltered.src = 'chs'
+process.ak8PFJetsCHSPruned.src = 'pfNoMuonCHS'
+process.ak8PFJetsCHSTrimmed.src = 'pfNoMuonCHS'
+process.ak8PFJetsCHSFiltered.src = 'pfNoMuonCHS'
 
 process.ak10PFJetsCHSPruned = process.ak8PFJetsCHSPruned.clone(rParam = 1)
 process.ak10PFJetsCHSTrimmed = process.ak8PFJetsCHSTrimmed.clone(rParam = 1)

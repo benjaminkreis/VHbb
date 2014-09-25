@@ -10,9 +10,9 @@ config.JobType.allowNonProductionCMSSW = True
 
 config.section_("Data")
 config.Data.inputDataset = 'INPUTDATASET'
-config.Data.dbsUrl = 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader/'
-config.Data.splitting = 'FileBased'
-config.Data.unitsPerJob = 1
+config.Data.dbsUrl = 'https://cmsweb.cern.ch/dbs/prod/DBSURL/DBSReader/'
+config.Data.splitting = 'LumiBased'
+config.Data.unitsPerJob = LBSPERJOB
 config.Data.publication = True
 config.Data.publishDbsUrl = 'https://cmsweb.cern.ch/dbs/prod/phys03/DBSWriter/'
 config.Data.publishDataName = 'PUBLISHDATANAME'
