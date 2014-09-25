@@ -291,8 +291,12 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //AK4 Jets
+
   for(auto inputJet=AK4jets->begin(); inputJet!=AK4jets->end(); ++inputJet){
     Hbb::Jet outputJet=Hbb::Jet(inputJet->pt(), inputJet->eta(), inputJet->phi(), inputJet->mass());
+    outputJet.R = 0.4;
+    outputJet.area = jet1->jetArea();
+    outputJet.csv = jet1->bDiscriminator("combinedSecondaryVertexBJetTags");
     _output.AK4PFCHS.push_back(outputJet);
   }
   
@@ -324,6 +328,7 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   if(AK4GenJets->size()>0){
     for(auto jet1=AK4GenJets->begin(); jet1!=AK4GenJets->end(); ++jet1){
       Hbb::Jet jet=Hbb::Jet(jet1->pt(), jet1->eta(), jet1->phi(), jet1->mass());
+      jet.csv = jet1->bDiscriminator("combinedSecondaryVertexBJetTags");
       _output.AK4PFCHS.push_back(jet);
     }
   }
