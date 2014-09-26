@@ -244,38 +244,38 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       }
 
       if(output.daughterIds.size()>0) {
-	if((output.pdgId==23||output.pdgId==24) && output.daughterIds[0]==25)
+	if((output.pdgId==23||abs(output.pdgId)==24) && output.daughterIds[0]==25)
 	  _output.genVstar=output;
       }
       else {
 	if(output.daughterIds.size()>1) {
-	  if ((output.pdgId==23||output.pdgId==24) && output.daughterIds[1]==25)
+	  if ((output.pdgId==23||abs(output.pdgId)==24) && output.daughterIds[1]==25)
 	    _output.genVstar=output;
 	}
       }
 
       if(output.daughterIds.size()>0) {
-	if((output.pdgId==23||output.pdgId==24) && (abs(output.daughterIds[0])==11||
-						    abs(output.daughterIds[0])==12||
-						    abs(output.daughterIds[0])==13||
-						    abs(output.daughterIds[0])==14||
-						    abs(output.daughterIds[0])==15||
-						    abs(output.daughterIds[0])==16||
-						    abs(output.daughterIds[0])==1||
-						    abs(output.daughterIds[0])==2||
-						    abs(output.daughterIds[0])==3||
-						    abs(output.daughterIds[0])==4||
-						    abs(output.daughterIds[0])==5||
-						    abs(output.daughterIds[0])==6))                       
+	if((output.pdgId==23||abs(output.pdgId)==24) && (abs(output.daughterIds[0])==11||
+							 abs(output.daughterIds[0])==12||
+							 abs(output.daughterIds[0])==13||
+							 abs(output.daughterIds[0])==14||
+							 abs(output.daughterIds[0])==15||
+							 abs(output.daughterIds[0])==16||
+							 abs(output.daughterIds[0])==1||
+							 abs(output.daughterIds[0])==2||
+							 abs(output.daughterIds[0])==3||
+							 abs(output.daughterIds[0])==4||
+							 abs(output.daughterIds[0])==5||
+							 abs(output.daughterIds[0])==6))                       
 	  _output.genV=output;
 	
 	if( output.pdgId==25                     && abs(output.daughterIds[0])==5)
 	_output.genHiggs=output;
       }
 
-      if((output.pdgId==11||output.pdgId==12||output.pdgId==13||output.pdgId==14||output.pdgId==15||output.pdgId==16) && (output.motherId==24||output.motherId==25)) 
+      if((output.pdgId==11||output.pdgId==12||output.pdgId==13||output.pdgId==14||output.pdgId==15||output.pdgId==16) && (output.motherId==23||abs(output.motherId)==24)) 
 	_output.genLepton=output;
-      if((output.pdgId==-11||output.pdgId==-12||output.pdgId==-13||output.pdgId==-14||output.pdgId==-15||output.pdgId==-16) && (output.motherId==24||output.motherId==25)) 
+      if((output.pdgId==-11||output.pdgId==-12||output.pdgId==-13||output.pdgId==-14||output.pdgId==-15||output.pdgId==-16) && (output.motherId==23||abs(output.motherId)==24)) 
 	_output.genAntiLepton=output;
       if(output.pdgId==5 && output.motherId==25) 
 	_output.genB=output;
@@ -293,10 +293,8 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   //AK4 Jets
 
   for(auto inputJet=AK4jets->begin(); inputJet!=AK4jets->end(); ++inputJet){
-    Hbb::Jet outputJet=Hbb::Jet(inputJet->pt(), inputJet->eta(), inputJet->phi(), inputJet->mass());
+    Hbb::Jet outputJet=Hbb::Jet(*inputJet);
     outputJet.R = 0.4;
-    outputJet.area = inputJet->jetArea();
-    outputJet.csv = inputJet->bDiscriminator("combinedSecondaryVertexBJetTags");
     _output.AK4PFCHS.push_back(outputJet);
   }
   
@@ -305,8 +303,8 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     pat::Jet d2=pat::Jet();
     getHiggsCandidate(AK4jets, d1, d2);
     
-    Hbb::Jet j1=Hbb::Jet(d1.pt(), d1.eta(), d1.phi(), d1.mass());
-    Hbb::Jet j2=Hbb::Jet(d2.pt(), d2.eta(), d2.phi(), d2.mass());
+    Hbb::Jet j1=Hbb::Jet(d1);
+    Hbb::Jet j2=Hbb::Jet(d2);
     Hbb::Higgs h=Hbb::Higgs(j1.lv+j2.lv);
     h.daughters.push_back(j1);
     h.daughters.push_back(j2);

@@ -3,6 +3,8 @@
 
 #include "TLorentzVector.h"
 
+#include "DataFormats/PatCandidates/interface/Jet.h"
+
 #include <string>
 
 namespace Hbb
@@ -113,6 +115,13 @@ namespace Hbb
   Jet() : Object()
       {
 	this->initialize();
+      }
+
+  Jet(pat::Jet input) : Object(input.pt(), input.eta(), input.phi(), input.mass())
+      {
+	this->initialize();
+	this->area = input.jetArea();
+	this->csv = input.bDiscriminator("combinedSecondaryVertexBJetTags");
       }
     
   Jet(TLorentzVector theLV) : Object(theLV)
