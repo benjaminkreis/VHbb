@@ -1,1 +1,51 @@
- 
+void formatPlots() {
+	TFile* ifile = new TFile("HbbAna.root","READ");
+	HbbAnalyzer->cd();
+	HiggsM_gen->SetLineColor(kRed);
+	HiggsM_gen->Draw();
+	mjj_gen->SetLineColor(kOrange);
+	mjj_gen->SetMarkerColor(kOrange);
+	mjj_gen->SetMarkerStyle(20);
+	mjj_gen->Draw("sameP");
+	THiggsM_gen->Draw("same");
+	Tmjj_gen->SetLineColor(kMagenta);
+	Tmjj_gen->SetMarkerColor(kMagenta);
+	Tmjj_gen->SetMarkerStyle(20);
+	Tmjj_gen->Draw("sameP");
+	THiggsM->SetLineColor(kGreen);
+	THiggsM->Draw("same");
+	Tmjj->SetLineColor(kYellow);
+	Tmjj->SetMarkerColor(kYellow);
+	Tmjj->SetMarkerStyle(20);
+	Tmjj->Draw("sameP");
+	//HiggsM_gen->GetXaxis()->SetTitle("M_{H} [GeV]");
+	HiggsM_gen->GetXaxis()->SetTitleOffset(1.4);
+	//HiggsM_gen->GetYaxis()->SetTitle("events / 1 GeV");
+	HiggsM_gen->GetYaxis()->SetTitleOffset(1.7);
+	TLegend * leg = new TLegend(0.2,0.6,0.6,0.9);
+	leg->SetFillColor(0);
+	leg->SetFillStyle(0);
+	leg->AddEntry((TObject*)0,"Anti-k_{T} R={0.1-1.5}, PF+CHS","");
+	leg->AddEntry(HiggsM_gen,"M_{H}^{GEN} Based on pdgId","l");
+	leg->AddEntry(THiggsM_gen,"M_{H}^{GEN} Telescoping","l");
+	leg->AddEntry(THiggsM,"M_{H}^{RECO} Telescoping","l");
+	leg->AddEntry(mjj_gen,"M_{jj}^{GEN} Based on pdgId","p");
+	leg->AddEntry(Tmjj_gen,"M_{jj}^{GEN} Telescoping","p");
+	leg->AddEntry(Tmjj,"M_{jj}^{RECO} Telescoping","p");
+	leg->Draw("same");
+
+	new TCanvas();
+	TH1D* HiggsM_gen_clone = (TH1D*)HiggsM_gen->DrawClone();
+	HiggsM_gen_clone->GetYaxis()->SetRangeUser(0,120);
+	THiggsM_gen_R3->Draw("same");
+	THiggsM_R3->SetLineColor(kGreen);
+	THiggsM_R3->Draw("same");
+	TLegend * leg2 = new TLegend(0.2,0.6,0.6,0.9);
+	leg2->SetFillColor(0);
+	leg2->SetFillStyle(0);
+	leg2->AddEntry((TObject*)0,"Anti-k_{T} R=0.4, PF+CHS","");
+	leg2->AddEntry(HiggsM_gen_clone,"M_{H}^{GEN} Based on pdgId","l");
+	leg2->AddEntry(THiggsM_gen_R3,"M_{H}^{GEN} Telescoping","l");
+	leg2->AddEntry(THiggsM_R3,"M_{H}^{RECO} Telescoping","l");
+	leg2->Draw("same");
+} 
