@@ -20,3 +20,16 @@ void getHiggsCandidate(h_patJets inputJets, pat::Jet &d1, pat::Jet &d2){
     }
   }
 }
+
+void getHiggsCandidate(vector<Hbb::Jet> inputJets, pair<int,int> &leadingSubleadingIndex){
+  double maxPT2=0;
+  for(unsigned int jet1=0; jet1<inputJets.size(); jet1++){
+     for(unsigned int jet2=jet1+1; jet2<inputJets.size() && jet1<inputJets.size()-1; jet2++){
+      double pT2=pow(inputJets[jet1].lv.Px()+inputJets[jet2].lv.Px(),2)+
+         pow(inputJets[jet1].lv.Py()+inputJets[jet2].lv.Py(),2);
+      if (pT2>maxPT2){
+         leadingSubleadingIndex=make_pair(jet1,jet2);
+      }
+    }
+  }
+}
