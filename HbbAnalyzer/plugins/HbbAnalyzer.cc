@@ -73,6 +73,7 @@ class HbbAnalyzer : public edm::EDAnalyzer {
       static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
       //Check if GEN/RECO quantities pass the cuts
+      bool HiggsSelection();
       bool ZSelection();
       bool leptonSelection();
       bool jetSelection();
@@ -89,6 +90,7 @@ class HbbAnalyzer : public edm::EDAnalyzer {
       virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
       virtual void endJob() override;
       virtual void getCollections(const edm::Event& iEvent);
+      virtual void clearObjects();
 
       //virtual void beginRun(edm::Run const&, edm::EventSetup const&) override;
       //virtual void endRun(edm::Run const&, edm::EventSetup const&) override;
@@ -107,6 +109,7 @@ class HbbAnalyzer : public edm::EDAnalyzer {
       //Telescoping Information
       //
       unsigned int NInterpretations;
+      vector<double> Tmjj;
 
       //
       //Cuts
@@ -205,6 +208,8 @@ HbbAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 //#ifdef THIS_IS_AN_EVENT_EXAMPLE
   getCollections(iEvent);
 
+  clearObjects();
+
   if(!eventSelection()) return;
 
   //
@@ -248,6 +253,7 @@ HbbAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     getHiggsCandidate(HbbHandle->genTeleHiggs[iR].daughters,lSublIndex);
     double mjj = (HbbHandle->genTeleHiggs[iR].daughters[lSublIndex.first].lv+HbbHandle->genTeleHiggs[iR].daughters[lSublIndex.second].lv).M();
     histograms["Tmjj_gen"]->Fill(mjj);
+    Tmjj.push_back(mjj);
 
     //Telescoping Jets
     histograms["Tj1M_gen"]->Fill(HbbHandle->genTeleHiggs[iR].daughters[lSublIndex.first].lv.M());
@@ -266,6 +272,8 @@ HbbAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   //Telescoping Interpretations
   histograms["rho_z_gen"]->Fill(double(interpretations_passing_cuts)/HbbHandle->genTeleHiggs.size());
+  histograms["volatility_gen"]->Fill(TMath::RMS(Tmjj.size(),&Tmjj[0])/TMath::Mean(Tmjj.size(),&Tmjj[0]));
+  Tmjj.clear();
 
   //
   //RECO Level Objects
@@ -289,6 +297,7 @@ HbbAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     getHiggsCandidate(HbbHandle->TeleHiggs[iR].daughters,lSublIndex);
     double mjj = (HbbHandle->TeleHiggs[iR].daughters[lSublIndex.first].lv+HbbHandle->TeleHiggs[iR].daughters[lSublIndex.second].lv).M();
     histograms["Tmjj"]->Fill(mjj);
+    Tmjj.push_back(mjj);
 
     //Telescoping Jets
     histograms["Tj1M"]->Fill(HbbHandle->TeleHiggs[iR].daughters[lSublIndex.first].lv.M());
@@ -307,6 +316,7 @@ HbbAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   //Telescoping Interpretations
   histograms["rho_z"]->Fill(double(interpretations_passing_cuts)/HbbHandle->TeleHiggs.size());
+  histograms["volatility"]->Fill(TMath::RMS(Tmjj.size(),&Tmjj[0])/TMath::Mean(Tmjj.size(),&Tmjj[0]));
 //#endif
    
 #ifdef THIS_IS_AN_EVENTSETUP_EXAMPLE
@@ -383,6 +393,7 @@ HbbAnalyzer::beginJob()
 
   //Telescoping Interpretations
   histograms["rho_z_gen"] = fs->make<TH1D>("rho_z_gen","Interpretations Passing The Cuts;z;Events",100,0,1);
+  histograms["volatility_gen"] = fs->make<TH1D>("volatility_gen","Volatility GEN (#Nu=Gamma/<m>);Volatility;Events",100,0,1);
 
   //
   //RECO Level Objects
@@ -420,6 +431,7 @@ HbbAnalyzer::beginJob()
 
   //Telescoping Interpretations
   histograms["rho_z"] = fs->make<TH1D>("rho_z","Interpretations Passing The Cuts;z;Events",100,0,1);
+  histograms["volatility"] = fs->make<TH1D>("volatility","Volatility (#Nu=Gamma/<m>);Volatility;Events",100,0,1);
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
@@ -433,6 +445,23 @@ void
 HbbAnalyzer::getCollections(const edm::Event& iEvent) {
     iEvent.getByLabel(HbbSrc,HbbHandle);
     assert(HbbHandle.isValid());
+}
+
+// ------------ method called once each event  ------------
+void
+HbbAnalyzer::clearObjects() {
+  Tmjj.clear();
+}
+
+// ------------ method called once each event  ------------
+bool
+HbbAnalyzer::HiggsSelection() {
+  bool teleHiggsSize = HbbHandle->TeleHiggs.size()>0;
+  bool theHiggsFilled = HbbHandle->theHiggs.lv.Px()!=0||HbbHandle->theHiggs.lv.Py()!=0||HbbHandle->theHiggs.lv.Pz()!=0||HbbHandle->theHiggs.lv.E()!=0;
+  if(teleHiggsSize && theHiggsFilled)
+    return true;
+  else
+    return false;
 }
 
 // ------------ method called once each event  ------------
@@ -532,7 +561,7 @@ HbbAnalyzer::jetSelection() {
 // ------------ method called once each event  ------------
 bool
 HbbAnalyzer::eventSelection() {
-  return ZSelection()&&leptonSelection()&&jetSelection();
+  return HiggsSelection()&&ZSelection()&&leptonSelection()&&jetSelection();
 }
 
 // ------------ methods called when matching any two collections of Hbb::Objects  ------------
