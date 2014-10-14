@@ -116,18 +116,18 @@ HbbAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 //#ifdef THIS_IS_AN_EVENT_EXAMPLE
   Handle<Hbb::Tuple> HbbHandle;
   iEvent.getByLabel(HbbSrc,HbbHandle);
-  mHiggs->Fill(HbbHandle->Higgses[3].lv.M());
-  HiggsPt->Fill(HbbHandle->Higgses[3].lv.Pt());
-  HiggsEta->Fill(HbbHandle->Higgses[3].lv.Eta());
-  HiggsPhi->Fill(HbbHandle->Higgses[3].lv.Phi());
-  for(unsigned int iR=0; iR<HbbHandle->Higgses.size(); iR++) {
-    mjj->Fill((HbbHandle->Higgses[iR].daughters[0].lv+HbbHandle->Higgses[iR].daughters[1].lv).M());
-    j1Pt->Fill(HbbHandle->Higgses[iR].daughters[0].lv.Pt());
-    j2Pt->Fill(HbbHandle->Higgses[iR].daughters[1].lv.Pt());
-    j1Eta->Fill(HbbHandle->Higgses[iR].daughters[0].lv.Eta());
-    j2Eta->Fill(HbbHandle->Higgses[iR].daughters[1].lv.Eta());
-    j1Phi->Fill(HbbHandle->Higgses[iR].daughters[0].lv.Phi());
-    j2Phi->Fill(HbbHandle->Higgses[iR].daughters[1].lv.Phi());
+  mHiggs->Fill(HbbHandle->TeleHiggs[3].lv.M());
+  HiggsPt->Fill(HbbHandle->TeleHiggs[3].lv.Pt());
+  HiggsEta->Fill(HbbHandle->TeleHiggs[3].lv.Eta());
+  HiggsPhi->Fill(HbbHandle->TeleHiggs[3].lv.Phi());
+  for(unsigned int iR=0; iR<HbbHandle->TeleHiggs.size(); iR++) {
+    mjj->Fill((HbbHandle->TeleHiggs[iR].daughters[0].lv+HbbHandle->TeleHiggs[iR].daughters[1].lv).M());
+    j1Pt->Fill(HbbHandle->TeleHiggs[iR].daughters[0].lv.Pt());
+    j2Pt->Fill(HbbHandle->TeleHiggs[iR].daughters[1].lv.Pt());
+    j1Eta->Fill(HbbHandle->TeleHiggs[iR].daughters[0].lv.Eta());
+    j2Eta->Fill(HbbHandle->TeleHiggs[iR].daughters[1].lv.Eta());
+    j1Phi->Fill(HbbHandle->TeleHiggs[iR].daughters[0].lv.Phi());
+    j2Phi->Fill(HbbHandle->TeleHiggs[iR].daughters[1].lv.Phi());
   }
 //#endif
    
