@@ -9,7 +9,7 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 process.source = cms.Source("PoolSource",
     # replace 'myfile.root' with the source file you want to use
     fileNames = cms.untracked.vstring(
-        'file:/uscms/home/aperloff/nobackup/YOURWORKINGAREA/VHbb/CMSSW_7_1_0_pre9/src/VHbb/HbbProducer/test/Hbb.root'
+        'file:/eos/uscms/store/user/lpcmbja/noreplica/ZH_HToBB_ZToLL_M-125_13TeV_powheg-herwigpp/PU40bx50_PLS170_V6AN1_wBTag/140925_003953/0000/Hbb_1.root'
     )
 )
 
