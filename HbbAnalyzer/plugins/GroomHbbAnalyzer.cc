@@ -232,6 +232,15 @@ GroomHbbAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
     fillHist("genHPt_hcuts", genHiggs.Pt());
   }
 
+  if (ZBoson.Pt() > 200) fillHist("Ztest200", ZBoson.Pt());
+  if (ZBoson.Pt() > 200 && genZ.Pt() > 180) fillHist("Ztest200gen180", ZBoson.Pt());
+  if (ZBoson.Pt() > 250) fillHist("Ztest250", ZBoson.Pt());
+  if (ZBoson.Pt() > 250 && genZ.Pt() > 200) fillHist("Ztest250gen200", ZBoson.Pt());
+  if (ZBoson.Pt() > 300) fillHist("Ztest300", ZBoson.Pt());
+  if (ZBoson.Pt() > 300 && genZ.Pt() > 250) fillHist("Ztest300gen250", ZBoson.Pt());
+  if (ZBoson.Pt() > 350) fillHist("Ztest350", ZBoson.Pt());
+  if (ZBoson.Pt() > 350 && genZ.Pt() > 300) fillHist("Ztest350gen300", ZBoson.Pt());
+
   //******** Jets ***************************
   double deltaPhi = 0.0;
   for (auto rads =std::begin(algo); rads != std::end(algo); ++rads) {
@@ -342,7 +351,7 @@ GroomHbbAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 	      fillHist("tau3_150cut_" + *rads, jetmap[*rads][0].tau3);
 	      fillHist("HiggsM_150cut_ungr_" + *rads, jetmap[*rads][0].lv.M());
 	      fillHist("HiggsPt_150cut_ungr_" + *rads, jetmap[*rads][0].lv.Pt());
-	      if (jetmap[*rads][0].lv.M() > 50){
+	      if (jetmap[*rads][0].lv.M() > 50 && std::abs(ZBoson.DeltaPhi(jetmap[*rads][0].lv)) > 2.5){
 		fillHist("tau1_150masscut_" + *rads, jetmap[*rads][0].tau1);
 		fillHist("tau2_150masscut_" + *rads, jetmap[*rads][0].tau2);
 		fillHist("tau3_150masscut_" + *rads, jetmap[*rads][0].tau3);
@@ -356,7 +365,7 @@ GroomHbbAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 	      fillHist("tau3_200cut_" + *rads, jetmap[*rads][0].tau3);
 	      fillHist("HiggsM_200cut_ungr_" + *rads, jetmap[*rads][0].lv.M());
 	      fillHist("HiggsPt_200cut_ungr_" + *rads, jetmap[*rads][0].lv.Pt());
-	      if (jetmap[*rads][0].lv.M() > 50){
+	      if (jetmap[*rads][0].lv.M() > 50 && std::abs(ZBoson.DeltaPhi(jetmap[*rads][0].lv)) > 2.5){
 		fillHist("tau1_200masscut_" + *rads, jetmap[*rads][0].tau1);
 		fillHist("tau2_200masscut_" + *rads, jetmap[*rads][0].tau2);
 		fillHist("tau3_200masscut_" + *rads, jetmap[*rads][0].tau3);
@@ -370,7 +379,7 @@ GroomHbbAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 	      fillHist("tau3_300cut_" + *rads, jetmap[*rads][0].tau3);
 	      fillHist("HiggsM_300cut_ungr_" + *rads, jetmap[*rads][0].lv.M());
 	      fillHist("HiggsPt_300cut_ungr_" + *rads, jetmap[*rads][0].lv.Pt());
-	      if (jetmap[*rads][0].lv.M() > 50){
+	      if (jetmap[*rads][0].lv.M() > 50 && std::abs(ZBoson.DeltaPhi(jetmap[*rads][0].lv)) > 2.5){
 		fillHist("tau1_300masscut_" + *rads, jetmap[*rads][0].tau1);
 		fillHist("tau2_300masscut_" + *rads, jetmap[*rads][0].tau2);
 		fillHist("tau3_300masscut_" + *rads, jetmap[*rads][0].tau3);
@@ -642,6 +651,31 @@ GroomHbbAnalyzer::bookHistograms() {
   hname= "gendeltaRbb_cuts300";
   htitle="gendeltaRbb_cuts300";
   m_HistNames[hname] = genDir.make<TH1D>(hname,htitle,60,0.0,6.0);
+
+  hname= "Ztest200";
+  htitle="Ztest200";
+  m_HistNames[hname] = ZDir.make<TH1D>(hname,htitle,200,0,1000);
+  hname= "Ztest200gen180";
+  htitle="Ztest200gen180";
+  m_HistNames[hname] = ZDir.make<TH1D>(hname,htitle,200,0,1000);
+  hname= "Ztest250";
+  htitle="Ztest250";
+  m_HistNames[hname] = ZDir.make<TH1D>(hname,htitle,200,0,1000);
+  hname= "Ztest250gen200";
+  htitle="Ztest250gen200";
+  m_HistNames[hname] = ZDir.make<TH1D>(hname,htitle,200,0,1000);
+  hname= "Ztest300";
+  htitle="Ztest300";
+  m_HistNames[hname] = ZDir.make<TH1D>(hname,htitle,200,0,1000);
+  hname= "Ztest300gen250";
+  htitle="Ztest300gen250";
+  m_HistNames[hname] = ZDir.make<TH1D>(hname,htitle,200,0,1000);
+  hname= "Ztest350";
+  htitle="Ztest350";
+  m_HistNames[hname] = ZDir.make<TH1D>(hname,htitle,200,0,1000);
+  hname= "Ztest350gen300";
+  htitle="Ztest350gen300";
+  m_HistNames[hname] = ZDir.make<TH1D>(hname,htitle,200,0,1000);
 
 
   for (auto rads =std::begin(algo); rads != std::end(algo); ++rads) {  
