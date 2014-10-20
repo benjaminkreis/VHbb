@@ -17,6 +17,7 @@ doHmassFat = False
 doHmassAK4Int = False
 doHmassFatInt = False
 dotaus = True
+dosingletau=False
 
 fat = ['AK8', 'AK10', 'AK12', 'AK15']
 algo = ['AK4']
@@ -897,24 +898,25 @@ if doHmassFatInt:
                 canvas.SaveAs('/uscms_data/d3/ingabu/CSA14/CMSSW_7_1_0_pre9/src/VHbb/HbbAnalyzer/macros/Gifs/SB/'+ v + a + g + 'Int.gif')
 
 
+###### NJettiness ########
 if dotaus:
     for a in fat: 
         for c in cuts:
-            hist_zh_var1 = zh.Get('HbbAnalyzer/' + a + '/tau1' + c + a)
+            hist_zh_var1 = zh.Get('HbbAnalyzer/' + a + '/tau2' + c + a)
             hist_zh_var1.Sumw2()
-            hist_dy_var1 = dy.Get('HbbAnalyzer/' + a + '/tau1' + c + a)
+            hist_dy_var1 = dy.Get('HbbAnalyzer/' + a + '/tau2' + c + a)
             hist_dy_var1.Sumw2()
-            hist_tt_var1 = tt.Get('HbbAnalyzer/' + a + '/tau1' + c + a)
+            hist_tt_var1 = tt.Get('HbbAnalyzer/' + a + '/tau2' + c + a)
             hist_tt_var1.Sumw2()
 
-            hist_zh_var2 = zh.Get('HbbAnalyzer/' + a + '/tau2' + c + a)
+            hist_zh_var2 = zh.Get('HbbAnalyzer/' + a + '/tau3' + c + a)
             hist_zh_var2.Sumw2()
-            hist_dy_var2 = dy.Get('HbbAnalyzer/' + a + '/tau2' + c + a)
+            hist_dy_var2 = dy.Get('HbbAnalyzer/' + a + '/tau3' + c + a)
             hist_dy_var2.Sumw2()
-            hist_tt_var2 = tt.Get('HbbAnalyzer/' + a + '/tau2' + c + a)
+            hist_tt_var2 = tt.Get('HbbAnalyzer/' + a + '/tau3' + c + a)
             hist_tt_var2.Sumw2()
 
-            rbn=2; xmin=0.; xmax=0.6; title='#tau_{2}/#tau_{1}'
+            rbn=2; xmin=0.0; xmax=0.4; title='#tau_{3}/#tau_{2}'
 
             hist_zh_var1.Rebin(rbn)
             hist_zh_var1.SetLineColor(ROOT.kBlack)
@@ -948,42 +950,53 @@ if dotaus:
             hist_tt_var = hist_tt_var1.Clone()
             hist_tt_var.Divide(hist_tt_var2,hist_tt_var1,1.,1.,"b");
 
-            ymin = 0.; ymax = hist_zh_var.GetMaximum()
-            ymax = ymax + 2*ymax
 
             canvas = ROOT.TCanvas()
             #canvas.SetLogy()
-            imin=0
-            imax=hist_zh_var.GetXaxis().FindBin(0.6)
-            error= ROOT.Double(0.)
+
+            zhnbins = hist_zh_var.GetSize() - 2
+            dynbins = hist_dy_var.GetSize() - 2
+            ttnbins = hist_tt_var.GetSize() - 2
+
+            hist_zh_var.Scale(1/hist_zh_var.Integral(0,zhnbins))
+            hist_dy_var.Scale(1/hist_dy_var.Integral(0,dynbins))
+            hist_tt_var.Scale(1/hist_tt_var.Integral(0,ttnbins))
+
+            ymin = 0.; ymax = hist_zh_var.GetMaximum()
+            if ymax < hist_dy_var.GetMaximum(): ymax = hist_dy_var.GetMaximum()
+            if ymax < hist_tt_var.GetMaximum(): ymax = hist_tt_var.GetMaximum()
+            ymax = 1.3*ymax
 
             hist_zh_var.SetMarkerStyle(20)
             hist_zh_var.SetMarkerColor(ROOT.kBlack)
+            hist_zh_var.SetFillColor(ROOT.kBlack)
+            hist_zh_var.SetFillStyle(3016)
             hist_zh_var.GetXaxis().SetRangeUser(xmin, xmax)
             hist_zh_var.GetYaxis().SetRangeUser(ymin, ymax)
             hist_zh_var.GetXaxis().SetTitleSize(0.05)
             hist_zh_var.GetXaxis().SetTitleOffset(0.8)
             hist_zh_var.GetXaxis().SetTitle(title)
-            hist_zh_var.Scale(1/hist_zh_var.IntegralAndError(imin,imax,error))
             hist_dy_var.SetMarkerStyle(22)
             hist_dy_var.SetMarkerColor(ROOT.kRed)
+            hist_dy_var.SetFillColor(ROOT.kRed)
+            hist_dy_var.SetFillStyle(3013)
             hist_dy_var.GetXaxis().SetRangeUser(xmin, xmax)
             hist_dy_var.GetYaxis().SetRangeUser(ymin, ymax)
             hist_dy_var.GetXaxis().SetTitleSize(0.05)
             hist_dy_var.GetXaxis().SetTitleOffset(0.8)
             hist_dy_var.GetXaxis().SetTitle(title)
-            hist_dy_var.Scale(1/hist_dy_var.IntegralAndError(imin,imax,error))
             hist_tt_var.SetMarkerStyle(21)
             hist_tt_var.SetMarkerColor(ROOT.kGreen)
+            hist_tt_var.SetFillColor(ROOT.kGreen)
+            hist_tt_var.SetFillStyle(3004)
             hist_tt_var.GetXaxis().SetRangeUser(xmin, xmax)
             hist_tt_var.GetYaxis().SetRangeUser(ymin, ymax)
             hist_tt_var.GetXaxis().SetTitleSize(0.05)
             hist_tt_var.GetXaxis().SetTitleOffset(0.8)
             hist_tt_var.GetXaxis().SetTitle(title)
-            hist_tt_var.Scale(1/hist_tt_var.IntegralAndError(imin,imax,error))
-            hist_zh_var.Draw("P")
-            hist_dy_var.Draw("same, P")
-            hist_tt_var.Draw("same, P")
+            hist_zh_var.Draw("HIST")
+            hist_dy_var.Draw("same HIST")
+            hist_tt_var.Draw("same HIST")
 
 
             latex = ROOT.TLatex()
@@ -1006,8 +1019,97 @@ if dotaus:
 
             canvas.Update()
 
-            canvas.SaveAs('/uscms_data/d3/ingabu/CSA14/CMSSW_7_1_0_pre9/src/VHbb/HbbAnalyzer/macros/Gifs/SB/MorePlots/tau'+ c + a + '.gif')
+            canvas.SaveAs('/uscms_data/d3/ingabu/CSA14/CMSSW_7_1_0_pre9/src/VHbb/HbbAnalyzer/macros/Gifs/SB/MorePlots/tau3o2'+ c + a + '.gif')
 
-        
+if dosingletau:
+    for a in fat: 
+        for t in tau:
+            hist_zh_var = zh.Get('HbbAnalyzer/' + a + '/' + t + a)
+            hist_zh_var.Sumw2()
+            hist_dy_var = dy.Get('HbbAnalyzer/' + a + '/' + t + a)
+            hist_dy_var.Sumw2()
+            hist_tt_var = tt.Get('HbbAnalyzer/' + a + '/' + t + a)
+            hist_tt_var.Sumw2()
+
+            rbn=2; xmin=0.0; xmax=0.8;
+            if t.find('tau1') > -1: title='#tau_{1}'
+            if t.find('tau2') > -1: title='#tau_{2}'
+            if t.find('tau3') > -1: title='#tau_{3}'
+
+            hist_zh_var.Rebin(rbn)
+            hist_zh_var.SetLineColor(ROOT.kBlack)
+            hist_zh_var.SetLineWidth(3)
+            hist_zh_var.SetStats(0)
+            hist_dy_var.Rebin(rbn)
+            hist_dy_var.SetLineColor(ROOT.kRed)
+            hist_dy_var.SetLineWidth(3)
+            hist_dy_var.SetStats(0)
+            hist_tt_var.Rebin(rbn)
+            hist_tt_var.SetLineColor(ROOT.kGreen)
+            hist_tt_var.SetLineWidth(3)
+            hist_tt_var.SetStats(0)
+
+            canvas = ROOT.TCanvas()
+            #canvas.SetLogy()
+
+            #hist_zh_var.Scale(1/hist_zh_var.IntegralAndError(imin,imax,error))
+            hist_zh_var.Scale(1/hist_zh_var.Integral())
+            #hist_dy_var.Scale(1/hist_dy_var.IntegralAndError(imin,imax,error))
+            hist_dy_var.Scale(1/hist_dy_var.Integral())
+            #hist_tt_var.Scale(1/hist_tt_var.IntegralAndError(imin,imax,error))
+            hist_tt_var.Scale(1/hist_tt_var.Integral())
+
+            ymin = 0.; ymax = hist_zh_var.GetMaximum()
+            if ymax < hist_dy_var.GetMaximum(): ymax = hist_dy_var.GetMaximum()
+            if ymax < hist_tt_var.GetMaximum(): ymax = hist_tt_var.GetMaximum()
+            ymax = 1.3*ymax
+
+            hist_zh_var.SetFillColor(ROOT.kBlack)
+            hist_zh_var.SetFillStyle(3016)
+            hist_zh_var.GetXaxis().SetRangeUser(xmin, xmax)
+            hist_zh_var.GetYaxis().SetRangeUser(ymin, ymax)
+            hist_zh_var.GetXaxis().SetTitleSize(0.05)
+            hist_zh_var.GetXaxis().SetTitleOffset(0.8)
+            hist_zh_var.GetXaxis().SetTitle(title)
+            hist_dy_var.SetFillColor(ROOT.kRed)
+            hist_dy_var.SetFillStyle(3013)
+            hist_dy_var.GetXaxis().SetRangeUser(xmin, xmax)
+            hist_dy_var.GetYaxis().SetRangeUser(ymin, ymax)
+            hist_dy_var.GetXaxis().SetTitleSize(0.05)
+            hist_dy_var.GetXaxis().SetTitleOffset(0.8)
+            hist_dy_var.GetXaxis().SetTitle(title)
+            hist_tt_var.SetFillColor(ROOT.kGreen)
+            hist_tt_var.SetFillStyle(3004)
+            hist_tt_var.GetXaxis().SetRangeUser(xmin, xmax)
+            hist_tt_var.GetYaxis().SetRangeUser(ymin, ymax)
+            hist_tt_var.GetXaxis().SetTitleSize(0.05)
+            hist_tt_var.GetXaxis().SetTitleOffset(0.8)
+            hist_tt_var.GetXaxis().SetTitle(title)
+            hist_zh_var.Draw("HIST")
+            hist_dy_var.Draw("same HIST")
+            hist_tt_var.Draw("same HIST")
+
+
+            latex = ROOT.TLatex()
+            latex.SetNDC()
+            latex.SetTextSize(0.06)
+            latex.DrawLatex(0.10, 0.94, '#color[' + str(4) + ']{' + a + '}')
+
+
+            xl1=.7; yl1=.63 
+            xl2=xl1+.15; yl2=yl1+.23
+            leg =ROOT.TLegend(xl1,yl1,xl2,yl2);
+            leg.SetFillColor(0);
+            leg.SetLineColor(0);
+            leg.SetShadowColor(0);
+            leg.AddEntry(hist_zh_var,"ZH","l");
+            leg.AddEntry(hist_dy_var,"DYJets","l");
+            leg.AddEntry(hist_tt_var,"TTBar","l");
+            leg.SetTextSize(0.045);    
+            leg.Draw();
+
+            canvas.Update()
+
+            canvas.SaveAs('/uscms_data/d3/ingabu/CSA14/CMSSW_7_1_0_pre9/src/VHbb/HbbAnalyzer/macros/Gifs/SB/MorePlots/' + t + a + '.gif')
 
 #raw_input('...')
