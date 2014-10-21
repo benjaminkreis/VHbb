@@ -12,6 +12,9 @@ import os,sys
 
 from array import array
 
+d=os.environ['CMSSW_BASE']
+gROOT.ProcessLine('.L '+d+'/src/VHbb/post/weightSignalNLO.C+')
+
 PUWeight='PUweight'
 #trigWeightEl='weightTrig2012SingleEle'
 #trigWeightMu='weightTrig2012SingleMuon'
@@ -26,7 +29,7 @@ TGaxis.SetMaxDigits(3)
 
 class Plot:
 
-    def __init__(self,name,distribution,binsX=None,nBinsX=100,xMin=0,xMax=100,xTitle='',binsY=None,nBinsY=100,yMin=0,yMax=100,yTitle='',yLog=True,cuts="bdt",Vtype=3,boost='low'):
+    def __init__(self,name,distribution,binsX=None,nBinsX=100,xMin=0,xMax=100,xTitle='',binsY=None,nBinsY=100,yMin=0,yMax=100,yTitle='',yLog=True,cuts="bdt",Vtype=3,boost='med'):
         self.name=name; self.distribution=distribution; self.binsX=binsX; self.nBinsX=nBinsX; self.xMin=xMin; self.xMax=xMax; self.xTitle=xTitle; self.binsY=binsY; self.nBinsY=nBinsY; self.yMin=yMin; self.yMax=yMax; self.yTitle=yTitle; self.yLog=yLog; self.cuts=cuts; self.Vtype=Vtype; self.boost=boost
 
         self.is2D=(':' in self.distribution)
@@ -98,7 +101,7 @@ class Plot:
     def skip(self, sample):
         if (self.Vtype==0 or self.Vtype==2) and sample.channel=='el': return True
         if (self.Vtype==1 or self.Vtype==3) and sample.channel=='mu': return True
-        if (not doWJetsShapeSys and not doAllSys) and isEqual(sample.type,'WJets') and 'shape' in sample.name: return True
+        if (not doWJetsShapeSys and not doAllSys) and isEqual(sample.type,'ZJets') and 'shape' in sample.name: return True
         if (not doTTbarShapeSys and not doAllSys) and isEqual(sample.type,'ttbar') and 'shape' in sample.name: return True
         else: return False
                     
@@ -120,67 +123,76 @@ class Plot:
             sample.h=self.newHist(sample.name)
 
             theCuts=cuts[self.Vtype][self.cuts]+' && Vtype=='+str(self.Vtype)
-            if self.boost=='low': theCuts+=' && 100<V.pt && V.pt<130 && vLepton_pfCorrIso[0] < 0.075'
-            if self.boost=='med': theCuts+=' && 130<V.pt && V.pt<180'
-            if self.boost=='high': theCuts+=' && 180<V.pt'
+            #if self.boost=='low': theCuts+=' && 100<V.pt && V.pt<130'
+            if self.boost=='med' and self.cuts=='bdt': theCuts+=' && V.pt > 50. && V.pt < 100. && H.mass > 40. && H.mass < 250.'
+            if self.boost=='high' and self.cuts=='bdt': theCuts+=' && V.pt > 100. && H.mass < 250.'
             
             weight='1'
             if sample.isMC:
-                theCuts = theCuts.replace('((EVENT.run<193834 && (triggerFlags[22]>0 || triggerFlags[23]>0)) || (EVENT.run>=193834 && (triggerFlags[14]>0 ||triggerFlags[21]>0)))','1')
-                theCuts = theCuts.replace('(triggerFlags[44]>0)','1')
+                #theCuts = theCuts.replace('((EVENT.run<193834 && (triggerFlags[22]>0 || triggerFlags[23]>0)) || (EVENT.run>=193834 && (triggerFlags[14]>0 ||triggerFlags[21]>0)))','1')
+                #theCuts = theCuts.replace('(triggerFlags[44]>0)','1')
                 theCuts = theCuts.replace('(!(207883<=EVENT.run && EVENT.run<=208307))','1')
                 weight+=' * '+PUWeight 
                 weight+=' * '+self.trigWeight
-                if isEqual(sample.type,'WJets'): weight+=' * weightWpt_WJets'
-                if isEqual(sample.type,'ttbar'): weight+=' * weightWpt_TTbar'
-                weight+=' * weightEleTrigger'  #Why are we applying this weight to muon channel? JS
+                #if isEqual(sample.type,'WJets'): weight+=' * weightWpt_WJets'
+                #if isEqual(sample.type,'ttbar'): weight+=' * weightWpt_TTbar'
+                #weight+=' * weightEleTrigger'  #Why are we applying this weight to muon channel? JS
 
-                if doBDT:
+                if doBDT and not sample.isSignal:
                     weight+=' * 2'
                     theCuts+=' && EVENT.event%2==0'
 
+                if do1stHalfBDT:
+                    weight+=' * 4'
+                    theCuts+=' && EVENT.event%4==1'
+                    
+                if do2ndHalfBDT:
+                    weight+=' * 4'
+                    theCuts+=' && EVENT.event%2!=0 && EVENT.event%4!=1'
+
                 if sample.isSignal:
+                    #weight+=' * weightSignalNLO(genZ.pt)' # SS, 17 Oct 2014
                     #weight+=' * weightSignalEWK'
                     #weight+=' * weightSignalQCD'
                     weight+=' * 1'
 
                 weight+=' / effectiveLumi'
 
-            if isEqual(sample.type,'WJets'):
-                W_light='W_light'
-                W_b='W_b'
-                W_bb='W_bb'
+            if isEqual(sample.type,'ZJets'):
+                Z_light='Z_light'
+                Z_b='Z_b'
+                Z_bb='Z_bb'
                 if sample.systematic:
-                    W_light+='_'+sample.systematic
-                    W_b+='_'+sample.systematic
-                    W_bb+='_'+sample.systematic
+                    Z_light+='_'+sample.systematic
+                    Z_b+='_'+sample.systematic
+                    Z_bb+='_'+sample.systematic
 
-                self.extraHists[W_light]=self.newHist(W_light)
-                self.extraHists[W_b]=self.newHist(W_b)
-                self.extraHists[W_bb]=self.newHist(W_bb)
+                self.extraHists[Z_light]=self.newHist(Z_light)
+                self.extraHists[Z_b]=self.newHist(Z_b)
+                self.extraHists[Z_bb]=self.newHist(Z_bb)
 
                 if not applyNormSFs:
-                    scaleFactors[self.boost]['W_light'] = 1
-                    scaleFactors[self.boost]['W_b'] = 1
-                    scaleFactors[self.boost]['W_bb'] = 1
+                    scaleFactors[self.boost]['Z_light'] = 1
+                    scaleFactors[self.boost]['Z_b'] = 1
+                    scaleFactors[self.boost]['Z_bb'] = 1
                 
-                sample.chain.Draw(self.distribution+'>>'+self.extraHists[W_light].GetName(),weight+' * '+str(scaleFactors[self.boost]['W_light'])+' * ('+theCuts+' && ((abs(hJet_flavour[0])==5)+(abs(hJet_flavour[1])==5))==0)','GOFF')
-                sample.chain.Draw(self.distribution+'>>'+self.extraHists[W_b].GetName(),weight+' * '+str(scaleFactors[self.boost]['W_b'])    +' * ('+theCuts+' && ((abs(hJet_flavour[0])==5)+(abs(hJet_flavour[1])==5))==1)','GOFF')
-                sample.chain.Draw(self.distribution+'>>'+self.extraHists[W_bb].GetName(),weight+' * '+str(scaleFactors[self.boost]['W_bb'])   +' * ('+theCuts+' && ((abs(hJet_flavour[0])==5)+(abs(hJet_flavour[1])==5))==2)','GOFF')
+                sample.chain.Draw(self.distribution+'>>'+self.extraHists[Z_light].GetName(),weight+' * '+str(scaleFactors[self.boost]['Z_light'])+' * ('+theCuts+' && ((abs(hJet_flavour[0])==5)+(abs(hJet_flavour[1])==5))==0)','GOFF')
+                sample.chain.Draw(self.distribution+'>>'+self.extraHists[Z_b].GetName(),weight+' * '+str(scaleFactors[self.boost]['Z_b'])    +' * ('+theCuts+' && ((abs(hJet_flavour[0])==5)+(abs(hJet_flavour[1])==5))==1)','GOFF')
+                sample.chain.Draw(self.distribution+'>>'+self.extraHists[Z_bb].GetName(),weight+' * '+str(scaleFactors[self.boost]['Z_bb'])   +' * ('+theCuts+' && ((abs(hJet_flavour[0])==5)+(abs(hJet_flavour[1])==5))==2)','GOFF')
 
                 if showOverflow:   #if we fix the overflow when drawing all histograms, then all the "extraHists" will automatically have overflow taken care of
-                    for hName in [W_light,W_b,W_bb]:
+                    for hName in [Z_light,Z_b,Z_bb]:
                         h=self.extraHists[hName]
                         self.overflow(h)
                 
-                sample.h.Add(self.extraHists[W_light])
-                sample.h.Add(self.extraHists[W_b])
-                sample.h.Add(self.extraHists[W_bb])
+                sample.h.Add(self.extraHists[Z_light])
+                sample.h.Add(self.extraHists[Z_b])
+                sample.h.Add(self.extraHists[Z_bb])
 
                 #Inclusive W sample will be scaled below
-                self.extraHists[W_light].Scale(self.lumi)
-                self.extraHists[W_b].Scale(self.lumi)
-                self.extraHists[W_bb].Scale(self.lumi)
+                self.extraHists[Z_light].Scale(self.lumi)
+                self.extraHists[Z_b].Scale(self.lumi)
+                self.extraHists[Z_bb].Scale(self.lumi)
 
             else:
                 if isEqual(sample.type,'ttbar') and applyNormSFs: scaleFactor=str(scaleFactors[self.boost]['ttbar'])
@@ -237,15 +249,15 @@ class Plot:
         #W+Jets and ttbar shape
         if doWJetsShapeSys or doTTbarShapeSys or doAllSys:
             shapeSamples=[]
-            if doWJetsShapeSys or doAllSys and self.extraHists.has_key('WJets'):
-                shapeSamples+=['W_light','W_b','W_bb']
+            if doWJetsShapeSys or doAllSys and self.extraHists.has_key('ZJets'):
+                shapeSamples+=['Z_light','Z_b','Z_bb']
             if doTTbarShapeSys or doAllSys and self.extraHists.has_key('ttbar'):
                 shapeSamples+=['ttbar']
                     
             for sampleName in shapeSamples:
                 nominal=self.extraHists[sampleName]
                 if sampleName=='ttbar': up=self.extraHists[sampleName+'_ttbarShapeUp']
-                else: up=self.extraHists[sampleName+'_WJetsShapeUp']
+                else: up=self.extraHists[sampleName+'_ZJetsShapeUp']
                 down=up.Clone(up.GetName().replace('Up','Down'))
 
                 if self.is1D:
@@ -256,21 +268,24 @@ class Plot:
                         for yBin in range(0,self.nBinsY+2):
                             down.SetBinContent(yBin,max(0,nominal.GetBinContent(xBin,yBin)-(up.GetBinContent(xBin,yBin)-nominal.GetBinContent(xBin,yBin))))
                 if sampleName=='ttbar': self.extraHists[sampleName+'_ttbarShapeDown']=down
-                else: self.extraHists[sampleName+'_WJetsShapeDown']=down
+                else: self.extraHists[sampleName+'_ZJetsShapeDown']=down
                             
         #Force W+Jets and ttbar systematic integrals to nominal values
         for histName in self.extraHists.keys():
-            if self.extraHists.has_key('WJets'):  #Sometimes I skip WJets for speed - JS
-                if contains(histName,'W_light_'):
-                    self.extraHists[histName].Scale(self.integral(self.extraHists['W_light'])/self.integral(self.extraHists[histName]))
-                elif contains(histName,'W_b_'):
-                    self.extraHists[histName].Scale(self.integral(self.extraHists['W_b'])/self.integral(self.extraHists[histName]))
-                elif contains(histName,'W_bb_'):
-                    self.extraHists[histName].Scale(self.integral(self.extraHists['W_bb'])/self.integral(self.extraHists[histName]))
-            if self.extraHists.has_key('ttbar'):
-                if contains(histName,'ttbar_'):
-                    self.extraHists[histName].Scale(self.integral(self.extraHists['ttbar'])/self.integral(self.extraHists[histName]))
-                                                                                                       
+            try:
+				if self.extraHists.has_key('ZJets'):  #Sometimes I skip WJets for speed - JS
+					if contains(histName,'Z_light_'):
+						self.extraHists[histName].Scale(self.integral(self.extraHists['Z_light'])/self.integral(self.extraHists[histName]))
+					elif contains(histName,'Z_b_'):
+						self.extraHists[histName].Scale(self.integral(self.extraHists['Z_b'])/self.integral(self.extraHists[histName]))
+					elif contains(histName,'Z_bb_'):
+						self.extraHists[histName].Scale(self.integral(self.extraHists['Z_bb'])/self.integral(self.extraHists[histName]))
+				if self.extraHists.has_key('ttbar'):
+					if contains(histName,'ttbar_'):
+						self.extraHists[histName].Scale(self.integral(self.extraHists['ttbar'])/self.integral(self.extraHists[histName]))
+            except:
+				print histName, self.extraHists[histName], self.integral(self.extraHists[histName])
+                                                                                                      
         #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #Signals and total background - yes it shouldn't really be here but I want to return the total background yield - JS
 
@@ -336,6 +351,7 @@ class Plot:
             self.lPad.SetGridy()
             self.lPad.Draw()
 
+        #self.extraHists['Data'].SetMaximum(2*self.extraHists['Data'].GetMaximum())
         self.extraHists['Data'].SetMaximum(2*max(self.extraHists['Data'].GetMaximum(),self.extraHists['Total Background'].GetMaximum()))
         self.extraHists['Data'].SetMinimum(0.025)
 
@@ -357,6 +373,7 @@ class Plot:
             if signal in samplesForPlotting:
                 signal.h.Scale(signalMagFrac)
                 signal.h.Draw("SAME HIST")
+                #signal.h.Scale(1./signalMagFrac)
 
         self.extraHists['Data'].Draw("SAME E1 X0") #redraw data so its not hidden
         self.uPad.RedrawAxis()
@@ -532,7 +549,6 @@ class Plot:
             histogram.GetYaxis().SetTitleOffset(.75)
 
         histogram.GetYaxis().CenterTitle()
-        
         if self.yLog:
             self.uPad.SetLogy()
             histogram.SetMaximum(500*histogram.GetMaximum())
