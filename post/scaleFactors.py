@@ -1,23 +1,5 @@
 scaleFactors= {}
 
-for i in ['med','high']:
-    scaleFactors[i] = {}
-
-#Z(ll)
-scaleFactors['med']['Zlight']=1.11
-scaleFactors['med']['Zb']=1.59
-scaleFactors['med']['Zbb']=0.98
-scaleFactors['med']['ttbar']=1.10
-
-#Z(ll)
-scaleFactors['high']['Zlight']=1.11
-scaleFactors['high']['Zb']=1.59
-scaleFactors['high']['Zbb']=0.98
-scaleFactors['high']['ttbar']=1.10
-
-"""
-scaleFactors= {}
-
 for i in ['low','med','high']:
     scaleFactors[i] = {}
 
@@ -35,7 +17,6 @@ scaleFactors['high']['W_light']=1.04
 scaleFactors['high']['W_b']=2.46
 scaleFactors['high']['W_bb']=0.77
 scaleFactors['high']['ttbar']=1.00
-"""
 
 """
 scaleFactors = {}
