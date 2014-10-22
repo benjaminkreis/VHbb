@@ -10,8 +10,11 @@ import pickle
 defaultDistribution='h_mass_bdt'
 #defaultDistribution='x_mVH_bdt'
 
-defaultSignalNames=['Wh_125p6_0P','Wh_125p6_0M']
-defaultBackgroundNames=['W_light','W_b','W_bb','ZJets','ttbar','singleTop',
+defaultSignalNames=['Zh_125p6_0P','Zh_125p6_0M']
+defaultBackgroundNames=['Z_light','Z_b','Z_bb',
+                 #'ZJets',
+                 'ttbar',
+                 #'singleTop',
                  #'QCD',
                  'VZ','VV']
 
@@ -21,51 +24,51 @@ leptonEffSys='1.03'
 signalEWKSys='1.02'
 signalQCDSys='1.05'
 backgroundNormSys='1.1'
-ZJetsSys='1.10'  #suggested by Seth
-singleTopSys='1.15'
+#ZJetsSys='1.10'  #suggested by Seth
+#singleTopSys='1.15'
 dibosonSys='1.15'
-QCDSys='2'
+#QCDSys='2'
 qqbarPDFSys='1.01'
 ggPDFSys='1.01'
 METSys='1.03'  #FIX ME - should this be a shape uncertainty?
 
 #FIX ME - Should there be QCD scale uncertainties?
-flatSystematics=[('lumi',{'Wh_125p6_0P':lumiSys,'Wh_125p6_0M':lumiSys,'ZJets':lumiSys,'singleTop':lumiSys,'QCD':lumiSys,'VZ':lumiSys,'VV':lumiSys}),
-                 ('leptonEff',{'Wh_125p6_0P':leptonEffSys,'Wh_125p6_0M':leptonEffSys,'ZJets':leptonEffSys,'singleTop':leptonEffSys,'QCD':leptonEffSys,'VZ':leptonEffSys,'VV':leptonEffSys}),
-                 #('MET',{'Wh_125p6_0P':METSys,'Wh_125p6_0M':METSys,'ZJets':METSys,'singleTop':METSys,'QCD':METSys,'VZ':METSys,'VV':METSys}),
-                 ('qqbarPDF',{'Wh_125p6_0P':qqbarPDFSys,'Wh_125p6_0M':qqbarPDFSys,'VZ':qqbarPDFSys,'VV':qqbarPDFSys}),
+flatSystematics=[('lumi',{'Zh_125p6_0P':lumiSys,'Zh_125p6_0M':lumiSys,'VZ':lumiSys,'VV':lumiSys}),
+                 ('leptonEff',{'Zh_125p6_0P':leptonEffSys,'Zh_125p6_0M':leptonEffSys,'VZ':leptonEffSys,'VV':leptonEffSys}),
+                 #('MET',{'Wh_OA125p6_0P':METSys,'Wh_125p6_0M':METSys,'ZJets':METSys,'singleTop':METSys,'QCD':METSys,'VZ':METSys,'VV':METSys}),
+                 ('qqbarPDF',{'Zh_125p6_0P':qqbarPDFSys,'Zh_125p6_0M':qqbarPDFSys,'VZ':qqbarPDFSys,'VV':qqbarPDFSys}),
                  ('ggPDF',{'singleTop':ggPDFSys,'QCD':ggPDFSys}),
-                 ('signalBoostEWK',{'Wh_125p6_0P':signalEWKSys,'Wh_125p6_0M':signalEWKSys}),
-                 ('signalBoostQCD',{'Wh_125p6_0P':signalQCDSys,'Wh_125p6_0M':signalQCDSys}),
-                 ('WlightNorm',{'W_light':backgroundNormSys}),
-                 ('WbNorm',{'W_b':backgroundNormSys}),
-                 ('WbbNorm',{'W_bb':backgroundNormSys}),
-                 ('ZjetsNorm',{'ZJets':ZJetsSys}),
+                 ('signalBoostEWK',{'Zh_125p6_0P':signalEWKSys,'Zh_125p6_0M':signalEWKSys}),
+                 ('signalBoostQCD',{'Zh_125p6_0P':signalQCDSys,'Zh_125p6_0M':signalQCDSys}),
+                 ('ZlightNorm',{'Z_light':backgroundNormSys}),
+                 ('ZbNorm',{'Z_b':backgroundNormSys}),
+                 ('ZbbNorm',{'Z_bb':backgroundNormSys}),
+                 #('ZjetsNorm',{'ZJets':ZJetsSys}),
                  ('ttbarNorm',{'ttbar':backgroundNormSys}),
-                 ('singleTopNorm',{'singleTop':singleTopSys}),
-                 ('QCDNorm',{'QCD':QCDSys}),
+                 #('singleTopNorm',{'singleTop':singleTopSys}),
+                 #('QCDNorm',{'QCD':QCDSys}),
                  ('dibosonNorm',{'VZ':dibosonSys,'VV':dibosonSys}),
                  ]
 
 #FIX ME - we need systematic samples for signal
 one='1'
-shapeSystematics=[('JEC',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'W_light':one,'W_b':one,'W_bb':one,'ZJets':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
-                  ('JER',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'W_light':one,'W_b':one,'W_bb':one,'ZJets':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
-                  ('btag',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'W_light':one,'W_b':one,'W_bb':one,'ZJets':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
-                  ('mistag',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'W_light':one,'W_b':one,'W_bb':one,'ZJets':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
-                  ('stat_0P',{'Wh_125p6_0P':one}),
-                  ('stat_0M',{'Wh_125p6_0M':one}),
-                  ('stat_W_light',{'W_light':one}),
-                  ('stat_W_b',{'W_b':one}),
-                  ('stat_W_bb',{'W_bb':one}),
-                  ('stat_ZJets',{'ZJets':one}),
+shapeSystematics=[('JEC',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one}),
+                  ('JER',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one}),
+                  ('btag',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one}),
+                  ('mistag',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one}),
+                  ('stat_0P',{'Zh_125p6_0P':one}),
+                  ('stat_0M',{'Zh_125p6_0M':one}),
+                  ('stat_Z_light',{'Z_light':one}),
+                  ('stat_Z_b',{'Z_b':one}),
+                  ('stat_Z_bb',{'Z_bb':one}),
+                  #('stat_ZJets',{'ZJets':one}),
                   ('stat_ttbar',{'ttbar':one}),
-                  ('stat_singleTop',{'singleTop':one}),
-                  ('stat_QCD',{'QCD':one}),
+                  #('stat_singleTop',{'singleTop':one}),
+                  #('stat_QCD',{'QCD':one}),
                   ('stat_VZ',{'VZ':one}),
                   ('stat_VV',{'VV':one}),
-                  ('ttbarShape',{'ttbar':one}),
-                  ('WJetsShape',{'W_light':one,'W_b':one,'W_bb':one}),
+                  #('ttbarShape',{'ttbar':one}),
+                  #('WJetsShape',{'W_light':one,'W_b':one,'W_bb':one}),
                   ]
                     
 ########################################################################
