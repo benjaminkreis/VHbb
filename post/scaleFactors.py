@@ -4,15 +4,15 @@ for i in ['med','high']:
     scaleFactors[i] = {}
 
 #Z(ll)
-scaleFactors['med']['Zlight']=1.11
-scaleFactors['med']['Zb']=1.59
-scaleFactors['med']['Zbb']=0.98
+scaleFactors['med']['Z_light']=1.11
+scaleFactors['med']['Z_b']=1.59
+scaleFactors['med']['Z_bb']=0.98
 scaleFactors['med']['ttbar']=1.10
 
 #Z(ll)
-scaleFactors['high']['Zlight']=1.11
-scaleFactors['high']['Zb']=1.59
-scaleFactors['high']['Zbb']=0.98
+scaleFactors['high']['Z_light']=1.11
+scaleFactors['high']['Z_b']=1.59
+scaleFactors['high']['Z_bb']=0.98
 scaleFactors['high']['ttbar']=1.10
 
 """
