@@ -124,8 +124,8 @@ class Plot:
 
             theCuts=cuts[self.Vtype][self.cuts]+' && Vtype=='+str(self.Vtype)
             #if self.boost=='low': theCuts+=' && 100<V.pt && V.pt<130'
-            if self.boost=='med' and self.cuts=='bdt': theCuts+=' && V.pt > 50. && V.pt < 100. && H.mass > 40. && H.mass < 250.'
-            if self.boost=='high' and self.cuts=='bdt': theCuts+=' && V.pt > 100. && H.mass < 250.'
+            if self.boost=='med' and self.cuts=='bdt': theCuts+=' && V.pt > 50. && V.pt < 100. && h_HmCorr > 40. && h_HmCorr < 250.'
+            if self.boost=='high' and self.cuts=='bdt': theCuts+=' && V.pt > 100. && h_HmCorr < 250.'
             
             weight='1'
             if sample.isMC:
@@ -140,7 +140,7 @@ class Plot:
 
                 if doBDT and not sample.isSignal:
                     weight+=' * 2'
-                    theCuts+=' && EVENT.event%2==0'
+                    theCuts+=' && EventForTraining==0'#' && EVENT.event%2==0'
 
                 if do1stHalfBDT:
                     weight+=' * 4'
@@ -194,6 +194,20 @@ class Plot:
                 self.extraHists[Z_b].Scale(self.lumi)
                 self.extraHists[Z_bb].Scale(self.lumi)
 
+                if DEBUG:
+                    print '=============================='
+                    print weight+' * '+scaleFactor
+                    print '=============================='
+                    print theCuts
+                    print '=============================='
+
+                stdout_old = sys.stdout
+                logFile = open(outputDir + '/log.txt','a')
+                sys.stdout = logFile                    
+                if DEBUG:
+                    print "Draw:",sample.name, self.Vtype, self.cuts, self.boost, sample.h.Integral()#, sample.h.Integral(0,sample.h.GetNbinsX()+1, 0,sample.h.GetNbinsY()+1)
+                sys.stdout = stdout_old
+                logFile.close()
             else:
                 if isEqual(sample.type,'ttbar') and applyNormSFs: scaleFactor=str(scaleFactors[self.boost]['ttbar'])
                 else: scaleFactor='1'
@@ -212,7 +226,7 @@ class Plot:
                 logFile = open(outputDir + '/log.txt','a')
                 sys.stdout = logFile
                 if DEBUG:
-                    print "Draw:",sample.name, self.Vtype, self.cuts, self.boost, sample.h.Integral(), sample.h.Integral(0,sample.h.GetNbinsX()+1, 0,sample.h.GetNbinsY()+1)
+                    print "Draw:",sample.name, self.Vtype, self.cuts, self.boost, sample.h.Integral()#, sample.h.Integral(0,sample.h.GetNbinsX()+1, 0,sample.h.GetNbinsY()+1)
                 sys.stdout = stdout_old
                 logFile.close()
 
