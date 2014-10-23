@@ -3,11 +3,11 @@ import pickle
 
 #defaultDistribution='hMass_v_VstarMass_bdt'
 #defaultDistribution='allBDTs_v_VstarMass_bdt'
-#defaultDistribution='mainBDT_v_VstarMass_bdt'
+defaultDistribution='mainBDT_v_VstarMass_bdt'
 
 #defaultDistribution='h_mass_mjj'
 #defaultDistribution='x_mVH_mjj'
-defaultDistribution='h_mass_bdt'
+#defaultDistribution='h_mass_bdt'
 #defaultDistribution='x_mVH_bdt'
 
 defaultSignalNames=['Zh_125p6_0P','Zh_125p6_0M']
