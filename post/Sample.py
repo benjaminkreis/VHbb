@@ -40,6 +40,7 @@ class Sample:
             return
 
         path+='/'+self.inputDir+'/*'+self.fileIdentifier+'*.root'
+        if self.fileIdentifier.startswith("Merged") or self.fileIdentifier.startswith("Zee") or self.fileIdentifier.startswith("Zmm"): path ='/eos/uscms/store/user/ntran/VHbb/Zll_step4/102114/'+self.inputDir+'/*'+self.fileIdentifier+'*.root'
         self.inputList=glob(path)
 
         if len(self.inputList)==0:
@@ -67,20 +68,34 @@ class Sample:
 
 #name,sampleType,inputDir,fileIdentifier,altName,channel):
 
-Zh_125p6_0P=Sample('Zh_125p6_0P','signal','','ZHiggs0P_M-125p6_8TeV-JHUGenV4-private_nominal','Zh (CP = 0^{+})')
-Zh_125p6_0M=Sample('Zh_125p6_0M','signal','','ZHiggs0M_M-125p6_8TeV-JHUGenV4-private_nominal','Zh (CP = 0^{-})')
+Zh_125p6_0P=Sample('Zh_125p6_0P','signal','/','ZHiggs0P_M-125p6_8TeV-JHUGenV4-private_nominal','Zh (CP = 0^{+})')
+Zh_125p6_0M=Sample('Zh_125p6_0M','signal','/','ZHiggs0M_M-125p6_8TeV-JHUGenV4-private_nominal','Zh (CP = 0^{-})')
 
-WZ=Sample('WZ','VZ','','WZ_TuneZ2star_8TeV_pythia6_tauola_nominal')
-#ZZ=Sample('ZZ','VZ','','ZZ_TuneZ2star_8TeV_pythia6_tauola_nominal') #BEN FIXME currently broken
-WW=Sample('WW','VV','','WW_TuneZ2star_8TeV_pythia6_tauola_nominal')
+WZ=Sample('WZ','VZ','/','WZ_TuneZ2star_8TeV_pythia6_tauola_nominal')
+ZZ=Sample('ZZ','VZ','/','ZZ_TuneZ2star_8TeV_pythia6_tauola_nominal')
+WW=Sample('WW','VV','/','WW_TuneZ2star_8TeV_pythia6_tauola_nominal')
 
 diboson=[WZ,ZZ,WW]
 
-ZJets=Sample('DYJetsToLL_PtZ-100','ZJets','', 'DYJetsToLL_PtZ-100_TuneZ2star_8TeV-madgraph_nominal')#BEN FIXME need many more samples
+"""
+DYJets_PtZ50to70=Sample('DYJetsToLL_PtZ-50To70','ZJets','/', 'DYJetsToLL_PtZ-50To70_TuneZ2star_8TeV-madgraph-tarball_nominal')
+DYJets_PtZ70to100=Sample('DYJetsToLL_PtZ-70To100','ZJets','/', 'DYJetsToLL_PtZ-70To100_TuneZ2star_8TeV-madgraph-tarball_nominal')
+DYJets_PtZ100=Sample('DYJetsToLL_PtZ-100','ZJets','/', 'DYJetsToLL_PtZ-100_TuneZ2star_8TeV-madgraph_nominal')
+DYJets_HT200to400=Sample('DYJetsToLL_HT-200To400','ZJets','/', 'DYJetsToLL_HT-200To400_TuneZ2Star_8TeV-madgraph_nominal')
+DYJets_HT400toInf=Sample('DYJetsToLL_HT-400ToInf','ZJets','/', 'DYJetsToLL_HT-400ToInf_TuneZ2Star_8TeV-madgraph_procV2_nominal')
+DYJets_M50=Sample('DYJetsToLL_M-50','ZJets','/', 'DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_nominal')
+DY1Jets_M50=Sample('DY1JetsToLL_M-50','ZJets','/', 'DY1JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_procV2_mergeV1V2_nominal')
+DY2Jets_M50=Sample('DY2JetsToLL_M-50','ZJets','/', 'DY2JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_nominal')
+DY3Jets_M50=Sample('DY3JetsToLL_M-50','ZJets','/', 'DY3JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_nominal')
+DY4Jets_M50=Sample('DY4JetsToLL_M-50','ZJets','/', 'DY4JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_mergeV1V2_nominal')
 
-TTbar_FullLept=Sample('TTbar_FullLept','ttbar','','TTJets_FullLeptMGDecays_8TeV-madgraph_nominal')
-TTbar_SemiLept=Sample('TTbar_SemiLept','ttbar','','TTJets_SemiLeptMGDecays_8TeV-madgraph_nominal')
-TTbar_Hadronic=Sample('TTbar_Hadronic','ttbar','','TTJets_HadronicMGDecays_8TeV-madgraph_nominal')
+Zjets=[DYJets_PtZ50to70,DYJets_PtZ70to100,DYJets_PtZ100,DYJets_HT200to400,DYJets_HT400toInf,DYJets_M50,DY1Jets_M50,DY2Jets_M50,DY3Jets_M50,DY4Jets_M50]
+"""
+Zjets=[Sample('MergedDY','ZJets','/', 'Merged_DY_nominal_4.1')]
+
+TTbar_FullLept=Sample('TTbar_FullLept','ttbar','/','TTJets_FullLeptMGDecays_8TeV-madgraph_nominal')
+TTbar_SemiLept=Sample('TTbar_SemiLept','ttbar','/','TTJets_SemiLeptMGDecays_8TeV-madgraph_nominal')
+TTbar_Hadronic=Sample('TTbar_Hadronic','ttbar','/','TTJets_HadronicMGDecays_8TeV-madgraph_nominal')
 
 ttbar=[TTbar_FullLept,TTbar_SemiLept,TTbar_Hadronic]
 
@@ -107,14 +122,14 @@ ttbar=[TTbar_FullLept,TTbar_SemiLept,TTbar_Hadronic]
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-dataEl=Sample('DataEl','Data','','Zee',channel='el')
-dataMu=Sample('DataMu','Data','','Zmm',channel='mu')
+dataEl=Sample('DataEl','Data','/','Zee_nominal',channel='el')
+dataMu=Sample('DataMu','Data','/','Zmm_nominal',channel='mu')
 
 data=[dataEl,dataMu]
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 
-samplesForPlotting=[Zh_125p6_0P,Zh_125p6_0M]+diboson+[ZJets]+ttbar+data
+samplesForPlotting=[Zh_125p6_0P,Zh_125p6_0M]+diboson+Zjets+ttbar+data
 
 #samplesForPlotting=[Wh_125p6_0P,Wh_125p6_0M,Wh_125p6_0Mf05ph0]+diboson+[WJets,ZJets]+ttbar+singleTop+QCD+data
 #samplesForPlotting=[Wh_125p6_0P,Wh_125p6_0M,Wh_125p6_0Mf05ph0]+diboson+[ZJets]+ttbar+singleTop+QCD+data   #no W+Jets
@@ -129,6 +144,7 @@ allSamples=samplesForPlotting
 #WJetsHW=Sample('WJets_shapeSys','WJets','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/WJets_boostedHW_lumiWeighted',systematic='WJetsShapeUp')
 #ttbarMCatNLO=Sample('ttbar_shapeSys','ttbar','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/TTbar_mcAtNLO_lumiWeighted',systematic='ttbarShapeUp')
 #systematicSamples=[WJetsHW,ttbarMCatNLO]
+systematicSamples=[]
 
 systematics=['JECDown','JECUp','JERDown','JERUp','btagDown','btagUp','mistagDown','mistagUp']
 for sample in allSamples:
