@@ -40,7 +40,7 @@ class Sample:
             return
 
         path+='/'+self.inputDir+'/*'+self.fileIdentifier+'*.root'
-        if self.fileIdentifier.startswith("Merged") or self.fileIdentifier.startswith("Zee") or self.fileIdentifier.startswith("Zmm"): path ='/eos/uscms/store/user/ntran/VHbb/Zll_step4/102114/'+self.inputDir+'/*'+self.fileIdentifier+'*.root'
+        #if self.fileIdentifier.startswith("Merged") or self.fileIdentifier.startswith("Zee") or self.fileIdentifier.startswith("Zmm"): path ='/eos/uscms/store/user/ntran/VHbb/Zll_step4/102114/'+self.inputDir+'/*'+self.fileIdentifier+'*.root'
         self.inputList=glob(path)
 
         if len(self.inputList)==0:
@@ -91,7 +91,7 @@ DY4Jets_M50=Sample('DY4JetsToLL_M-50','ZJets','/', 'DY4JetsToLL_M-50_TuneZ2Star_
 
 Zjets=[DYJets_PtZ50to70,DYJets_PtZ70to100,DYJets_PtZ100,DYJets_HT200to400,DYJets_HT400toInf,DYJets_M50,DY1Jets_M50,DY2Jets_M50,DY3Jets_M50,DY4Jets_M50]
 """
-Zjets=[Sample('MergedDY','ZJets','/', 'Merged_DY_nominal_4.1')]
+Zjets=[Sample('MergedDY','ZJets','/', 'Merged_DY_nominal')]
 
 TTbar_FullLept=Sample('TTbar_FullLept','ttbar','/','TTJets_FullLeptMGDecays_8TeV-madgraph_nominal')
 TTbar_SemiLept=Sample('TTbar_SemiLept','ttbar','/','TTJets_SemiLeptMGDecays_8TeV-madgraph_nominal')
