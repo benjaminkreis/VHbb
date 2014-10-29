@@ -9,7 +9,7 @@
 #include "TObject.h"
 
 //
-// NOTE: Contains dirty hacks for things like 0P and 0PH so thy don't interfere.  not completely general!!
+// NOTE: Should be a little more clever with strings so that 0M and 0Mf05ph0 don't interfere
 //
 
 void makeNew(TFile * myFile, TString oldname, TString newname) {
@@ -52,7 +52,7 @@ void renormalize_by_factor(TFile * myFile, double factor, TString changeHistName
   hChange->Write();
 }
 
-void convertRootFile(TString sigName = "Wh_125p6_0P", TString sigAltName = "Wh_125p6_0M", double altMu=-1.0) {
+void convertRootFile(TString sigName = "Zh_125p6_0P", TString sigAltName = "Zh_125p6_0M", double altMu=-1.0) {
 
   TFile * myFile = new TFile("plots.root", "update");
   cout << "Changing file " << myFile << endl;
@@ -68,27 +68,25 @@ void convertRootFile(TString sigName = "Wh_125p6_0P", TString sigAltName = "Wh_1
     TString newName = oldName;
     
     if( oldName.Contains(sigName) ) {
-      if( !(sigName=="Wh_125p6_0P" && oldName.Contains("0PH")) ){ //dirty hack
-	newName.ReplaceAll(sigName,"sig");
-	cout << oldName << " -> " << newName << endl;
-	makeNew(myFile, oldName, newName);
-      }//dirty hack
+      newName.ReplaceAll(sigName,"sig");
+      //cout << oldName << " " << newName << endl;
+      makeNew(myFile, oldName, newName);
     }
-    if( oldName.Contains(sigAltName) ) {
-      if( !(sigAltName=="Wh_125p6_0M" && oldName.Contains("0Mf05ph0")) ){ //dirty hack
-	newName.ReplaceAll(sigAltName,"sig_ALT");
-	cout << oldName << " -> " << newName << endl;
-	makeNew(myFile, oldName, newName);
-	
-	//Renormalize by factor
-	if(altMu >= 0) {
-	  renormalize_by_factor(myFile, altMu, newName);
-	}
-      }//dirty hack
+    else if( oldName.Contains(sigAltName) ) {
+      if( sigAltName=="Zh_125p6_0M" && oldName.Contains("0Mf05ph0") ) continue; //dirty hack
+      newName.ReplaceAll(sigAltName,"sig_ALT");
+      //cout << oldName << " " << newName << endl;
+      makeNew(myFile, oldName, newName);
+
+      //Renormalize by factor
+      if(altMu >= 0) {
+	renormalize_by_factor(myFile, altMu, newName);
+      }
+
     }
-    
+        
   }//end loop over keys
-  
+
   myFile->Close();
 
 }
