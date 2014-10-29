@@ -210,7 +210,7 @@ int extractSignificanceStats_NewBlind(bool unblind=false, TString legALT="0^{-}"
   //Plotting
  //Plotting
   gStyle->SetOptStat(0);
-  TCanvas *c1=new TCanvas("c","c",500,500);
+  TCanvas *c1=new TCanvas("c","c",800,600);
   c1->cd();
   hSM->Rebin(50);
   hPS->Rebin(50);
@@ -320,7 +320,7 @@ int extractSignificanceStats_NewBlind(bool unblind=false, TString legALT="0^{-}"
 
  leg->Draw();
 
-  c1->SaveAs("sigsep_combine_"+nameALT+".eps");
+  c1->SaveAs("sigsep_combine_"+nameALT+".pdf");
   c1->SaveAs("sigsep_combine_"+nameALT+".png");
   c1->SaveAs("sigsep_combine_"+nameALT+".root");
   c1->SaveAs("sigsep_combine_"+nameALT+".C");
