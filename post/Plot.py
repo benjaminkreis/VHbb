@@ -12,6 +12,9 @@ import os,sys
 
 from array import array
 
+d=os.environ['CMSSW_BASE']
+gROOT.ProcessLine('.L '+d+'/src/VHbb/post/weightSignalNLO.C+')
+
 PUWeight='PUweight'
 #trigWeightEl='weightTrig2012SingleEle'
 #trigWeightMu='weightTrig2012SingleMuon'
@@ -135,14 +138,22 @@ class Plot:
                 if isEqual(sample.type,'ttbar'): weight+=' * weightWpt_TTbar'
                 weight+=' * weightEleTrigger'  #Why are we applying this weight to muon channel? JS
 
-                if doBDT:
+                if doBDT and not sample.isSignal:
                     weight+=' * 2'
                     theCuts+=' && EVENT.event%2==0'
 
+                if do1stHalfBDT:
+                    weight+=' * 4'
+                    theCuts+=' && EVENT.event%4==1'
+                    
+                if do2ndHalfBDT:
+                    weight+=' * 4'
+                    theCuts+=' && EVENT.event%2!=0 && EVENT.event%4!=1'
+
                 if sample.isSignal:
-                    #weight+=' * weightSignalEWK'
-                    #weight+=' * weightSignalQCD'
-                    weight+=' * 1'
+                    weight+=' * weightSignalNLO(genWstar.pt)' # SS, 17 Oct 2014
+                    weight+=' * weightSignalEWK'
+                    weight+=' * weightSignalQCD'
 
                 weight+=' / effectiveLumi'
 
@@ -260,17 +271,20 @@ class Plot:
                             
         #Force W+Jets and ttbar systematic integrals to nominal values
         for histName in self.extraHists.keys():
-            if self.extraHists.has_key('WJets'):  #Sometimes I skip WJets for speed - JS
-                if contains(histName,'W_light_'):
-                    self.extraHists[histName].Scale(self.integral(self.extraHists['W_light'])/self.integral(self.extraHists[histName]))
-                elif contains(histName,'W_b_'):
-                    self.extraHists[histName].Scale(self.integral(self.extraHists['W_b'])/self.integral(self.extraHists[histName]))
-                elif contains(histName,'W_bb_'):
-                    self.extraHists[histName].Scale(self.integral(self.extraHists['W_bb'])/self.integral(self.extraHists[histName]))
-            if self.extraHists.has_key('ttbar'):
-                if contains(histName,'ttbar_'):
-                    self.extraHists[histName].Scale(self.integral(self.extraHists['ttbar'])/self.integral(self.extraHists[histName]))
-                                                                                                       
+            try:
+				if self.extraHists.has_key('WJets'):  #Sometimes I skip WJets for speed - JS
+					if contains(histName,'W_light_'):
+						self.extraHists[histName].Scale(self.integral(self.extraHists['W_light'])/self.integral(self.extraHists[histName]))
+					elif contains(histName,'W_b_'):
+						self.extraHists[histName].Scale(self.integral(self.extraHists['W_b'])/self.integral(self.extraHists[histName]))
+					elif contains(histName,'W_bb_'):
+						self.extraHists[histName].Scale(self.integral(self.extraHists['W_bb'])/self.integral(self.extraHists[histName]))
+				if self.extraHists.has_key('ttbar'):
+					if contains(histName,'ttbar_'):
+						self.extraHists[histName].Scale(self.integral(self.extraHists['ttbar'])/self.integral(self.extraHists[histName]))
+            except:
+				print histName, self.extraHists[histName], self.integral(self.extraHists[histName])
+                                                                                                      
         #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #Signals and total background - yes it shouldn't really be here but I want to return the total background yield - JS
 
@@ -336,6 +350,7 @@ class Plot:
             self.lPad.SetGridy()
             self.lPad.Draw()
 
+        #self.extraHists['Data'].SetMaximum(2*self.extraHists['Data'].GetMaximum())
         self.extraHists['Data'].SetMaximum(2*max(self.extraHists['Data'].GetMaximum(),self.extraHists['Total Background'].GetMaximum()))
         self.extraHists['Data'].SetMinimum(0.025)
 
@@ -357,6 +372,7 @@ class Plot:
             if signal in samplesForPlotting:
                 signal.h.Scale(signalMagFrac)
                 signal.h.Draw("SAME HIST")
+                #signal.h.Scale(1./signalMagFrac)
 
         self.extraHists['Data'].Draw("SAME E1 X0") #redraw data so its not hidden
         self.uPad.RedrawAxis()
@@ -532,7 +548,6 @@ class Plot:
             histogram.GetYaxis().SetTitleOffset(.75)
 
         histogram.GetYaxis().CenterTitle()
-        
         if self.yLog:
             self.uPad.SetLogy()
             histogram.SetMaximum(500*histogram.GetMaximum())

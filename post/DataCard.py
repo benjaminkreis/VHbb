@@ -3,11 +3,12 @@ import pickle
 
 #defaultDistribution='hMass_v_VstarMass_bdt'
 #defaultDistribution='allBDTs_v_VstarMass_bdt'
-#defaultDistribution='mainBDT_v_VstarMass_bdt'
+defaultDistribution='mainBDT_v_VstarMass_bdt'
+#defaultDistribution='mainBDT_v_SMvPS_bdt'
 
 #defaultDistribution='h_mass_mjj'
 #defaultDistribution='x_mVH_mjj'
-defaultDistribution='h_mass_bdt'
+#defaultDistribution='h_mass_bdt'
 #defaultDistribution='x_mVH_bdt'
 
 defaultSignalNames=['Wh_125p6_0P','Wh_125p6_0M']
@@ -18,7 +19,8 @@ defaultBackgroundNames=['W_light','W_b','W_bb','ZJets','ttbar','singleTop',
 none='-'
 lumiSys='1.026'
 leptonEffSys='1.03'
-signalEWKSys='1.02'
+signalEWKSys0P='1.02'
+signalEWKSys0M='1.10' # SS, 17 Oct 2014
 signalQCDSys='1.05'
 backgroundNormSys='1.1'
 ZJetsSys='1.10'  #suggested by Seth
@@ -35,7 +37,7 @@ flatSystematics=[('lumi',{'Wh_125p6_0P':lumiSys,'Wh_125p6_0M':lumiSys,'ZJets':lu
                  #('MET',{'Wh_125p6_0P':METSys,'Wh_125p6_0M':METSys,'ZJets':METSys,'singleTop':METSys,'QCD':METSys,'VZ':METSys,'VV':METSys}),
                  ('qqbarPDF',{'Wh_125p6_0P':qqbarPDFSys,'Wh_125p6_0M':qqbarPDFSys,'VZ':qqbarPDFSys,'VV':qqbarPDFSys}),
                  ('ggPDF',{'singleTop':ggPDFSys,'QCD':ggPDFSys}),
-                 ('signalBoostEWK',{'Wh_125p6_0P':signalEWKSys,'Wh_125p6_0M':signalEWKSys}),
+                 ('signalBoostEWK',{'Wh_125p6_0P':signalEWKSys0P,'Wh_125p6_0M':signalEWKSys0M}),
                  ('signalBoostQCD',{'Wh_125p6_0P':signalQCDSys,'Wh_125p6_0M':signalQCDSys}),
                  ('WlightNorm',{'W_light':backgroundNormSys}),
                  ('WbNorm',{'W_b':backgroundNormSys}),

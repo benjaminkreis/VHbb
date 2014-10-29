@@ -14,7 +14,6 @@ class Sample:
 
         self.systematic=systematic
         
-        
     #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     def setType(self,sampleType):
@@ -88,7 +87,7 @@ TTbar_FullLept=Sample('TTbar_FullLept','ttbar','Ntuple_Step1V42_Step2Tag_EDMV42_
 TTbar_SemiLept=Sample('TTbar_SemiLept','ttbar','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/TTbar_SemiLept_lumiWeighted')
 TTbar_Hadronic=Sample('TTbar_Hadronic','ttbar','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/TTbar_Hadronic_lumiWeighted')
 
-ttbar=[TTbar_FullLept,TTbar_SemiLept,TTbar_Hadronic]
+ttbar=[TTbar_FullLept,TTbar_SemiLept]#,TTbar_Hadronic]
 
 singleTop_sChannel=Sample('singleTop_sChannel','singleTop','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/SingleTop_sChannel_lumiWeighted')
 singleTop_tChannel=Sample('singleTop_tChannel','singleTop','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/SingleTop_tChannel_lumiWeighted')
