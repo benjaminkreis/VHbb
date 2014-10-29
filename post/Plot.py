@@ -101,7 +101,7 @@ class Plot:
     def skip(self, sample):
         if (self.Vtype==0 or self.Vtype==2) and sample.channel=='el': return True
         if (self.Vtype==1 or self.Vtype==3) and sample.channel=='mu': return True
-        if (not doWJetsShapeSys and not doAllSys) and isEqual(sample.type,'ZJets') and 'shape' in sample.name: return True
+        if (not doZJetsShapeSys and not doAllSys) and isEqual(sample.type,'ZJets') and 'shape' in sample.name: return True
         if (not doTTbarShapeSys and not doAllSys) and isEqual(sample.type,'ttbar') and 'shape' in sample.name: return True
         else: return False
                     
@@ -176,10 +176,13 @@ class Plot:
                     scaleFactors[self.boost]['Z_b'] = 1
                     scaleFactors[self.boost]['Z_bb'] = 1
                 
-                sample.chain.Draw(self.distribution+'>>'+self.extraHists[Z_light].GetName(),weight+' * '+str(scaleFactors[self.boost]['Z_light'])+' * ('+theCuts+' && ((abs(hJet_flavour[0])==5)+(abs(hJet_flavour[1])==5))==0)','GOFF')
-                sample.chain.Draw(self.distribution+'>>'+self.extraHists[Z_b].GetName(),weight+' * '+str(scaleFactors[self.boost]['Z_b'])    +' * ('+theCuts+' && ((abs(hJet_flavour[0])==5)+(abs(hJet_flavour[1])==5))==1)','GOFF')
-                sample.chain.Draw(self.distribution+'>>'+self.extraHists[Z_bb].GetName(),weight+' * '+str(scaleFactors[self.boost]['Z_bb'])   +' * ('+theCuts+' && ((abs(hJet_flavour[0])==5)+(abs(hJet_flavour[1])==5))==2)','GOFF')
-
+                #sample.chain.Draw(self.distribution+'>>'+self.extraHists[Z_light].GetName(),weight+' * '+str(scaleFactors[self.boost]['Z_light'])+' * ('+theCuts+' && ((abs(hJet_flavour[0])==5)+(abs(hJet_flavour[1])==5))==0)','GOFF')
+                #sample.chain.Draw(self.distribution+'>>'+self.extraHists[Z_b].GetName(),weight+' * '+str(scaleFactors[self.boost]['Z_b'])    +' * ('+theCuts+' && ((abs(hJet_flavour[0])==5)+(abs(hJet_flavour[1])==5))==1)','GOFF')
+                #sample.chain.Draw(self.distribution+'>>'+self.extraHists[Z_bb].GetName(),weight+' * '+str(scaleFactors[self.boost]['Z_bb'])   +' * ('+theCuts+' && ((abs(hJet_flavour[0])==5)+(abs(hJet_flavour[1])==5))==2)','GOFF')
+                sample.chain.Draw(self.distribution+'>>'+self.extraHists[Z_light].GetName(),weight+' * '+str(scaleFactors[self.boost]['Z_light'])+' * ('+theCuts+' && ((eventFlav != 5 && eventFlav != 4) || eventFlav == 4))','GOFF')
+                sample.chain.Draw(self.distribution+'>>'+self.extraHists[Z_b].GetName(),weight+' * '+str(scaleFactors[self.boost]['Z_b'])    +' * ('+theCuts+' && eventFlav == 5 && !(abs(hJet_flavour[0]) == 5 && abs(hJet_flavour[1]) == 5))','GOFF')
+                sample.chain.Draw(self.distribution+'>>'+self.extraHists[Z_bb].GetName(),weight+' * '+str(scaleFactors[self.boost]['Z_bb'])   +' * ('+theCuts+' && eventFlav == 5 && abs(hJet_flavour[0]) == 5 && abs(hJet_flavour[1]) == 5)','GOFF')
+                
                 if showOverflow:   #if we fix the overflow when drawing all histograms, then all the "extraHists" will automatically have overflow taken care of
                     for hName in [Z_light,Z_b,Z_bb]:
                         h=self.extraHists[hName]
@@ -261,15 +264,16 @@ class Plot:
                 self.makeStat(self.extraHists[histName],ID)
 
         #W+Jets and ttbar shape
-        if doWJetsShapeSys or doTTbarShapeSys or doAllSys:
+        if doZJetsShapeSys or doTTbarShapeSys or doAllSys:
             shapeSamples=[]
-            if doWJetsShapeSys or doAllSys and self.extraHists.has_key('ZJets'):
+            if doZJetsShapeSys or doAllSys and self.extraHists.has_key('ZJets'):
                 shapeSamples+=['Z_light','Z_b','Z_bb']
             if doTTbarShapeSys or doAllSys and self.extraHists.has_key('ttbar'):
                 shapeSamples+=['ttbar']
                     
             for sampleName in shapeSamples:
                 nominal=self.extraHists[sampleName]
+                print sampleName
                 if sampleName=='ttbar': up=self.extraHists[sampleName+'_ttbarShapeUp']
                 else: up=self.extraHists[sampleName+'_ZJetsShapeUp']
                 down=up.Clone(up.GetName().replace('Up','Down'))
@@ -308,7 +312,8 @@ class Plot:
             if self.skip(sample): continue
             
             sample.h.SetLineWidth(4)
-            if sample.isSignal:
+            if sample.isSignal and not sample.systematic:
+            	print sample.name
                 sample.h.SetLineColor(1)
                 sample.h.SetLineStyle(2+len(self.signals))
                 self.signals.append(sample)
@@ -387,7 +392,7 @@ class Plot:
             if signal in samplesForPlotting:
                 signal.h.Scale(signalMagFrac)
                 signal.h.Draw("SAME HIST")
-                #signal.h.Scale(1./signalMagFrac)
+                signal.h.Scale(1./signalMagFrac) ## UNCOMMENT THIS WHEN MAKING DATA CARDS!!!!!!!!!
 
         self.extraHists['Data'].Draw("SAME E1 X0") #redraw data so its not hidden
         self.uPad.RedrawAxis()
