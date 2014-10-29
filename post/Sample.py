@@ -140,7 +140,7 @@ allSamples=samplesForPlotting
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 
-#BEN FIXME blindly assuming there are none of these
+#These are not used for Zll
 #WJetsHW=Sample('WJets_shapeSys','WJets','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/WJets_boostedHW_lumiWeighted',systematic='WJetsShapeUp')
 #ttbarMCatNLO=Sample('ttbar_shapeSys','ttbar','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/TTbar_mcAtNLO_lumiWeighted',systematic='ttbarShapeUp')
 #systematicSamples=[WJetsHW,ttbarMCatNLO]
