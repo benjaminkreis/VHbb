@@ -31,7 +31,7 @@ using namespace RooFit;
 void workspaceBuilder(){
 
   //Create workspace
-  RooWorkspace ws("workspace");
+  RooWorkspace ws("w");
   ws.autoImportClassCode(true);
 
   const int numChannels = 4;
@@ -47,10 +47,10 @@ void workspaceBuilder(){
   float xsec_0p5 = 0.81267106E-05;
   float xsec_1   = 0.16300162E-03;
 
-  std::vector<TH1F*> h0, h0p5, h1, hTotalBackground;
+  std::vector<TH1F*> h0, h0p5, h1, hTotalBackground, hData;
   std::vector<TH1F*> Sig_T_1, Sig_T_2, Sig_T_4;
   std::vector<RooRealVar*> D1;
-  std::vector<RooDataHist*> Sig_T_1_hist, Sig_T_2_hist, Sig_T_4_hist, TotalBackground_hist;
+  std::vector<RooDataHist*> Sig_T_1_hist, Sig_T_2_hist, Sig_T_4_hist, TotalBackground_hist, Data_hist;
   std::vector<RooHistFunc*> Sig_T_1_histfunc, Sig_T_2_histfunc, Sig_T_4_histfunc;
 
   for(int c=0; c<numChannels; c++){
@@ -94,7 +94,7 @@ void workspaceBuilder(){
     Sig_T_4_histfunc.push_back( new RooHistFunc("T_4_histfunc_"+loopName, "", RooArgSet(*D1[c]), *Sig_T_4_hist[c]) );
 
     //RooSpinZeroPdf_1D
-    HZZ4L_RooSpinZeroPdf_1D ggHpdf(loopName+"_signal_fai", loopName+"_signal_fai", *D1[c], x, RooArgList(*Sig_T_1_histfunc[c], *Sig_T_2_histfunc[c], *Sig_T_4_histfunc[c])); 
+    HZZ4L_RooSpinZeroPdf_1D ggHpdf(loopName+"__signal_fai", loopName+"__signal_fai", *D1[c], x, RooArgList(*Sig_T_1_histfunc[c], *Sig_T_2_histfunc[c], *Sig_T_4_histfunc[c])); 
     ws.import(ggHpdf, RecycleConflictNodes());
  
 
@@ -104,9 +104,10 @@ void workspaceBuilder(){
 
     hTotalBackground.push_back( (TH1F*)inputHistogramsFile->Get(basename + "_" + channels[c] + "__totalBackground") );
     TotalBackground_hist.push_back( new RooDataHist("TotalBackground_hist_"+loopName, "", RooArgList(*D1[c]), hTotalBackground[c]) );
-    RooHistPdf TotalBackground_histpdf(loopName+"_totalBackground_fai", "", RooArgList(*D1[c]), *TotalBackground_hist[c]);
+    RooHistPdf TotalBackground_histpdf(loopName+"__totalBackground_fai", "", RooArgList(*D1[c]), *TotalBackground_hist[c]);
     ws.import(TotalBackground_histpdf, RecycleConflictNodes());  
-    
+
+
     cout << loopName << " total background = " << hTotalBackground[c]->Integral() << endl;
     cout << loopName << " signal = " << h0[c]->Integral() << endl;
 
