@@ -1,3 +1,12 @@
+////////////////////////////////////////////
+//
+//     To run, in root do
+//     .L HZZ4L_RooSpinZeroPdf_1D.cc++
+//     .L workspaceBuilder.C++
+//     workspaceBuilder()
+//
+////////////////////////////////////////////
+
 //C++
 #include <iostream>
 
