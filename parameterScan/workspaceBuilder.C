@@ -20,6 +20,7 @@
 #include "RooDataHist.h"
 #include "RooHistFunc.h"
 #include "RooHistPdf.h"
+#include "RooPlot.h"
 
 //CMS
 #include "HZZ4L_RooSpinZeroPdf_1D.h"
@@ -40,7 +41,7 @@ void workspaceBuilder(){
   TFile * inputHistogramsFile = TFile::Open("plots.root");
   
   //fa3
-  RooRealVar x("fa3", "fa3", -1, 1);//really -1 to 1?
+  RooRealVar x("CMS_zz4l_fg4", "CMS_zz4l_fg4", -1, 1);//really -1 to 1?
   x.setBins(1000);
 
   float xsec_0   = 0.40609546E-05;
@@ -106,6 +107,16 @@ void workspaceBuilder(){
     TotalBackground_hist.push_back( new RooDataHist("TotalBackground_hist_"+loopName, "", RooArgList(*D1[c]), hTotalBackground[c]) );
     RooHistPdf TotalBackground_histpdf(loopName+"__totalBackground_fai", "", RooArgList(*D1[c]), *TotalBackground_hist[c]);
     ws.import(TotalBackground_histpdf, RecycleConflictNodes());  
+
+
+    ////////////////////
+    // Plot
+    ///////////////////
+
+
+    RooPlot* dframe = D1[c]->frame();
+    ggHpdf.plotOn(dframe);
+    dframe->Draw();
 
 
     cout << loopName << " total background = " << hTotalBackground[c]->Integral() << endl;
