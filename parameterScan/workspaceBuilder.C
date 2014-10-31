@@ -1,11 +1,13 @@
-////////////////////////////////////////////
-//
-//     To run, in root do
-//     .L HZZ4L_RooSpinZeroPdf_1D.cc++
-//     .L workspaceBuilder.C++
-//     workspaceBuilder()
-//
-////////////////////////////////////////////
+/*
+
+     To run, in root do
+       gSystem->AddIncludePath("-I$ROOFITSYS/include")
+       gSystem->AddIncludePath("-I$CMSSW_BASE/src/HiggsAnalysis/CombinedLimit/interface/")
+       gSystem->Load("$CMSSW_BASE/lib/slc5_amd64_gcc472/libHiggsAnalysisCombinedLimit.so")
+       .L workspaceBuilder.C++
+       workspaceBuilder()
+
+*/
 
 //C++
 #include <iostream>
@@ -14,6 +16,7 @@
 #include "TString.h"
 #include "TFile.h"
 #include "TH1F.h"
+#include "TROOT.h"
 
 //RooFit
 #include "RooWorkspace.h"
@@ -114,7 +117,6 @@ void workspaceBuilder(){
     ////////////////////
     // Plot
     ///////////////////
-
 
     //RooPlot* dframe = D1[c]->frame();
     //ggHpdf.plotOn(dframe);
