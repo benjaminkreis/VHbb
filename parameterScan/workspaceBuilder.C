@@ -47,6 +47,8 @@ void workspaceBuilder(){
   float xsec_0   = 0.40609546E-05;
   float xsec_0p5 = 0.81267106E-05;
   float xsec_1   = 0.16300162E-03;
+  float g4 =  0.15784;
+  float g1 = 1.0;
 
   std::vector<TH1F*> h0, h0p5, h1, hTotalBackground, hData;
   std::vector<TH1F*> Sig_T_1, Sig_T_2, Sig_T_4;
@@ -71,8 +73,8 @@ void workspaceBuilder(){
     Sig_T_1.push_back( h0[c] );
     Sig_T_2.push_back( h1[c] );
     Sig_T_4.push_back( h0p5[c] );//c1*T(fa3=0.5)- c2*T(fa3=0)-c3*T(fa3=1), where the c are the xsecs
-    Sig_T_1[c]->Scale(xsec_0);
-    Sig_T_2[c]->Scale(xsec_1);
+    Sig_T_1[c]->Scale(g1*g1*xsec_0);
+    Sig_T_2[c]->Scale(g4*g4*xsec_1);
     Sig_T_4[c]->Scale(xsec_0p5);
     Sig_T_4[c]->Add(Sig_T_1[c], -1);
     Sig_T_4[c]->Add(Sig_T_2[c], -1);
@@ -114,9 +116,9 @@ void workspaceBuilder(){
     ///////////////////
 
 
-    RooPlot* dframe = D1[c]->frame();
-    ggHpdf.plotOn(dframe);
-    dframe->Draw();
+    //RooPlot* dframe = D1[c]->frame();
+    //ggHpdf.plotOn(dframe);
+    //dframe->Draw();
 
 
     cout << loopName << " total background = " << hTotalBackground[c]->Integral() << endl;
