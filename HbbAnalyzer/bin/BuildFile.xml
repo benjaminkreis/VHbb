@@ -1,6 +1,0 @@
-<use   name="JetMETAnalysis/JetUtilities"/>
-<use   name="FWCore/FWLite"/>
-<use   name="rootphysics"/>
-<use   name="rootgraphics"/>
-<use   name="root"/>
-<bin   name="format_plots_x"          file="format_plots_x.cc" />

@@ -1,6 +1,6 @@
 <lcgdict>
   <class name="Hbb::Tuple" ClassVersion="11">
-    <version ClassVersion="11" checksum="2335065851"/>
+    <version ClassVersion="11" checksum="2136060758"/>
     <version ClassVersion="10" checksum="3324275566"/>
   </class>
   <class name="std::vector<Hbb::Tuple>"/>
@@ -15,18 +15,11 @@
   <class name="edm::Wrapper<std::vector<Hbb::Object> >"/>
   
   <class name="Hbb::Jet" ClassVersion="10">
-    <version ClassVersion="10" checksum="2723362239"/>
+    <version ClassVersion="10" checksum="3842334813"/>
   </class>
   <class name="std::vector<Hbb::Jet>"/>
   <class pattern="edm::Wrapper<Hbb::Jet>"/>
   <class name="edm::Wrapper<std::vector<Hbb::Jet> >"/>
-  
-  <class name="Hbb::SubJet" ClassVersion="10">
-    <version ClassVersion="10" checksum="2643004651"/>
-  </class>
-  <class name="std::vector<Hbb::SubJet>"/>
-  <class pattern="edm::Wrapper<Hbb::SubJet>"/>
-  <class name="edm::Wrapper<std::vector<Hbb::SubJet> >"/>
 
   <class name="Hbb::Lepton" ClassVersion="11">
     <version ClassVersion="11" checksum="4002713751"/>
@@ -49,41 +42,4 @@
   <class name="std::vector<Hbb::Muon>"/>
   <class pattern="edm::Wrapper<Hbb::Muon>"/>
   <class name="edm::Wrapper<std::vector<Hbb::Muon> >"/>
-
-  <class name="Hbb::Tau" ClassVersion="10">
-    <version ClassVersion="10" checksum="3141788524"/>
-  </class>
-  <class name="std::vector<Hbb::Tau>"/>
-  <class pattern="edm::Wrapper<Hbb::Tau>"/>
-  <class name="edm::Wrapper<std::vector<Hbb::Tau> >"/>
-
-  <class name="Hbb::V" ClassVersion="11">
-    <version ClassVersion="11" checksum="3249600074"/>
-    <version ClassVersion="10" checksum="824873305"/>
-  </class>
-  <class name="std::vector<Hbb::V>"/>
-  <class pattern="edm::Wrapper<Hbb::V>"/>
-  <class name="edm::Wrapper<std::vector<Hbb::V> >"/>
-
-  <class name="Hbb::Higgs" ClassVersion="10">
-    <version ClassVersion="10" checksum="861980076"/>
-  </class>
-  <class name="std::vector<Hbb::Higgs>"/>
-  <class pattern="edm::Wrapper<Hbb::Higgs>"/>
-  <class name="edm::Wrapper<std::vector<Hbb::Higgs> >"/>
-
-  <class name="Hbb::MET" ClassVersion="10">
-    <version ClassVersion="10" checksum="3109902223"/>
-  </class>
-  <class name="std::vector<Hbb::MET>"/>
-  <class pattern="edm::Wrapper<Hbb::MET>"/>
-  <class name="edm::Wrapper<std::vector<Hbb::MET> >"/>
-
-  <class name="Hbb::GenParticle" ClassVersion="10">
-    <version ClassVersion="10" checksum="17475534"/>
-  </class>
-  <class name="std::vector<Hbb::GenParticle>"/>
-  <class pattern="edm::Wrapper<Hbb::GenParticle>"/>
-  <class name="edm::Wrapper<std::vector<Hbb::GenParticle> >"/>
-
 </lcgdict>

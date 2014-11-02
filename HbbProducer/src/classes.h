@@ -29,40 +29,10 @@ namespace {
     std::vector<Hbb::Muon> dummy18;
     edm::Wrapper<std::vector<Hbb::Muon> > dummy19;
 
-    Hbb::Tau dummy20;
-    edm::Wrapper<Hbb::Tau> dummy21;
-    std::vector<Hbb::Tau> dummy22;
-    edm::Wrapper<std::vector<Hbb::Tau> > dummy23;
-
-    Hbb::V dummy24;
-    edm::Wrapper<Hbb::V> dummy25;
-    std::vector<Hbb::V> dummy26;
-    edm::Wrapper<std::vector<Hbb::V> > dummy27;
-
-    Hbb::Higgs dummy28;
-    edm::Wrapper<Hbb::Higgs> dummy29;
-    std::vector<Hbb::Higgs> dummy30;
-    edm::Wrapper<std::vector<Hbb::Higgs> > dummy31;
-
-    Hbb::MET dummy32;
-    edm::Wrapper<Hbb::MET> dummy33;
-    std::vector<Hbb::MET> dummy34;
-    edm::Wrapper<std::vector<Hbb::MET> > dummy35;    
-
     Hbb::Lepton dummy36;
     edm::Wrapper<Hbb::Lepton> dummy37;
     std::vector<Hbb::Lepton> dummy38;
     edm::Wrapper<std::vector<Hbb::Lepton> > dummy39;
 
-    Hbb::SubJet dummy40;
-    edm::Wrapper<Hbb::SubJet> dummy41;
-    std::vector<Hbb::SubJet> dummy42;
-    edm::Wrapper<std::vector<Hbb::SubJet> > dummy43;
-    
-    Hbb::GenParticle dummy44;
-    edm::Wrapper<Hbb::GenParticle> dummy45;
-    std::vector<Hbb::GenParticle> dummy46;
-    edm::Wrapper<std::vector<Hbb::GenParticle> > dummy47;
-    
   };
 }
