@@ -57,7 +57,7 @@ void workspaceBuilder(){
   std::vector<TH1F*> h0, h0p5, h1, hTotalBackground, hData;
   std::vector<TH1F*> Sig_T_1, Sig_T_2, Sig_T_4;
   std::vector<RooRealVar*> D1;
-  std::vector<RooDataHist*> Sig_T_1_hist, Sig_T_2_hist, Sig_T_4_hist, TotalBackground_hist, Data_hist;
+  std::vector<RooDataHist*> Sig_T_1_hist, Sig_T_2_hist, Sig_T_4_hist, TotalBackground_hist;
   std::vector<RooHistFunc*> Sig_T_1_histfunc, Sig_T_2_histfunc, Sig_T_4_histfunc;
 
   for(int c=0; c<numChannels; c++){
@@ -115,13 +115,22 @@ void workspaceBuilder(){
     ws.import(TotalBackground_histpdf, RecycleConflictNodes());  
 
 
+    ///////////////////////
+    // Data
+    ///////////////////////
+
+    hData.push_back( (TH1F*)inputHistogramsFile->Get(basename + "_" + channels[c] + "__Data") );
+    RooDataHist Data_hist(loopName+"__Data_fai", "", RooArgList(*D1[c]), hData[c]);
+    ws.import(Data_hist, RecycleConflictNodes());
+
+
     ////////////////////
     // Plot
     ///////////////////
 
-    //RooPlot* dframe = D1[c]->frame();
-    //ggHpdf.plotOn(dframe);
-    //dframe->Draw();
+    //RooPlot* plot =  ws.var("D1_mainBDT_v_VstarMass_bdt_Vtype2_medBoost")->frame()
+    //ws.pdf("mainBDT_v_VstarMass_bdt_Vtype2_medBoost__totalBackground_fai")->plotOn(plot)
+    //plot->Draw()
 
 
     cout << loopName << " total background = " << hTotalBackground[c]->Integral() << endl;
