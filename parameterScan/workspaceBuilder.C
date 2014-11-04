@@ -38,10 +38,10 @@ void workspaceBuilder(){
   RooWorkspace ws("w");
   ws.autoImportClassCode(true);
 
-  const int numChannels = 1;
+  const int numChannels = 4;
   TString basename = "mainBDT_v_VstarMass_bdt";
-  //TString channels[numChannels] = {"Vtype2_medBoost", "Vtype3_medBoost", "Vtype2_highBoost", "Vtype3_highBoost"};
-  TString channels[numChannels] = {"Vtype2_medBoost"};
+  TString channels[numChannels] = {"Vtype2_medBoost", "Vtype3_medBoost", "Vtype2_highBoost", "Vtype3_highBoost"};
+  //TString channels[numChannels] = {"Vtype2_medBoost"};
   TFile * inputHistogramsFile = TFile::Open("plots.root");
   
   //fa3
