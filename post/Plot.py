@@ -159,6 +159,8 @@ class Plot:
                 weight+=' / effectiveLumi'
 
             if isEqual(sample.type,'ZJets'):
+                weight+=' * '+'lheWeight'
+                
                 Z_light='Z_light'
                 Z_b='Z_b'
                 Z_bb='Z_bb'
@@ -201,7 +203,9 @@ class Plot:
                     print '=============================='
                     print weight+' * '+scaleFactor
                     print '=============================='
-                    print theCuts
+                    print weight+' * '+str(scaleFactors[self.boost]['Z_light'])+' * ('+theCuts+' && ((eventFlav != 5 && eventFlav != 4) || eventFlav == 4))'
+                    print weight+' * '+str(scaleFactors[self.boost]['Z_b'])    +' * ('+theCuts+' && eventFlav == 5 && !(abs(hJet_flavour[0]) == 5 && abs(hJet_flavour[1]) == 5))'
+                    print weight+' * '+str(scaleFactors[self.boost]['Z_bb'])   +' * ('+theCuts+' && eventFlav == 5 && abs(hJet_flavour[0]) == 5 && abs(hJet_flavour[1]) == 5)'
                     print '=============================='
 
                 stdout_old = sys.stdout
