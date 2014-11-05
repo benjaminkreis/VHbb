@@ -112,7 +112,7 @@ void workspaceBuilder(){
     hTotalBackground.push_back( (TH1F*)inputHistogramsFile->Get(basename + "_" + channels[c] + "__totalBackground") );
     TotalBackground_hist.push_back( new RooDataHist("TotalBackground_hist_"+loopName, "", RooArgList(*D1[c]), hTotalBackground[c]) );
     RooHistPdf TotalBackground_histpdf(loopName+"__totalBackground_fai", "", RooArgList(*D1[c]), *TotalBackground_hist[c]);
-    ws.import(TotalBackground_histpdf, RecycleConflictNodes());  
+    ws.import(TotalBackground_histpdf, RecycleConflictNodes());
 
 
     ///////////////////////
@@ -121,7 +121,7 @@ void workspaceBuilder(){
 
     hData.push_back( (TH1F*)inputHistogramsFile->Get(basename + "_" + channels[c] + "__Data") );
     RooDataHist Data_hist(loopName+"__Data_fai", "", RooArgList(*D1[c]), hData[c]);
-    ws.import(Data_hist, RecycleConflictNodes());
+    ws.import(Data_hist);//RecycleConflictNodes not allowed here for some reason  
 
 
     ////////////////////
