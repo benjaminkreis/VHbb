@@ -97,8 +97,8 @@ showOverflow=True
 
 doShapeComparison=False   #FIXME - not updated
 
-elLumi=19040
-muLumi=19040
+elLumi=18940
+muLumi=18940
 
 sigmaFracUnc={}
 sigmaFracUnc['VZ']=0.2
