@@ -28,7 +28,7 @@ else:
 if len(argv)>2:
     inputDir=argv[2]
 else:
-    inputDir='/eos/uscms/store/user/lpcmbja/noreplica/ssagir/step4_Zll/102314'#'/eos/uscms/store/user/ntran/VHbb/Zll_step4/102314'
+    inputDir='/eos/uscms/store/user/ntran/VHbb/Zll_step4/102914'
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 #SETTINGS
@@ -36,23 +36,23 @@ else:
 DEBUG=True#False
 
 fillEmptyBins=False
-blind=True
+blind=False
 applyNormSFs=True
-unroll2D=True
+unroll2D=False
 
-doBDT=True
+doBDT=False
 do1stHalfBDT=False
 do2ndHalfBDT=False
 
-doCutTable=False
+doCutTable=True
 doTheta=False
-makeDataCard=True
+makeDataCard=False
 
 doAllSys=False#True
-doJECSys=True#False
-doJERSys=True#False
-doBTagSys=True#False
-doMisTagSys=True#False
+doJECSys=False#False
+doJERSys=False#False
+doBTagSys=False#False
+doMisTagSys=False#False
 doZJetsShapeSys=False
 doTTbarShapeSys=False
 doStatSys=False
@@ -67,12 +67,9 @@ doCuts=[
 doVtypes=[
     0,
     1,
-    #2,
-    #3
     ]
 
 doBoosts=[
-    #'low',
     'med',
     'high'
     ]
@@ -122,8 +119,8 @@ showOverflow=True
 
 doShapeComparison=False   #FIXME - not updated
 
-elLumi=19040
-muLumi=19040
+elLumi=18940
+muLumi=18940
 
 sigmaFracUnc={}
 sigmaFracUnc['VZ']=0.2
@@ -150,11 +147,11 @@ if doTheta or makeDataCard:
     doBoosts=['med','high']
     doCuts=['bdt']
     doCutTable=False
-    
+"""    
 if doCutTable:
     doTheta=False
     makeDataCard=False
-"""
+
 ##################################################################################################################################################################
 
 if __name__=='__main__':

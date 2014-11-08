@@ -6,7 +6,11 @@ jetpuID_cut = 'hJet_puJetIdL[0]>0 && hJet_puJetIdL[1]>0'
 hbhe_cut    = 'hbhe'
 bad_pixels = '(!(207883<=EVENT.run && EVENT.run<=208307))'
 
-preselection = jetPt_cut + ' && ' + jetEta_cut + ' && ' + hbhe_cut + ' && ' + jetpuID_cut + ' && ' + bad_pixels
+json       = 'EVENT.json==1'
+higgsFlag  = 'H.HiggsFlag==1'
+trigger    = '( ( Vtype==1 && (triggerFlags[5]>0 || triggerFlags[6]>0) ) || ( Vtype==0 && ( triggerFlags[22]>0 || triggerFlags[23]>0 || triggerFlags[14]>0 || triggerFlags[21]>0 ) ) )'
+
+preselection = jetPt_cut + ' && ' + jetEta_cut + ' && ' + hbhe_cut + ' && ' + jetpuID_cut + ' && ' + bad_pixels + ' && ' + json + ' && ' + higgsFlag + ' && ' + trigger
 
 CSVT = '0.898'
 CSVL = '0.244'
@@ -39,6 +43,6 @@ cuts[1]['TTbar'] = preselection + ' && ' + upperHMass + ' && ' + tcBtag + ' && '
 cuts[0]['TTbar'] = preselection + ' && ' + upperHMass + ' && ' + tcBtag + ' && ' + zVeto + ' && H.pt > 100.' + ' && Vtype == 0'
 cuts[1]['Zbb']   = preselection + ' && ' + vetoHMass + ' && ' + upperHMass + ' && ' + zWindow + ' && ' + tcBtag + ' && ' + max1AddJet + ' && ' + dPhiVH + ' && Vtype == 1'
 cuts[0]['Zbb']   = preselection + ' && ' + vetoHMass + ' && ' + upperHMass + ' && ' + zWindow + ' && ' + tcBtag + ' && ' + max1AddJet + ' && ' + dPhiVH + ' && Vtype == 0'
-cuts[1]['bdt']   = preselection + ' && ' + maxBtag + ' > ' + CSVC + ' && ' + minBtag + ' > ' + CSVL + ' && ' + zWindow + ' && ' + pullAngle + ' && Vtype == 1'
-cuts[0]['bdt']   = preselection + ' && ' + maxBtag + ' > ' + CSVC + ' && ' + minBtag + ' > ' + CSVL + ' && ' + zWindow + ' && ' + pullAngle + ' && Vtype == 0'
+cuts[1]['bdt']   = preselection + ' && (( V.pt < 100 && ' + maxBtag + ' > ' + CSVC + ')||( V.pt > 100 && ' + maxBtag + ' > ' + CSVL + ')) && ' + minBtag + ' > ' + CSVL + ' && ' + zWindow + ' && ' + pullAngle + ' && Vtype == 1'
+cuts[0]['bdt']   = preselection + ' && (( V.pt < 100 &&' + maxBtag + ' > ' + CSVC + ')||( V.pt > 100 && ' + maxBtag + ' > ' + CSVL + ')) && ' + minBtag + ' > ' + CSVL + ' && ' + zWindow + ' && ' + pullAngle + ' && Vtype == 0'
 
