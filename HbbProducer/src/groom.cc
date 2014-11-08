@@ -9,6 +9,8 @@
 #include "fastjet/tools/Pruner.hh"
 #include "fastjet/tools/MassDropTagger.hh"
 #include "fastjet/ClusterSequenceArea.hh"
+#include "fastjet/contrib/Nsubjettiness.hh"
+#include "fastjet/contrib/NjettinessPlugin.hh"
 #include "fastjet/contrib/Njettiness.hh"
 
 #include <vector>
@@ -44,7 +46,7 @@ double Nbut=3;
 
 //n-subjettiness
 double beta = 1.0; // power for angular dependence, e.g. beta = 1 --> linear k-means, beta = 2 --> quadratic/classic k-means
-double Rcut = 10000.0; // maximum R particles can be from axis to be included in jet (large value for no cutoff) 
+//double Rcut = 10000.; // maximum R particles can be from axis to be included in jet (large value for no cutoff) 
 
 //---------------------------------------------------------------------------------------------------------------------------------
 
@@ -179,11 +181,12 @@ void groom(pat::Jet iJet, Hbb::Jet& oJet, double R){
   //------------------------------------
   // NSubJettiness
   //------------------------------------
-  NsubParameters paraNsub(beta, R, Rcut);
+  NsubParameters paraNsub(beta, R, R);
   
   Njettiness nSubOnePass(Njettiness::onepass_kt_axes,paraNsub);
   
   oJet.tau1 = nSubOnePass.getTau(1,fjConstituents);
   oJet.tau2 = nSubOnePass.getTau(2,fjConstituents);
   oJet.tau3 = nSubOnePass.getTau(3,fjConstituents);
+
 }

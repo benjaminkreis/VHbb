@@ -31,6 +31,7 @@
 
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
+#include "DataFormats/PatCandidates/interface/Electron.h"
 #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
 
 // user include files
@@ -68,6 +69,7 @@ private:
   edm::InputTag _AK8PackedSource, _AK10PackedSource, _AK12PackedSource, _AK15PackedSource;
   edm::InputTag _AK4GenSource;
   edm::InputTag _muonSource;
+  edm::InputTag _electronSource;
   
   Hbb::Tuple _output;
   
@@ -111,6 +113,8 @@ HbbProducer::HbbProducer(const edm::ParameterSet& iConfig)
   _AK4GenSource=edm::InputTag(iConfig.getParameter<edm::InputTag>("AK4GenSource"));
 
   _muonSource=edm::InputTag(iConfig.getParameter<edm::InputTag>("muonSource"));
+
+  _electronSource=edm::InputTag(iConfig.getParameter<edm::InputTag>("electronSource"));
 
   //register your products
   produces<Hbb::Tuple>();
@@ -215,6 +219,9 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   edm::Handle< edm::View< pat::Muon > > inputMuons;
   iEvent.getByLabel(_muonSource,inputMuons);
 
+  edm::Handle< edm::View< pat::Electron > > inputElectrons;
+  iEvent.getByLabel(_electronSource,inputElectrons);
+
   //clock_t setup=clock();
   //cout<<"Setup time: "<<(setup-start)/(double)(CLOCKS_PER_SEC/1000)<<endl;
 
@@ -244,38 +251,38 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       }
 
       if(output.daughterIds.size()>0) {
-	if((output.pdgId==23||output.pdgId==24) && output.daughterIds[0]==25)
+	if((output.pdgId==23||abs(output.pdgId)==24) && output.daughterIds[0]==25)
 	  _output.genVstar=output;
       }
       else {
 	if(output.daughterIds.size()>1) {
-	  if ((output.pdgId==23||output.pdgId==24) && output.daughterIds[1]==25)
+	  if ((output.pdgId==23||abs(output.pdgId)==24) && output.daughterIds[1]==25)
 	    _output.genVstar=output;
 	}
       }
 
       if(output.daughterIds.size()>0) {
-	if((output.pdgId==23||output.pdgId==24) && (abs(output.daughterIds[0])==11||
-						    abs(output.daughterIds[0])==12||
-						    abs(output.daughterIds[0])==13||
-						    abs(output.daughterIds[0])==14||
-						    abs(output.daughterIds[0])==15||
-						    abs(output.daughterIds[0])==16||
-						    abs(output.daughterIds[0])==1||
-						    abs(output.daughterIds[0])==2||
-						    abs(output.daughterIds[0])==3||
-						    abs(output.daughterIds[0])==4||
-						    abs(output.daughterIds[0])==5||
-						    abs(output.daughterIds[0])==6))                       
+	if((output.pdgId==23||abs(output.pdgId)==24) && (abs(output.daughterIds[0])==11||
+							 abs(output.daughterIds[0])==12||
+							 abs(output.daughterIds[0])==13||
+							 abs(output.daughterIds[0])==14||
+							 abs(output.daughterIds[0])==15||
+							 abs(output.daughterIds[0])==16||
+							 abs(output.daughterIds[0])==1||
+							 abs(output.daughterIds[0])==2||
+							 abs(output.daughterIds[0])==3||
+							 abs(output.daughterIds[0])==4||
+							 abs(output.daughterIds[0])==5||
+							 abs(output.daughterIds[0])==6))                       
 	  _output.genV=output;
 	
 	if( output.pdgId==25                     && abs(output.daughterIds[0])==5)
 	_output.genHiggs=output;
       }
 
-      if((output.pdgId==11||output.pdgId==12||output.pdgId==13||output.pdgId==14||output.pdgId==15||output.pdgId==16) && (output.motherId==24||output.motherId==25)) 
+      if((output.pdgId==11||output.pdgId==12||output.pdgId==13||output.pdgId==14||output.pdgId==15||output.pdgId==16) && (output.motherId==23||abs(output.motherId)==24)) 
 	_output.genLepton=output;
-      if((output.pdgId==-11||output.pdgId==-12||output.pdgId==-13||output.pdgId==-14||output.pdgId==-15||output.pdgId==-16) && (output.motherId==24||output.motherId==25)) 
+      if((output.pdgId==-11||output.pdgId==-12||output.pdgId==-13||output.pdgId==-14||output.pdgId==-15||output.pdgId==-16) && (output.motherId==23||abs(output.motherId)==24)) 
 	_output.genAntiLepton=output;
       if(output.pdgId==5 && output.motherId==25) 
 	_output.genB=output;
@@ -293,10 +300,8 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   //AK4 Jets
 
   for(auto inputJet=AK4jets->begin(); inputJet!=AK4jets->end(); ++inputJet){
-    Hbb::Jet outputJet=Hbb::Jet(inputJet->pt(), inputJet->eta(), inputJet->phi(), inputJet->mass());
+    Hbb::Jet outputJet=Hbb::Jet(*inputJet);
     outputJet.R = 0.4;
-    outputJet.area = jet1->jetArea();
-    outputJet.csv = jet1->bDiscriminator("combinedSecondaryVertexBJetTags");
     _output.AK4PFCHS.push_back(outputJet);
   }
   
@@ -305,8 +310,8 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     pat::Jet d2=pat::Jet();
     getHiggsCandidate(AK4jets, d1, d2);
     
-    Hbb::Jet j1=Hbb::Jet(d1.pt(), d1.eta(), d1.phi(), d1.mass());
-    Hbb::Jet j2=Hbb::Jet(d2.pt(), d2.eta(), d2.phi(), d2.mass());
+    Hbb::Jet j1=Hbb::Jet(d1);
+    Hbb::Jet j2=Hbb::Jet(d2);
     Hbb::Higgs h=Hbb::Higgs(j1.lv+j2.lv);
     h.daughters.push_back(j1);
     h.daughters.push_back(j2);
@@ -390,6 +395,36 @@ HbbProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       if(75<theV.lv.M() && theV.lv.M()<105){
 	theV.daughters.push_back(_output.Muons[0]);
 	theV.daughters.push_back(_output.Muons[1]);
+	_output.theV=theV;
+      }
+    }
+  }
+
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  //Electrons
+
+  if(inputElectrons->size()>0){
+    
+    for(auto inputElectron=inputElectrons->begin(); inputElectron!=inputElectrons->end(); ++inputElectron){
+      Hbb::Electron electron=Hbb::Electron();
+      electron.lv.SetPtEtaPhiM(inputElectron->pt(), inputElectron->eta(), inputElectron->phi(), inputElectron->mass());
+      electron.charge=inputElectron->charge();
+      electron.isolation=(inputElectron->pfIsolationVariables().sumChargedHadronPt + max(0., inputElectron->pfIsolationVariables().sumNeutralHadronEt + inputElectron->pfIsolationVariables().sumPhotonEt - 0.5*inputElectron->pfIsolationVariables().sumPUPt))/inputElectron->pt();
+      _output.Electrons.push_back(electron);
+    }
+  }
+
+  //clock_t electrons=clock();
+  //cout<<"Electron time: "<<(electrons-fat)/(double)(CLOCKS_PER_SEC/1000)<<endl;
+
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  if(_output.Electrons.size()==2){
+    if(_output.Electrons[0].charge!=_output.Electrons[1].charge){
+      Hbb::V theV=Hbb::V(_output.Electrons[0].lv+_output.Electrons[1].lv);
+      if(75<theV.lv.M() && theV.lv.M()<105){
+	theV.daughters.push_back(_output.Electrons[0]);
+	theV.daughters.push_back(_output.Electrons[1]);
 	_output.theV=theV;
       }
     }

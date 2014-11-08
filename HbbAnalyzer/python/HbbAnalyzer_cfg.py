@@ -1,4 +1,5 @@
 import FWCore.ParameterSet.Config as cms
+import glob
 
 process = cms.Process("Demo")
 
@@ -9,7 +10,22 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 process.source = cms.Source("PoolSource",
     # replace 'myfile.root' with the source file you want to use
     fileNames = cms.untracked.vstring(
-        'file:/uscms/home/aperloff/nobackup/YOURWORKINGAREA/VHbb/CMSSW_7_1_0_pre9/src/VHbb/HbbProducer/test/Hbb.root'
+        ######################
+        #My cmsRun Production#
+        ######################
+        #'file:/uscms/home/aperloff/nobackup/YOURWORKINGAREA/VHbb/CMSSW_7_1_0_pre9/src/VHbb/HbbProducer/python/Hbb.root'
+        ####
+        #ZH#
+        ####
+        ('file:%s ' % name) for name in glob.glob('/eos/uscms/store/user/lpcmbja/noreplica/ZH_HToBB_ZToLL_M-125_13TeV_powheg-herwigpp/PU40bx50_PLS170_V6AN1_noMuIso/141001_010002/0000/Hbb*.root')
+        #######
+        #ZJets#
+        #######
+        #('file:%s ' % name) for name in glob.glob('/eos/uscms/store/user/lpcmbja/noreplica/DYJetsToLL_M-50_13TeV-madgraph-pythia8/PU40bx50_PLS170_V6AN1_noMuIso/141001_010020/*/Hbb*.root')
+        ########
+        #TTJets#
+        ########
+        #('file:%s ' % name) for name in glob.glob('/eos/uscms/store/user/lpcmbja/noreplica/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/PU40bx50_PLS170_V6AN1_noMuIso/141001_010043/*/Hbb*.root')
     )
 )
 

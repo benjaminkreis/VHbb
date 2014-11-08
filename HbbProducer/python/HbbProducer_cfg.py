@@ -6,7 +6,7 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True),
                                      allowUnscheduled = cms.untracked.bool(True) 
                                      )
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
 process.source = cms.Source("PoolSource",
                             fileNames = cms.untracked.vstring(
         'file:/eos/uscms/store/user/jstupak/ZH_HToBB_ZToLL_M-125_13TeV_powheg-herwigpp/Spring14dr-PU_S14_POSTLS170_V6AN1-v1/140622_185946/0000/miniAOD-prod_PAT_1.root'
@@ -32,6 +32,7 @@ process.GlobalTag.globaltag = theGlobalTag
 
 process.pfCHS = cms.EDFilter('CandPtrSelector', src = cms.InputTag('packedPFCandidates'), cut = cms.string('fromPV'))
 process.pfNoMuonCHS =  cms.EDProducer("CandPtrProjector", src = cms.InputTag("pfCHS"), veto = cms.InputTag("selectedMuons"))
+process.pfNoElectronsCHS = cms.EDProducer("CandPtrProjector", src = cms.InputTag("pfNoMuonCHS"), veto =  cms.InputTag("selectedElectrons"))
 
 #2012 Tight muon: https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideMuonId#Tight_Muon
 #missing dZ cut - JS
@@ -53,27 +54,23 @@ process.selectedMuons = cms.EDFilter("PATMuonSelector",
 
 #process.muonMatch.match='packedGenParticles'
 
-"""
-process.selectedMuons = cms.EDFilter("CandPtrSelector", src = cms.InputTag("slimmedMuons"), cut = cms.string('pt > 20. &'
-                                                                                                             'abs(eta) < 2.4 &'
-                                                                                                             'isGlobalMuon &' 
-                                                                                                             'isPFMuon &'
-                                                                                                             'globalTrack.normalizedChi2 < 10.0 &'
-                                                                                                             'globalTrack.hitPattern.numberOfValidMuonHits > 0 &'
-                                                                                                             'numberOfMatchedStations > 1 &'
-                                                                                                             'abs(dB) < 0.02 &'
-                                                                                                             'innerTrack.hitPattern.numberOfValidPixelHits > 0 &'
-                                                                                                             'innerTrack.hitPattern.trackerLayersWithMeasurement > 5'
-                                                                                                             ))
-"""
-#process.selectedElectrons = cms.EDFilter("CandPtrSelector", src = cms.InputTag("slimmedElectrons"), cut = cms.string("your selection for ele"))
+
+##**** Electron definition from https://github.com/cms-sw/cmssw/blob/CMSSW_7_3_X/PhysicsTools/PatAlgos/test/miniAOD/example_ei.py - IB
+process.selectedElectrons = cms.EDFilter("PATElectronSelector", 
+                                         src = cms.InputTag("slimmedElectrons"), 
+                                         cut = cms.string('abs(eta)<2.5 &'
+                                                          'pt>20. &'
+                                                          'gsfTrack.isAvailable() &'
+                                                          'gsfTrack.trackerExpectedHitsInner().numberOfLostHits() < 2 &'
+                                                          '(pfIsolationVariables().sumChargedHadronPt+max(0.,pfIsolationVariables().sumNeutralHadronEt+pfIsolationVariables().sumPhotonEt-0.5*pfIsolationVariables().sumPUPt))/pt < 0.15'))
+
 
 process.load('RecoJets.Configuration.RecoPFJets_cff')
 process.load('RecoJets.Configuration.RecoGenJets_cff')
 process.fixedGridRhoFastjetAll.pfCandidatesTag = 'packedPFCandidates'
 
 process.ak4PFJets.src = 'packedPFCandidates'
-process.ak4PFJetsCHS.src = 'pfNoMuonCHS'
+process.ak4PFJetsCHS.src = 'pfNoElectronsCHS'
 
 process.ak8PFJetsCHS  = process.ak4PFJetsCHS.clone(rParam = 0.8)
 process.ak10PFJetsCHS = process.ak4PFJetsCHS.clone(rParam = 1.0)
@@ -87,9 +84,9 @@ process.ak10GenJets = process.ak4GenJets.clone(rParam = 1.0)
 process.ak12GenJets = process.ak4GenJets.clone(rParam = 1.2)
 process.ak15GenJets = process.ak4GenJets.clone(rParam = 1.5)
 
-process.ak8PFJetsCHSPruned.src = 'pfNoMuonCHS'
-process.ak8PFJetsCHSTrimmed.src = 'pfNoMuonCHS'
-process.ak8PFJetsCHSFiltered.src = 'pfNoMuonCHS'
+process.ak8PFJetsCHSPruned.src = 'pfNoElectronsCHS'
+process.ak8PFJetsCHSTrimmed.src = 'pfNoElectronsCHS'
+process.ak8PFJetsCHSFiltered.src = 'pfNoElectronsCHS'
 
 process.ak10PFJetsCHSPruned = process.ak8PFJetsCHSPruned.clone(rParam = 1)
 process.ak10PFJetsCHSTrimmed = process.ak8PFJetsCHSTrimmed.clone(rParam = 1)
@@ -473,7 +470,7 @@ process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 process.options.allowUnscheduled = cms.untracked.bool(True)
 
 process.out = cms.OutputModule("PoolOutputModule",
-                               fileName = cms.untracked.string('Hbb.root'),
+                               fileName = cms.untracked.string('HbbEle.root'),
                                outputCommands = cms.untracked.vstring(['keep *_HbbProducer_*_*',
                                                                        ])
 )
