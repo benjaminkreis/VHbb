@@ -17,6 +17,7 @@
 #include "TFile.h"
 #include "TH1F.h"
 #include "TROOT.h"
+#include "TCanvas.h"
 
 //RooFit
 #include "RooWorkspace.h"
@@ -127,11 +128,15 @@ void workspaceBuilder(){
     ////////////////////
     // Plot
     ///////////////////
-
-    //RooPlot* plot =  ws.var("D1_mainBDT_v_VstarMass_bdt_Vtype2_medBoost")->frame()
-    //ws.pdf("mainBDT_v_VstarMass_bdt_Vtype2_medBoost__totalBackground_fai")->plotOn(plot)
-    //plot->Draw()
-
+    
+    /*
+    TCanvas myCanvas("myCanvas", "myCanvas", 640, 480);
+    myCanvas.cd();
+    RooPlot* plot =  ws.var("D1_mainBDT_v_VstarMass_bdt_Vtype2_medBoost")->frame();
+    ws.pdf("mainBDT_v_VstarMass_bdt_Vtype2_medBoost__signal_fai")->plotOn(plot);
+    plot->Draw();
+    myCanvas.Print("c.png");
+    */
 
     cout << loopName << " total background = " << hTotalBackground[c]->Integral() << endl;
     cout << loopName << " signal = " << h0[c]->Integral() << endl;
