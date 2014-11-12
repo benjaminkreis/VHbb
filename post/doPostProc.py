@@ -28,7 +28,7 @@ else:
 if len(argv)>2:
     inputDir=argv[2]
 else:
-    inputDir='/eos/uscms/store/user/ntran/VHbb/Zll_step4/102914'
+    inputDir='/eos/uscms/store/user/lpcmbja/noreplica/ntran/Zllstep4/111014'
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 #SETTINGS

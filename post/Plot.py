@@ -18,8 +18,8 @@ gROOT.ProcessLine('.L '+d+'/src/VHbb/post/weightSignalNLO.C+')
 PUWeight='PUweight'
 #trigWeightEl='weightTrig2012SingleEle'
 #trigWeightMu='weightTrig2012SingleMuon'
-trigWeightEl='weightTrig2012A'
-trigWeightMu='weightTrig2012A'
+trigWeightEl='weightTrig2012'
+trigWeightMu='weightTrig2012'
 
 if not os.path.isdir(outputDir): os.system("mkdir -p "+outputDir)
 output=TFile(outputDir+'/plots.root',"RECREATE")
@@ -134,6 +134,7 @@ class Plot:
                 theCuts = theCuts.replace('(!(207883<=EVENT.run && EVENT.run<=208307))','1')
                 weight+=' * '+PUWeight 
                 weight+=' * '+self.trigWeight
+                weight+=' * weightMueEff'
                 #if isEqual(sample.type,'WJets'): weight+=' * weightWpt_WJets'
                 #if isEqual(sample.type,'ttbar'): weight+=' * weightWpt_TTbar'
                 #weight+=' * weightEleTrigger'  #Why are we applying this weight to muon channel? JS
@@ -152,14 +153,14 @@ class Plot:
 
                 if sample.isSignal:
                     #weight+=' * weightSignalNLO(genZ.pt)' # SS, 17 Oct 2014
-                    #weight+=' * weightSignalEWK'
-                    #weight+=' * weightSignalQCD'
+                    weight+=' * weightEWKSignalATLAS'
+                    weight+=' * weightSignalQCD'
                     weight+=' * 1'
 
                 weight+=' / effectiveLumi'
 
             if isEqual(sample.type,'ZJets'):
-                weight+=' * '+'lheWeight'
+                weight+=' * lheWeight * weightDYZpT'
                 
                 Z_light='Z_light'
                 Z_b='Z_b'
