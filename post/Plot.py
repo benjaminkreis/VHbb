@@ -152,10 +152,10 @@ class Plot:
                     theCuts+=' && EVENT.event%2!=0 && EVENT.event%4!=1'
 
                 if sample.isSignal:
-                    #weight+=' * weightSignalNLO(genZ.pt)' # SS, 17 Oct 2014
+                    weight+=' * weightSignalNLO(genZ.pt)' # SS, 17 Oct 2014
                     weight+=' * weightEWKSignalATLAS'
                     weight+=' * weightSignalQCD'
-                    weight+=' * 1'
+                    #weight+=' * 1'
 
                 weight+=' / effectiveLumi'
 
