@@ -25,9 +25,11 @@
 #include "RooHistFunc.h"
 #include "RooHistPdf.h"
 #include "RooPlot.h"
+#include "RooFormulaVar.h"
 
 //CMS
 #include "HZZ4L_RooSpinZeroPdf_1D.h"
+#include "ProcessNormalization.h"
 
 using namespace std;
 using namespace RooFit;
@@ -39,10 +41,10 @@ void workspaceBuilder(){
   RooWorkspace ws("w");
   ws.autoImportClassCode(true);
 
-  const int numChannels = 4;
+  const int numChannels = 1;
   TString basename = "mainBDT_v_VstarMass_bdt";
-  TString channels[numChannels] = {"Vtype2_medBoost", "Vtype3_medBoost", "Vtype2_highBoost", "Vtype3_highBoost"};
-  //TString channels[numChannels] = {"Vtype2_medBoost"};
+  //TString channels[numChannels] = {"Vtype2_medBoost", "Vtype3_medBoost", "Vtype2_highBoost", "Vtype3_highBoost"};
+  TString channels[numChannels] = {"Vtype2_medBoost"};
   TFile * inputHistogramsFile = TFile::Open("plots.root");
   
   //fa3
@@ -60,6 +62,7 @@ void workspaceBuilder(){
   std::vector<RooRealVar*> D1;
   std::vector<RooDataHist*> Sig_T_1_hist, Sig_T_2_hist, Sig_T_4_hist, TotalBackground_hist;
   std::vector<RooHistFunc*> Sig_T_1_histfunc, Sig_T_2_histfunc, Sig_T_4_histfunc;
+  std::vector<ProcessNormalization*> T1_const, T2_const, T4_const;;
 
   for(int c=0; c<numChannels; c++){
 
@@ -105,7 +108,13 @@ void workspaceBuilder(){
     HZZ4L_RooSpinZeroPdf_1D ggHpdf(loopName+"__signal_fai", loopName+"__signal_fai", *D1[c], x, RooArgList(*Sig_T_1_histfunc[c], *Sig_T_2_histfunc[c], *Sig_T_4_histfunc[c])); 
     ws.import(ggHpdf, RecycleConflictNodes());
  
-
+    //Normalization
+    T1_const.push_back( new ProcessNormalization("processNormalization_"+loopName, "processNormalization_"+loopName, Sig_T_1[c]->Integral()) );
+    T2_const.push_back( new ProcessNormalization("processNormalization_"+loopName, "processNormalization_"+loopName, Sig_T_2[c]->Integral()) );
+    T4_const.push_back( new ProcessNormalization("processNormalization_"+loopName, "processNormalization_"+loopName, Sig_T_4[c]->Integral()) );
+    RooFormulaVar ggH_norm(loopName+"__signal_fai"+"_norm","((1-abs(@0))*@1 + abs(@0)*@2 + (@0>0 ? 1.:-1.)*sqrt(abs(@0)*(1-abs(@0)))*(@3-@1-@2))/@1 >0 ? ((1-abs(@0))*@1 + abs(@0)*@2 + (@0>0 ? 1.:-1.)*sqrt(abs(@0)*(1-abs(@0)))*(@3-@1-@2))/@1 : 1.e-20", RooArgList(x, *T1_const[c], *T2_const[c], *T4_const[c]));
+    ws.import(ggH_norm,RecycleConflictNodes());
+			   
     /////////////////////////
     // Backgrounds
     /////////////////////////
