@@ -21,7 +21,8 @@ defaultBackgroundNames=['Z_light','Z_b','Z_bb',
 none='-'
 lumiSys='1.026'
 leptonEffSys='1.03'
-signalEWKSys='1.02'
+signalEWKSys0P='1.02'
+signalEWKSys0M='1.10'
 signalQCDSys='1.05'
 backgroundNormSys='1.1'
 #ZJetsSys='1.10'  #suggested by Seth
@@ -38,7 +39,7 @@ flatSystematics=[('lumi',{'Zh_125p6_0P':lumiSys,'Zh_125p6_0M':lumiSys,'VZ':lumiS
                  #('MET',{'Wh_OA125p6_0P':METSys,'Wh_125p6_0M':METSys,'ZJets':METSys,'singleTop':METSys,'QCD':METSys,'VZ':METSys,'VV':METSys}),
                  ('qqbarPDF',{'Zh_125p6_0P':qqbarPDFSys,'Zh_125p6_0M':qqbarPDFSys,'VZ':qqbarPDFSys,'VV':qqbarPDFSys}),
                  ('ggPDF',{'singleTop':ggPDFSys,'QCD':ggPDFSys}),
-                 ('signalBoostEWK',{'Zh_125p6_0P':signalEWKSys,'Zh_125p6_0M':signalEWKSys}),
+                 ('signalBoostEWK',{'Zh_125p6_0P':signalEWKSys0P,'Zh_125p6_0M':signalEWKSys0M}),
                  ('signalBoostQCD',{'Zh_125p6_0P':signalQCDSys,'Zh_125p6_0M':signalQCDSys}),
                  ('ZlightNorm',{'Z_light':backgroundNormSys}),
                  ('ZbNorm',{'Z_b':backgroundNormSys}),
