@@ -86,6 +86,7 @@ void workspaceBuilder(){
     Sig_T_4[c]->Scale(xsec_0p5);
     Sig_T_4[c]->Add(Sig_T_1[c], -1);
     Sig_T_4[c]->Add(Sig_T_2[c], -1);
+    //Sig_T_4[c]->Scale(1e-200);
     
     //RooRealVar
     double dLowX  = Sig_T_1[c]->GetXaxis()->GetXmin();
@@ -112,7 +113,9 @@ void workspaceBuilder(){
     T1_const.push_back( new ProcessNormalization("T1_processNormalization_"+loopName, "T1_processNormalization_"+loopName, Sig_T_1[c]->Integral()) );
     T2_const.push_back( new ProcessNormalization("T2_processNormalization_"+loopName, "T2_processNormalization_"+loopName, Sig_T_2[c]->Integral()) );
     T4_const.push_back( new ProcessNormalization("T4_processNormalization_"+loopName, "T4_processNormalization_"+loopName, Sig_T_4[c]->Integral()) );
-    RooFormulaVar ggH_norm(loopName+"__signal_fai"+"_norm","((1-abs(@0))*@1 + abs(@0)*@2 + (@0>0 ? 1.:-1.)*sqrt(abs(@0)*(1-abs(@0)))*(@3-@1-@2))/@1 >0 ? ((1-abs(@0))*@1 + abs(@0)*@2 + (@0>0 ? 1.:-1.)*sqrt(abs(@0)*(1-abs(@0)))*(@3-@1-@2))/@1 : 1.e-20", RooArgList(x, *T1_const[c], *T2_const[c], *T4_const[c]));
+    //RooFormulaVar ggH_norm(loopName+"__signal_fai"+"_norm","((1-abs(@0))*@1 + abs(@0)*@2 + (@0>0 ? 1.:-1.)*sqrt(abs(@0)*(1-abs(@0)))*(@3-@1-@2))/@1 >0 ? ((1-abs(@0))*@1 + abs(@0)*@2 + (@0>0 ? 1.:-1.)*sqrt(abs(@0)*(1-abs(@0)))*(@3-@1-@2))/@1 : 1.e-20", RooArgList(x, *T1_const[c], *T2_const[c], *T4_const[c]));
+    
+    RooFormulaVar ggH_norm(loopName+"__signal_fai"+"_norm","((1-abs(@0))*@1 + abs(@0)*@2 + (@0>0 ? 1.:-1.)*sqrt(abs(@0)*(1-abs(@0)))*(@3))/@1 >0 ? ((1-abs(@0))*@1 + abs(@0)*@2 + (@0>0 ? 1.:-1.)*sqrt(abs(@0)*(1-abs(@0)))*(@3))/@1 : 1.e-20", RooArgList(x, *T1_const[c], *T2_const[c], *T4_const[c]));
     ws.import(ggH_norm,RecycleConflictNodes());
 			   
     /////////////////////////
