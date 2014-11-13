@@ -135,6 +135,12 @@ class Plot:
                 weight+=' * '+PUWeight 
                 weight+=' * '+self.trigWeight
                 weight+=' * weightMueEff'
+                weight+=' * lheWeight'
+                weight+=' * weightSignalQCD'
+                weight+=' * weightEWKSignalATLAS'
+                weight+=' * weightDYZpT'
+                weight+=' / effectiveLumi'
+
                 #if isEqual(sample.type,'WJets'): weight+=' * weightWpt_WJets'
                 #if isEqual(sample.type,'ttbar'): weight+=' * weightWpt_TTbar'
                 #weight+=' * weightEleTrigger'  #Why are we applying this weight to muon channel? JS
@@ -152,16 +158,8 @@ class Plot:
                     theCuts+=' && EVENT.event%2!=0 && EVENT.event%4!=1'
 
                 if sample.isSignal:
-                    weight+=' * weightSignalNLO(genZ.pt)' # SS, 17 Oct 2014
-                    weight+=' * weightEWKSignalATLAS'
-                    weight+=' * weightSignalQCD'
-                    #weight+=' * 1'
-
-                weight+=' / effectiveLumi'
-
+                    weight+=' * weightSignalNLO(genZ.pt)' # SS, 17 Oct 2014                                                                                                                                                                       
             if isEqual(sample.type,'ZJets'):
-                weight+=' * lheWeight * weightDYZpT'
-                
                 Z_light='Z_light'
                 Z_b='Z_b'
                 Z_bb='Z_bb'
@@ -433,7 +431,7 @@ class Plot:
             legend.SetTextFont(42)
             if blind == False:
                 legend.AddEntry(self.extraHists['Data'],"Data")
-            for bName,bLabel in zip(reversed(['QCD','ZJets','WJets','singleTop','ttbar','VV','VZ']),reversed(['QCD','Z+jets','W+jets','single top','ttbar','VV','VZ'])):
+            for bName,bLabel in zip(reversed(['QCD','ZJets','WJets','singleTop','ttbar','VV','VZ','ggh']),reversed(['QCD','Z+jets','W+jets','single top','ttbar','VV','VZ','ggZh'])):
                 try: legend.AddEntry(self.extraHists[bName],bLabel,"f")
                 except: pass
 

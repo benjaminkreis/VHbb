@@ -130,6 +130,7 @@ sigmaFracUnc['ZJets']=0.2
 sigmaFracUnc['ttbar']=0.15
 sigmaFracUnc['singleTop']=0.15
 sigmaFracUnc['QCD']=0.25
+sigmaFracUnc['ggh']=0.5
 lumiFracUnc=.026   #2.6% for 8 TeV, 2.2% for 7 TeV (Jia Fu)
 
 signalMagFrac=20

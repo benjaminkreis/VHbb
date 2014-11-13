@@ -71,6 +71,8 @@ class Sample:
 Zh_125p6_0P=Sample('Zh_125p6_0P','signal','/','ZHiggs0P_M-125p6_8TeV-JHUGenV4-private_nominal','Zh (CP = 0^{+})')
 Zh_125p6_0M=Sample('Zh_125p6_0M','signal','/','ZHiggs0M_M-125p6_8TeV-JHUGenV4-private_nominal','Zh (CP = 0^{-})')
 
+ggZh=Sample('ggZh','ggh','/','ZHiggs_ggZH_nominal')
+
 WZ=Sample('WZ','VZ','/','WZ_TuneZ2star_8TeV_pythia6_tauola_nominal')
 ZZ=Sample('ZZ','VZ','/','ZZ_TuneZ2star_8TeV_pythia6_tauola_nominal')
 WW=Sample('WW','VV','/','WW_TuneZ2star_8TeV_pythia6_tauola_nominal')
@@ -129,7 +131,7 @@ data=[dataEl,dataMu]
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 
-samplesForPlotting=[Zh_125p6_0P,Zh_125p6_0M]+diboson+Zjets+ttbar+data
+samplesForPlotting=[Zh_125p6_0P,Zh_125p6_0M,ggZh]+diboson+Zjets+ttbar+data
 
 #samplesForPlotting=[Wh_125p6_0P,Wh_125p6_0M,Wh_125p6_0Mf05ph0]+diboson+[WJets,ZJets]+ttbar+singleTop+QCD+data
 #samplesForPlotting=[Wh_125p6_0P,Wh_125p6_0M,Wh_125p6_0Mf05ph0]+diboson+[ZJets]+ttbar+singleTop+QCD+data   #no W+Jets
