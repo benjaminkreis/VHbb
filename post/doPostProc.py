@@ -36,17 +36,17 @@ else:
 DEBUG=True#False
 
 fillEmptyBins=False
-blind=False
+blind=True
 applyNormSFs=True
 unroll2D=False
 
-doBDT=False
+doBDT=True
 do1stHalfBDT=False
 do2ndHalfBDT=False
 
-doCutTable=True
+doCutTable=False
 doTheta=False
-makeDataCard=False
+makeDataCard=True
 
 doAllSys=False#True
 doJECSys=False#False
@@ -136,8 +136,8 @@ lumiFracUnc=.026   #2.6% for 8 TeV, 2.2% for 7 TeV (Jia Fu)
 signalMagFrac=20
 
 plotBackgrounds=['ZJets','ttbar','VV','VZ']
-backgroundFillColors={'QCD':ROOT.kMagenta,'ZJets':ROOT.kYellow-7,'WJets':ROOT.kGreen-3,'singleTop':ROOT.kCyan-7,'ttbar':ROOT.kBlue-7,'VV':ROOT.kGray+2,'VZ':ROOT.kRed-7}
-backgroundLineColors={'QCD':ROOT.kMagenta+1,'ZJets':ROOT.kYellow-4,'WJets':ROOT.kGreen-2,'singleTop':ROOT.kCyan-3,'ttbar':ROOT.kBlue-3,'VV':ROOT.kGray+3,'VZ':ROOT.kRed-4}
+backgroundFillColors={'QCD':ROOT.kMagenta,'ZJets':ROOT.kYellow-7,'WJets':ROOT.kGreen-3,'singleTop':ROOT.kCyan-7,'ttbar':ROOT.kBlue-7,'VV':ROOT.kGray+2,'VZ':ROOT.kRed-7,'ggh':kOrange+1}
+backgroundLineColors={'QCD':ROOT.kMagenta+1,'ZJets':ROOT.kYellow-4,'WJets':ROOT.kGreen-2,'singleTop':ROOT.kCyan-3,'ttbar':ROOT.kBlue-3,'VV':ROOT.kGray+3,'VZ':ROOT.kRed-4,'ggh':kOrange+2}
 
 treeName='tree'
                 
