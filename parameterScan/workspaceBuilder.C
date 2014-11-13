@@ -37,18 +37,20 @@ using namespace RooFit;
 
 void workspaceBuilder(){
 
+  bool ignoreInterference = 1;
+
   //Create workspace
   RooWorkspace ws("w");
   ws.autoImportClassCode(true);
 
-  const int numChannels = 1;
+  const int numChannels = 4;
   TString basename = "mainBDT_v_VstarMass_bdt";
-  //TString channels[numChannels] = {"Vtype2_medBoost", "Vtype3_medBoost", "Vtype2_highBoost", "Vtype3_highBoost"};
-  TString channels[numChannels] = {"Vtype2_medBoost"};
+  TString channels[numChannels] = {"Vtype2_medBoost", "Vtype3_medBoost", "Vtype2_highBoost", "Vtype3_highBoost"};
+  //TString channels[numChannels] = {"Vtype2_medBoost"};
   TFile * inputHistogramsFile = TFile::Open("plots.root");
   
   //fa3
-  RooRealVar x("CMS_zz4l_fg4", "CMS_zz4l_fg4", -1, 1);//really -1 to 1?
+  RooRealVar x("CMS_zz4l_fg4", "CMS_zz4l_fg4", 0, 0, 1);
   x.setBins(1000);
 
   float xsec_0   = 0.40609546E-05;
@@ -86,7 +88,7 @@ void workspaceBuilder(){
     Sig_T_4[c]->Scale(xsec_0p5);
     Sig_T_4[c]->Add(Sig_T_1[c], -1);
     Sig_T_4[c]->Add(Sig_T_2[c], -1);
-    //Sig_T_4[c]->Scale(1e-200);
+    if(ignoreInterference) Sig_T_4[c]->Scale(1e-200);
     
     //RooRealVar
     double dLowX  = Sig_T_1[c]->GetXaxis()->GetXmin();

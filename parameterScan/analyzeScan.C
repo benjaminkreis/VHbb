@@ -18,7 +18,9 @@ void analyzeScan(){
 
   TCanvas* c = new TCanvas("c", "c", 640, 640);
   c->cd();
-  gr->Draw("A*");
+  gr->SetMarkerSize(1);
+  gr->SetMarkerStyle(20);
+  gr->Draw("AP");
   gr->GetXaxis()->SetLabelSize(0.05);
   gr->GetYaxis()->SetLabelSize(0.05);
   gr->GetXaxis()->SetTitleSize(0.05);
