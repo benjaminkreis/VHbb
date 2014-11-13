@@ -16,7 +16,7 @@ defaultBackgroundNames=['Z_light','Z_b','Z_bb',
                  'ttbar',
                  #'singleTop',
                  #'QCD',
-                 'VZ','VV']
+                 'VZ','VV','ggh']
 
 none='-'
 lumiSys='1.026'
@@ -32,6 +32,7 @@ dibosonSys='1.15'
 qqbarPDFSys='1.01'
 ggPDFSys='1.01'
 METSys='1.03'  #FIX ME - should this be a shape uncertainty?
+ggZhSys='1.2'
 
 #FIX ME - Should there be QCD scale uncertainties?
 flatSystematics=[('lumi',{'Zh_125p6_0P':lumiSys,'Zh_125p6_0M':lumiSys,'VZ':lumiSys,'VV':lumiSys}),
@@ -49,6 +50,7 @@ flatSystematics=[('lumi',{'Zh_125p6_0P':lumiSys,'Zh_125p6_0M':lumiSys,'VZ':lumiS
                  #('singleTopNorm',{'singleTop':singleTopSys}),
                  #('QCDNorm',{'QCD':QCDSys}),
                  ('dibosonNorm',{'VZ':dibosonSys,'VV':dibosonSys}),
+                 ('ggZhSys',{'ggh':ggZhSys}),
                  ]
 
 #FIX ME - we need systematic samples for signal
@@ -70,6 +72,7 @@ shapeSystematics=[('JEC',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b
                   ('stat_VV',{'VV':one}),
                   #('ttbarShape',{'ttbar':one}),
                   #('WJetsShape',{'W_light':one,'W_b':one,'W_bb':one}),
+                  ('stat_ggZh',{'ggh':one}),
                   ]
                     
 ########################################################################
