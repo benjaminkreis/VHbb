@@ -14,19 +14,19 @@ void analyzeScan(){
   //float xmax = 1;
   //int ndiv=512;
 
-  //TString outName = "hzz_nll_v_fa3";
-  //TString fa3 = "(CMS_zz4l_fg4*0.021)/( (1-CMS_zz4l_fg4)*6.36 + CMS_zz4l_fg4*0.021 )";//H->ZZ
-  //TString xTitle = "f_{a3}^{ZZ}";  
+  TString outName = "zz_nll_v_fa3";
+  TString fa3 = "(CMS_zz4l_fg4*0.0249)/( (1-CMS_zz4l_fg4)*6.36 + CMS_zz4l_fg4*0.0249 )";//H->ZZ
+  TString xTitle = "f_{a3}^{ZZ}";  
   //float xmax = 0.015;//zoom
   //int ndiv = 505;//zoom
-  //float xmax = 1.;
-  //int ndiv = 512;
-
-  TString outName = "hww_nll_v_fa3";
-  TString fa3 = "(CMS_zz4l_fg4*0.021)/( (1-CMS_zz4l_fg4)*3.01 + CMS_zz4l_fg4*0.021 )";//H->WW
-  TString xTitle = "f_{a3}^{WW}";  
-  float xmax = 0.03;
+  float xmax = 1.;
   int ndiv = 512;
+
+  //TString outName = "hww_nll_v_fa3";
+  //TString fa3 = "(CMS_zz4l_fg4*0.0249)/( (1-CMS_zz4l_fg4)*3.01 + CMS_zz4l_fg4*0.0249 )";//H->WW
+  //TString xTitle = "f_{a3}^{WW}";  
+  //float xmax = 0.03;
+  //int ndiv = 512;
 
 
   TFile* fin = TFile::Open("higgsCombine1D_exp_inter.MultiDimFit.mH125.6.123456.root", "READ");
