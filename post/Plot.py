@@ -355,7 +355,7 @@ class Plot:
         if blind == True:
             uMargin = 0.15
              
-        rMargin=.08
+        rMargin=.11
         
         self.uPad=TPad("uPad","",0,yDiv,1,1) #for actual plots
         self.uPad.SetTopMargin(0.07)
@@ -395,7 +395,7 @@ class Plot:
             if signal in samplesForPlotting:
                 signal.h.Scale(signalMagFrac)
                 signal.h.Draw("SAME HIST")
-                signal.h.Scale(1./signalMagFrac) ## UNCOMMENT THIS WHEN MAKING DATA CARDS!!!!!!!!!
+                #signal.h.Scale(1./signalMagFrac) ## UNCOMMENT THIS WHEN MAKING DATA CARDS!!!!!!!!!
 
         self.extraHists['Data'].Draw("SAME E1 X0") #redraw data so its not hidden
         self.uPad.RedrawAxis()
@@ -404,18 +404,18 @@ class Plot:
         
             #calculate stat+sys uncertainty band
             self.uncBand=self.extraHists['Total Background'].Clone("unc")
-            for binNo in range(0,self.nBinsX+2):
-                lumiUnc=0
-                statUnc=0
-                sigmaUnc=0
-                for sample in samples:
-                    if sample.systematic or (not sample.isBackground) or self.skip(sample): continue
-                    lumiUnc+=(sample.h.GetBinContent(binNo)*lumiFracUnc)**2
-                    sigmaUnc+=(sample.h.GetBinContent(binNo)*sigmaFracUnc[sample.type])**2
-                    statUnc+=sample.h.GetBinError(binNo)**2
-                totalUnc=sqrt(lumiUnc+sigmaUnc+statUnc)
-                self.uncBand.SetBinError(binNo,totalUnc)
-                self.extraHists['Total Background'].SetBinError(binNo,totalUnc)
+            #for binNo in range(0,self.nBinsX+2):
+            #    lumiUnc=0
+            #    statUnc=0
+            #    sigmaUnc=0
+            #    for sample in samples:
+            #        if sample.systematic or (not sample.isBackground) or self.skip(sample): continue
+            #        lumiUnc+=(sample.h.GetBinContent(binNo)*lumiFracUnc)**2
+            #        sigmaUnc+=(sample.h.GetBinContent(binNo)*sigmaFracUnc[sample.type])**2
+            #        statUnc+=sample.h.GetBinError(binNo)**2
+            #    totalUnc=sqrt(lumiUnc+sigmaUnc+statUnc)
+            #    self.uncBand.SetBinError(binNo,totalUnc)
+            #    self.extraHists['Total Background'].SetBinError(binNo,totalUnc)
             self.uncBand.SetFillStyle(3344)
             self.uncBand.SetFillColor(1)
             self.uncBand.SetLineColor(1)
@@ -423,10 +423,12 @@ class Plot:
             gStyle.SetHatchesLineWidth(1)
             self.uncBand.Draw("SAME E2")
 
-            legend=TLegend(0.6,0.6,0.90,0.90)
+            legend=TLegend(0.43,0.6,0.88,0.90)
             SetOwnership( legend, 0 )   # 0 = release (not keep), 1 = keep
+            legend.SetNColumns(2)
             legend.SetShadowColor(0)
             legend.SetFillColor(0)
+            legend.SetFillStyle(0)
             legend.SetLineColor(0)
             legend.SetTextFont(42)
             if blind == False:
@@ -439,7 +441,7 @@ class Plot:
                 if signal in samplesForPlotting:
                     legend.AddEntry(signal.h, signal.altName + " x" + str(signalMagFrac), "l")
 
-            legend.AddEntry(self.uncBand , "Uncertainty" , "f")
+            legend.AddEntry(self.uncBand , "MC unc. (stat.)" , "f")
             legend.Draw("SAME")
 
             prelimTex=TLatex()
@@ -460,21 +462,48 @@ class Plot:
             elif self.Vtype==1: text='Z #rightarrow ee'
             elif self.Vtype==2: text='W #rightarrow #mu#nu'
             else: text='W #rightarrow e#nu'
-            channelTex.DrawLatex(0.5, 0.83, text);
+            channelTex.DrawLatex(0.38, 0.81, text);
 
             if blind == False:
                 self.lPad.cd()
                 self.pull=self.extraHists['Data'].Clone("pull")
-                for binNo in range(0,self.nBinsX+2):
-                    if self.extraHists['Total Background'].GetBinError(binNo)!=0:
-                        self.pull.SetBinContent(binNo,(self.extraHists['Data'].GetBinContent(binNo)-self.extraHists['Total Background'].GetBinContent(binNo))/sqrt(self.extraHists['Total Background'].GetBinError(binNo)**2+self.extraHists['Data'].GetBinError(binNo)**2))
+                self.pull.Divide(self.extraHists['Data'], self.extraHists['Total Background'])
+                #for binNo in range(0,self.nBinsX+2):
+                #    if self.extraHists['Total Background'].GetBinError(binNo)!=0:
+                #        #self.pull.SetBinContent(binNo,(self.extraHists['Data'].GetBinContent(binNo)-self.extraHists['Total Background'].GetBinContent(binNo))/sqrt(self.extraHists['Total Background'].GetBinError(binNo)**2+self.extraHists['Data'].GetBinError(binNo)**2))
+                #        self.pull.SetBinContent(binNo,self.extraHists['Data'].GetBinContent(binNo)/self.extraHists['Total Background'].GetBinContent(binNo))
+                #        #self.pull.SetBinError(binNo,(self.extraHists['Total Background'].GetBinContent(binNo)*self.extraHists['Data'].GetBinError(binNo)-self.extraHists['Data'].GetBinContent(binNo)*self.extraHists['Total Background'].GetBinError(binNo))/self.extraHists['Total Background'].GetBinContent(binNo)*self.extraHists['Total Background'].GetBinContent(binNo))
                 self.pull.SetMaximum(3)
-                self.pull.SetMinimum(-3)
-                self.pull.SetFillColor(2)
-                self.pull.SetLineColor(2)
+                self.pull.SetMinimum(0)
+                self.pull.SetFillColor(1)
+                self.pull.SetLineColor(1)
                 self.formatLowerHist(self.pull)
-                self.pull.GetYaxis().SetTitle('Pull')
-                self.pull.Draw("HIST")
+                #self.pull.GetYaxis().SetTitle('Pull')
+                self.pull.GetYaxis().SetTitle('Data/MC')
+                #self.pull.Draw("HIST")
+                self.pull.Draw("E1")
+                
+                self.pullUncBand=self.pull.Clone("pullunc")
+                self.pullUncBand.Divide(self.extraHists['Total Background'], self.extraHists['Total Background'])
+                #for binNo in range(0,self.nBinsX+2):
+                #	self.pullUncBand.SetBinContent(binNo,1.)
+                #	self.pullUncBand.SetBinError(binNo,self.extraHists['Total Background'].GetBinContent(binNo))
+                #	print self.pullUncBand.GetBinContent(binNo)
+                self.pullUncBand.SetFillStyle(3344)
+                self.pullUncBand.SetFillColor(1)
+                self.pullUncBand.SetLineColor(1)
+                self.pullUncBand.SetMarkerSize(0)
+                gStyle.SetHatchesLineWidth(1)
+                self.pullUncBand.Draw("SAME E2")
+                
+                pullLegend=TLegend(0.19,0.92,0.37,0.99)
+                SetOwnership( pullLegend, 0 )   # 0 = release (not keep), 1 = keep
+                pullLegend.SetShadowColor(0)
+                pullLegend.SetFillColor(0)
+                pullLegend.SetLineColor(0)
+                pullLegend.SetTextFont(42)
+                pullLegend.AddEntry(self.pullUncBand , "MC uncert. (stat.)" , "f")
+                pullLegend.Draw("SAME")
 
             self.canvas.Write()
             self.canvas.SaveAs(outputDir+'/'+self.name+'.pdf')
