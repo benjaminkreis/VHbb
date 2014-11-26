@@ -78,7 +78,7 @@ def setTDRStyle():
     ROOT . gStyle . SetPadBottomMargin(0.13);
     ROOT . gStyle . SetPadLeftMargin(0.16);
     #ROOT . gStyle . SetPadRightMargin(0.12);
-    ROOT . gStyle . SetPadRightMargin(0.02);
+    ROOT . gStyle . SetPadRightMargin(0.06);
 
 # For the Global title:
 
@@ -87,7 +87,7 @@ def setTDRStyle():
     ROOT . gStyle . SetTitleColor(1);
     ROOT . gStyle . SetTitleTextColor(1);
     ROOT . gStyle . SetTitleFillColor(10);
-    ROOT . gStyle . SetTitleFontSize(0.05);
+    ROOT . gStyle . SetTitleFontSize(0.08);
     # ROOT . gStyle . SetTitleH(0); # Set the height of the title box
     # ROOT . gStyle . SetTitleW(0); # Set the width of the title box
     # ROOT . gStyle . SetTitleX(0); # Set the position of the title box

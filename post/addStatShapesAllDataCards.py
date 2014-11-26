@@ -65,7 +65,7 @@ def main(inputDCfile, inputDCfile0P, outputDCfile0P, inputDCfile0M, outputDCfile
 
 if __name__ == "__main__":
 	prefix = "/uscms_data/d3/ssagir/ZllHbbAnalysis/CMSSW_5_3_3_patch2/src/VHbb/post"
-	prefix += "/plots/"
+	prefix += "/plots/BDT_approximateSMbinning_141123/"
 	inputDCfile = prefix+"dataCard_statUnc0_bg0.txt"
 	inputDCfile0P = prefix+"dataCard_0P.txt"
 	inputDCfile0M = prefix+"dataCard_0M.txt"

@@ -16,7 +16,6 @@ import ROOT
 import sys
 import os
 
-cut = "bdt"
 none = "-"
 one = "1"
 
@@ -72,8 +71,8 @@ def walk_and_copy(inputdir, outputdir, threshold, thresholdBG, binList, processL
                         if not valtotBG: valtotBG = 1e-5
                         # Check if we are above threshold
                         if (error/val > threshold/100 and error/valtotBG > thresholdBG/100):
-                            vtype = histo[histo.find(cut)+4:histo.find(cut)+10]
-                            boost = histo[histo.find(cut)+11:histo.find("__")]
+                            vtype = histo[histo.find("Vtype"):histo.find("Vtype")+6]
+                            boost = histo[histo.find("Vtype")+7:histo.find("__")]
                             process0 = histo[histo.find("__")+2:]
                             process = process0
                             if (process0 == "Zh_125p6_0P"): process = "0P"
@@ -119,7 +118,7 @@ if __name__ == "__main__":
     threshold = 0 # cut on binError/binContent in %
     thresholdBG = 0 # cut on binError/binContent_TotalBackground in %
     prefix = "/uscms_data/d3/ssagir/ZllHbbAnalysis/CMSSW_5_3_3_patch2/src/VHbb/post"
-    prefix += "/plots/"
+    prefix += "/plots/BDT_approximateSMbinning_141123/"
     inputRfile = prefix+"plots.root"
     outputRfile = prefix+"plots_statUnc%(threshold)s_bg%(thresholdBG)s.root" %locals()
     inputDataCard = prefix+"dataCard.txt"
