@@ -78,7 +78,7 @@ def setTDRStyle():
     ROOT . gStyle . SetPadBottomMargin(0.13);
     ROOT . gStyle . SetPadLeftMargin(0.16);
     #ROOT . gStyle . SetPadRightMargin(0.12);
-    ROOT . gStyle . SetPadRightMargin(0.02);
+    ROOT . gStyle . SetPadRightMargin(0.05);
 
 # For the Global title:
 

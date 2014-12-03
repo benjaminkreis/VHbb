@@ -28,7 +28,8 @@ else:
 if len(argv)>2:
     inputDir=argv[2]
 else:
-    inputDir='/eos/uscms/store/user/lpcmbja/noreplica/ssagir/step4/2014_10_18'
+    #inputDir='/eos/uscms/store/user/lpcmbja/noreplica/ssagir/step4/2014_10_18' # private samples, modify Sample.py as well
+    inputDir='/eos/uscms/store/user/lpcmbja/noreplica/ssagir/step4/2014_11_20' # official samples, modify Sample.py as well
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 #SETTINGS
@@ -54,6 +55,7 @@ doJERSys=False
 doBTagSys=False
 doMisTagSys=False
 doWJetsShapeSys=False
+doZJetsShapeSys=False
 doTTbarShapeSys=False
 doStatSys=False
 
@@ -121,8 +123,8 @@ showOverflow=True
 
 doShapeComparison=False   #FIXME - not updated
 
-elLumi=18940
-muLumi=18940
+elLumi=18940#19040
+muLumi=18940#19040
 
 sigmaFracUnc={}
 sigmaFracUnc['VZ']=0.2
@@ -136,7 +138,8 @@ lumiFracUnc=.026   #2.6% for 8 TeV, 2.2% for 7 TeV (Jia Fu)
 
 signalMagFrac=20
 
-plotBackgrounds=['QCD','ZJets','WJets','singleTop','ttbar','VV','VZ']
+#plotBackgrounds=['QCD','ZJets','WJets','singleTop','ttbar','VV','VZ']
+plotBackgrounds=['ZJets','WJets','singleTop','ttbar','VV','VZ']
 backgroundFillColors={'QCD':ROOT.kMagenta,'ZJets':ROOT.kYellow-7,'WJets':ROOT.kGreen-3,'singleTop':ROOT.kCyan-7,'ttbar':ROOT.kBlue-7,'VV':ROOT.kGray+2,'VZ':ROOT.kRed-7}
 backgroundLineColors={'QCD':ROOT.kMagenta+1,'ZJets':ROOT.kYellow-4,'WJets':ROOT.kGreen-2,'singleTop':ROOT.kCyan-3,'ttbar':ROOT.kBlue-3,'VV':ROOT.kGray+3,'VZ':ROOT.kRed-4}
 
@@ -174,6 +177,7 @@ if __name__=='__main__':
             yields[cuts][Vtype]={}
             for boost in doBoosts:
                 yields[cuts][Vtype][boost]={}
+	print cuts
     if makeDataCard:
     	for cuts in doCuts:
 			plots+=[
@@ -188,21 +192,38 @@ if __name__=='__main__':
 				#Plot(name='MELA_SMvHO',distribution=MELA_SMvHOmed,nBinsX=25,xMin=0,xMax=1, xTitle='L(0^{+}_{HO})/(L(0^{+})+L(0^{+}_{HO}))',yLog=False,cuts=cuts,Vtype=Vtype,boost='med'),
 				#Plot(name='MELA_SMvHO',distribution=MELA_SMvHOhigh,nBinsX=25,xMin=0,xMax=1, xTitle='L(0^{+}_{HO})/(L(0^{+})+L(0^{+}_{HO}))',yLog=False,cuts=cuts,Vtype=Vtype,boost='high'),
 
-				# mVh for AN
+				# mVh uniform binning
 				#Plot(name='x_mVh',distribution='x_mVH',nBinsX=50,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=2,boost='low'),	
 				#Plot(name='x_mVh',distribution='x_mVH',nBinsX=50,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=3,boost='low'),					
-				Plot(name='x_mVh',distribution='x_mVH',nBinsX=50,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=2,boost='med'),
-				Plot(name='x_mVh',distribution='x_mVH',nBinsX=50,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=3,boost='med'),
-				Plot(name='x_mVh',distribution='x_mVH',nBinsX=50,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=2,boost='high'),
-				Plot(name='x_mVh',distribution='x_mVH',nBinsX=50,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=3,boost='high'),
+				#Plot(name='x_mVh',distribution='x_mVH',nBinsX=50,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=2,boost='med'),
+				#Plot(name='x_mVh',distribution='x_mVH',nBinsX=50,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=3,boost='med'),
+				#Plot(name='x_mVh',distribution='x_mVH',nBinsX=50,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=2,boost='high'),
+				#Plot(name='x_mVh',distribution='x_mVH',nBinsX=50,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=3,boost='high'),
 			
-				# BDT for AN
+				# BDT uniform binning
 				#Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=linspace(-1,-0.76,4).tolist()+linspace(-0.72,0.04,20).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=2,boost='low'),
 				#Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=linspace(-1,-0.76,4).tolist()+linspace(-0.72,0.04,20).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=3,boost='low'),
 				#Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=linspace(-1,-0.76,4).tolist()+linspace(-0.72,0.04,20).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=2,boost='med'),
 				#Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=linspace(-1,-0.76,4).tolist()+linspace(-0.72,0.04,20).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=3,boost='med'),			
 				#Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=linspace(-1,-0.76,4).tolist()+linspace(-0.72,0.2,24).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=2,boost='high'),
 				#Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=linspace(-1,-0.76,4).tolist()+linspace(-0.72,0.2,24).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=3,boost='high'),
+
+				# mVh hypothesis testing binning
+				#Plot(name='x_mVh',distribution='x_mVH',nBinsX=50,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=2,boost='low'),	
+				#Plot(name='x_mVh',distribution='x_mVH',nBinsX=50,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=3,boost='low'),					
+				#Plot(name='x_mVh',distribution='x_mVH',binsX=[0]+linspace(300,500,9).tolist()+[550,1200],xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=2,boost='med'),
+				#Plot(name='x_mVh',distribution='x_mVH',binsX=[0]+linspace(300,500,9).tolist()+[550,1200],xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=3,boost='med'),
+				#Plot(name='x_mVh',distribution='x_mVH',binsX=[0]+linspace(400,900,11).tolist()+[1050,1200],xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=2,boost='high'),
+				#Plot(name='x_mVh',distribution='x_mVH',binsX=[0]+linspace(400,900,11).tolist()+[1050,1200],xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=3,boost='high'),
+			
+				# BDT hypothesis testing binning
+				#Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=linspace(-1,-0.76,4).tolist()+linspace(-0.72,0.04,20).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=2,boost='low'),
+				#Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=linspace(-1,-0.76,4).tolist()+linspace(-0.72,0.04,20).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=3,boost='low'),
+				Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=2,boost='med'),
+				Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=3,boost='med'),			
+				Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=[-1]+linspace(-0.75, 0.05, 9).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=2,boost='high'),
+				Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=[-1]+linspace(-0.75, 0.05, 9).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=3,boost='high'),
+
 
 				# For Significance, nominal prime binning
 				#Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=2,boost='med'),
@@ -221,18 +242,7 @@ if __name__=='__main__':
 				#Plot(name='allBDTs',distribution=BDTStitching,binsX=medBoostBDTBins,xTitle='BDT',yLog=True,cuts=cuts,Vtype=3,boost='med'), 
 				#Plot(name='allBDTs',distribution=BDTStitching,binsX=highBoostBDTBins,xTitle='BDT',yLog=True,cuts=cuts,Vtype=2,boost='high'),
 				#Plot(name='allBDTs',distribution=BDTStitching,binsX=highBoostBDTBins,xTitle='BDT',yLog=True,cuts=cuts,Vtype=3,boost='high'),
-			
-				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0]+linspace(325,450,6).tolist()+[550,1200],xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=Vtype,boost='med'),
-				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0]+linspace(400,900,11).tolist()+[1050,1200],xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.75, 0.05, 9).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=Vtype,boost='high'),
-
-				#First binning
-				#Plot(name='mainBDT_v_SMvPS', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:('+MELA_SMvPSmed+')',binsX=[0]+linspace(0.1,0.8,11).tolist()+[0.85,1],xTitle='L(0^{-})/(L(0^{+})+L(0^{-}))',binsY=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=Vtype,boost='med'),
-				#Plot(name='mainBDT_v_SMvPS', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:('+MELA_SMvPShigh+')',binsX=[0]+linspace(0.1,0.8,11).tolist()+[0.85,1],xTitle='L(0^{-})/(L(0^{+})+L(0^{-}))',binsY=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=Vtype,boost='high'),
-
-				#Second binning
-				#Plot(name='mainBDT_v_SMvPS', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:('+MELA_SMvPS+')',binsX=[0]+linspace(0.25,0.45,11).tolist()+[0.5,1],xTitle='L(0^{-})/(L(0^{+})+L(0^{-}))',binsY=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=Vtype,boost='med'),
-				#Plot(name='mainBDT_v_SMvPS', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:('+MELA_SMvPS+')',binsX=[0]+linspace(0.35,0.75,11).tolist()+[0.85,1],xTitle='L(0^{-})/(L(0^{+})+L(0^{-}))',binsY=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=Vtype,boost='high'),
-
+				
 				#uniform
 				#Plot(name='mainBDT_v_SMvPS', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:('+MELA_SMvPSmed+')',binsX=linspace(0,1,49).tolist(),xTitle='L(0^{-})/(L(0^{+})+L(0^{-}))',binsY=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=Vtype,boost='med'),
 				#Plot(name='mainBDT_v_SMvPS', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:('+MELA_SMvPShigh+')',binsX=linspace(0,1,25).tolist(),xTitle='L(0^{-})/(L(0^{+})+L(0^{-}))',binsY=[-1]+linspace(-0.75, 0.05, 9).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=Vtype,boost='high'),
@@ -263,7 +273,7 @@ if __name__=='__main__':
 				#Plot(name='mainBDT_v_SMvPS', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:('+MELA_SMvPSmed+')',binsX=[0]+linspace((333+1./3)/1200,(666+2./3)/1200,6).tolist()+[1200./1200],xTitle='L(0^{-})/(L(0^{+})+L(0^{-}))',binsY=[-1]+linspace(-0.68, -0.28, 5).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=Vtype,boost='med'),
 				#Plot(name='mainBDT_v_SMvPS', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:('+MELA_SMvPShigh+')',binsX=[0]+linspace((466+2./3)/1200,1000./1200,9).tolist()+[1200./1200],xTitle='L(0^{-})/(L(0^{+})+L(0^{-}))',binsY=[-1]+linspace(-0.68, -0.04, 9).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=Vtype,boost='high'),
 
-				#course KD from mVH
+				#coarse KD from mVH
 				#Plot(name='mainBDT_v_SMvPS', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:('+MELA_SMvPSmed+')',binsX=[0]+linspace((266+2./3)/1200,(733+1./3)/1200,4).tolist()+[1200./1200],xTitle='L(0^{-})/(L(0^{+})+L(0^{-}))',binsY=[-1]+linspace(-0.76, -0.2, 4).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=Vtype,boost='med'),
 				#Plot(name='mainBDT_v_SMvPS', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:('+MELA_SMvPShigh+')',binsX=[0]+linspace(400./1200,(933+1./3)/1200,5).tolist()+[(1066+2./3)/1200,1200./1200],xTitle='L(0^{-})/(L(0^{+})+L(0^{-}))',binsY=[-1]+linspace(-0.76, 0.04, 6).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=Vtype,boost='high'),
 
@@ -283,13 +293,53 @@ if __name__=='__main__':
 				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,24).tolist(),xTitle='m(Vh) [GeV]',binsY=linspace(-1, 1, 24).tolist(),yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='high'),
 				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,24).tolist(),xTitle='m(Vh) [GeV]',binsY=linspace(-1, 1, 24).tolist(),yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='high'),
 
+				#uniform mVH, Coarser, 21 bins
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,21).tolist(),xTitle='m(Vh) [GeV]',binsY=linspace(-1, 1, 21).tolist(),yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='med'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,21).tolist(),xTitle='m(Vh) [GeV]',binsY=linspace(-1, 1, 21).tolist(),yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='med'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,21).tolist(),xTitle='m(Vh) [GeV]',binsY=linspace(-1, 1, 21).tolist(),yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='high'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,21).tolist(),xTitle='m(Vh) [GeV]',binsY=linspace(-1, 1, 21).tolist(),yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='high'),
+
+				#uniform mVH, Coarser, 17 bins
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,17).tolist(),xTitle='m(Vh) [GeV]',binsY=linspace(-1, 1, 17).tolist(),yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='med'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,17).tolist(),xTitle='m(Vh) [GeV]',binsY=linspace(-1, 1, 17).tolist(),yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='med'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,17).tolist(),xTitle='m(Vh) [GeV]',binsY=linspace(-1, 1, 17).tolist(),yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='high'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,17).tolist(),xTitle='m(Vh) [GeV]',binsY=linspace(-1, 1, 17).tolist(),yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='high'),
+
+				#uniform mVH, Coarser, 14 bins
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,14).tolist(),xTitle='m(Vh) [GeV]',binsY=linspace(-1, 1, 14).tolist(),yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='med'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,14).tolist(),xTitle='m(Vh) [GeV]',binsY=linspace(-1, 1, 14).tolist(),yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='med'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,14).tolist(),xTitle='m(Vh) [GeV]',binsY=linspace(-1, 1, 14).tolist(),yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='high'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,14).tolist(),xTitle='m(Vh) [GeV]',binsY=linspace(-1, 1, 14).tolist(),yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='high'),
+
 				#uniformCoarser' global box mVH, rebinned
-				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,24).tolist(),xTitle='m(Vh) [GeV]',binsY=linspace(-1, 1, 24).tolist(),yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='low'),
-				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,24).tolist(),xTitle='m(Vh) [GeV]',binsY=linspace(-1, 1, 24).tolist(),yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='low'),
 				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 313.0434875488281, 365.2173985072545, 417.3913094656808, 469.5652204241071, 521.7391313825335, 573.9130423409598, 626.0869532993861, 678.2608642578125, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.9130434783344918, -0.8260869566689838, -0.7391304350034757, -0.6521739133379676, -0.5652173916724594, -0.4782608700069514, -0.39130434834144334, -0.3043478266759352, -0.21739130501042703, -0.13043478334491898, -0.043478261679410934, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='med'),
 				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 313.0434875488281, 365.2173957824707, 417.3913040161133, 469.56521224975586, 521.7391204833984, 573.913028717041, 626.0869369506836, 678.2608451843262, 730.4347534179688, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.9130434783344918, -0.8260869566689838, -0.7391304350034757, -0.6521739133379676, -0.5652173916724594, -0.4782608700069514, -0.39130434834144334, -0.3043478266759352, -0.21739130501042703, -0.13043478334491898, -0.043478261679410934, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='med'),
 				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 417.39129638671875, 469.56521371694714, 521.7391310471755, 573.9130483774038, 626.0869657076322, 678.2608830378606, 730.4348003680889, 782.6087176983173, 834.7826350285457, 886.956552358774, 939.1304696890024, 991.3043870192307, 1043.478304349459, 1095.6522216796875, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.739130437374115, -0.6521739152570566, -0.5652173931399981, -0.4782608710229397, -0.3913043489058812, -0.3043478267888228, -0.21739130467176437, -0.13043478255470586, -0.043478260437647465, 0.043478261679410934, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='high'),
 				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 417.39129638671875, 469.5652126736111, 521.7391289605034, 573.9130452473959, 626.0869615342882, 678.2608778211805, 730.434794108073, 782.6087103949653, 834.7826266818577, 886.95654296875, 991.3043212890625, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.9130434783605429, -0.8260869567210858, -0.7391304350816286, -0.6521739134421716, -0.5652173918027144, -0.47826087016325725, -0.39130434852380014, -0.30434782688434303, -0.21739130524488592, -0.13043478360542882, -0.04347826196597171, 0.04347825967348551, 0.1304347813129425, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='high'),
+
+				#uniformCoarser' global box mVH, rebinned, larger floor
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 313.0434875488281, 365.2173985072545, 417.3913094656808, 469.5652204241071, 521.7391313825335, 573.9130423409598, 626.0869532993861, 678.2608642578125, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.3043478266759352, -0.21739130501042703, -0.13043478334491898, -0.043478261679410934, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='med'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 313.0434875488281, 365.2173957824707, 417.3913040161133, 469.56521224975586, 521.7391204833984, 573.913028717041, 626.0869369506836, 678.2608451843262, 730.4347534179688, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.3043478266759352, -0.21739130501042703, -0.13043478334491898, -0.043478261679410934, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='med'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 417.39129638671875, 469.56521371694714, 521.7391310471755, 573.9130483774038, 626.0869657076322, 678.2608830378606, 730.4348003680889, 782.6087176983173, 834.7826350285457, 886.956552358774, 939.1304696890024, 991.3043870192307, 1043.478304349459, 1095.6522216796875, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.3043478267888228, -0.21739130467176437, -0.13043478255470586, -0.043478260437647465, 0.043478261679410934, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='high'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 417.39129638671875, 469.5652126736111, 521.7391289605034, 573.9130452473959, 626.0869615342882, 678.2608778211805, 730.434794108073, 782.6087103949653, 834.7826266818577, 886.95654296875, 991.3043212890625, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.30434782688434303, -0.21739130524488592, -0.13043478360542882, -0.04347826196597171, 0.04347825967348551, 0.1304347813129425, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='high'),
+
+				#uniform mVH, Coarser', 21 bins, rebinned
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 300.0, 360.0, 420.0, 480.0, 540.0, 600.0, 660.0, 720.0, 780.0, 840.0, 900.0, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.7000000104308128, -0.6000000089406967, -0.5000000074505806, -0.4000000059604645, -0.30000000447034836, -0.20000000298023224, -0.10000000149011612, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='med'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 300.0, 360.0, 420.0, 480.0, 540.0, 600.0, 660.0, 720.0, 780.0, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.800000011920929, -0.7000000104308128, -0.6000000089406967, -0.5000000074505806, -0.4000000059604645, -0.30000000447034836, -0.20000000298023224, -0.10000000149011612, 0.0, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='med'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 420.0, 480.0, 540.0, 600.0, 660.0, 720.0, 780.0, 840.0, 900.0, 1080.0, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.8999999997516474, -0.7999999995032946, -0.6999999992549419, -0.5999999990065892, -0.49999999875823653, -0.3999999985098839, -0.2999999982615311, -0.19999999801317847, -0.09999999776482582, 2.4835269396561444e-09, 0.1000000027318797, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='high'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 360.0, 420.0, 480.0, 540.0, 600.0, 660.0, 720.0, 780.0, 840.0, 900.0, 1020.0, 1140.0, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.8999999998645349, -0.7999999997290698, -0.6999999995936047, -0.5999999994581395, -0.49999999932267447, -0.3999999991872094, -0.29999999905174424, -0.19999999891627918, -0.09999999878081411, 1.3546510579942606e-09, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='high'),
+
+				#uniform mVH, Coarser', 17 bins, rebinned
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 300.0, 375.0, 450.0, 525.0, 600.0, 675.0, 750.0, 825.0, 975.0, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.875, -0.75, -0.625, -0.5, -0.375, -0.25, -0.125, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='med'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 300.0, 375.0, 450.0, 525.0, 600.0, 675.0, 750.0, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.875, -0.75, -0.625, -0.5, -0.375, -0.25, -0.125, 0.0, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='med'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 375.0, 450.0, 525.0, 600.0, 675.0, 750.0, 825.0, 900.0, 975.0, 1050.0, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.875, -0.75, -0.625, -0.5, -0.375, -0.25, -0.125, 0.0, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='high'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 375.0, 450.0, 525.0, 600.0, 675.0, 750.0, 825.0, 900.0, 975.0, 1050.0, 1125.0, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.625, -0.5, -0.375, -0.25, -0.125, 0.0, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='high'),
+
+				#uniform mVH, Coarser', 14 bins, rebinned
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 369.2307564871652, 461.5384477887835, 553.8461390904017, 646.1538303920202, 738.4615216936384, 830.7692129952567, 923.076904296875, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.8461538457444736, -0.6923076914889472, -0.5384615372334207, -0.3846153829778943, -0.23076922872236794, -0.07692307446684143, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='med'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 276.92307434082034, 369.23076171875, 461.53844909667964, 553.8461364746094, 646.1538238525391, 738.4615112304687, 830.7691986083984, 923.0768859863281, 1015.3845733642578, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.6923077002167701, -0.5384615451097489, -0.38461539000272754, -0.23076923489570622, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='med'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 461.53846571180554, 553.8461574978298, 646.1538492838542, 738.4615410698784, 830.7692328559028, 923.0769246419271, 1015.3846164279514, 1107.6923082139756, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.8461538460105658, -0.6923076920211315, -0.5384615380316973, -0.38461538404226303, -0.2307692300528288, -0.07692307606339455, 0.0769230779260397, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='high'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0.0, 369.2307586669922, 461.5384521484375, 553.8461456298828, 646.1538391113281, 738.4615325927734, 830.7692260742188, 923.0769195556641, 1015.3846130371094, 1107.6923065185547, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.8461538460105658, -0.6923076920211315, -0.5384615380316973, -0.38461538404226303, -0.2307692300528288, -0.07692307606339455, 0.0769230779260397, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='high'),
 
 				#uniform' local box mVH
 				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0]+linspace(269.388,587.755,12).tolist()+[1200],xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.795918, -0.265306, 12).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='low'),
@@ -330,6 +380,14 @@ if __name__=='__main__':
 				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0, 293.8775634765625, 318.3673400878906, 342.85713958740234, 367.34693908691406, 391.8367385864258, 416.3265380859375, 440.8163146972656, 465.3061218261719, 489.7959289550781, 538.7755126953125, 636.7346801757812, 1200],xTitle='m(Vh) [GeV]',binsY=[-1, -0.795918345451355, -0.7142857313156128, -0.6734693646430969, -0.6326530396938324, -0.5918367147445679, -0.5510203897953033, -0.5102040648460389, -0.4693877398967743, -0.4285714149475097, -0.3877550899982452, -0.3469387650489807, -0.3061224400997162, -0.26530611515045166, -0.22448979318141937, -0.18367347121238708, -0.1428571492433548, -0.10204081982374191, -0.020408162847161293, 1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='med'),
 				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0, 416.3265380859375, 440.8163350423177, 465.30613199869794, 489.7959289550781, 514.2857055664062, 538.7755126953125, 563.2653198242188, 587.755126953125, 612.244873046875, 661.2244873046875, 734.69384765625, 832.653076171875, 1126.5306396484375, 1200],xTitle='m(Vh) [GeV]',binsY=[-1, -0.8367347121238708, -0.6734693646430969, -0.6326530575752258, -0.5918367334774562, -0.5510204093796867, -0.5102040852819171, -0.46938776118414743, -0.42857143708637785, -0.3877551129886082, -0.3469387888908386, -0.30612245202064514, -0.26530611515045166, -0.22448979318141937, -0.18367347121238708, -0.10204081982374191, -0.020408162847161293, 0.1428571492433548, 1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='high'),
 				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0, 391.83673095703125, 416.3265380859375, 440.8163146972656, 465.3061157226563, 489.79591674804686, 514.2857177734375, 538.7755187988281, 563.2653198242188, 612.244873046875, 661.2244873046875, 734.69384765625, 808.1632690429688, 1200],xTitle='m(Vh) [GeV]',binsY=[-1, -0.7142857313156128, -0.6326530575752258, -0.5510203838348389, -0.4693877696990967, -0.4285714402794838, -0.3877551108598709, -0.346938781440258, -0.30612245202064514, -0.22448979318141937, -0.1428571492433548, -0.020408162847161293, 1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='high'),
+
+				#nominal prime, uniform
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0]+linspace(275,450,8).tolist()+[550,1200],xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=Vtype,boost='low'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0]+linspace(275,450,8).tolist()+[550,1200],xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=Vtype,boost='low'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,49).tolist(),xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.95, 0.95, 20).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='med'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,49).tolist(),xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.95, 0.95, 20).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='med'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,25).tolist(),xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.95, 0.95, 20).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='high'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,25).tolist(),xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.95, 0.95, 20).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='high'),
 
 				#nominal prime
 				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0]+linspace(275,450,8).tolist()+[550,1200],xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=Vtype,boost='low'),
@@ -434,6 +492,7 @@ if __name__=='__main__':
 
     for plot in plots:
         y=plot.Prepare()
+        print plot.cuts, plot.Vtype, plot.boost
         try: yields[plot.cuts][plot.Vtype][plot.boost]=y
         except: pass
         plot.Draw()
@@ -455,7 +514,7 @@ if __name__=='__main__':
             print "".ljust(nameWidth),
             for boost in doBoosts: print boost.ljust(cWidth),
             print
-            for histName in ['W_light','W_b','W_bb','ZJets','ttbar','singleTop','QCD','VZ','VV']:
+            for histName in ['W_light','W_b','W_bb','Z_light','Z_b','Z_bb','ttbar','singleTop','QCD','VZ','VV']:
                 print histName.ljust(nameWidth),
                 try:
                     for boost in doBoosts:

@@ -64,8 +64,8 @@ def main(inputDCfile, inputDCfile0P, outputDCfile0P, inputDCfile0M, outputDCfile
 	printTable(data0M,out0M)
 
 if __name__ == "__main__":
-	prefix = "/uscms_data/d3/ssagir/VHbbAnalysis/CMSSW_5_3_3_patch2/src/VHbb/post/plots"
-	prefix += "/BDT_nominalprime/"
+	prefix = "/uscms_data/d3/ssagir/WlnuHbbAnalysis/CMSSW_5_3_6/src/VHbb/post/plots"
+	prefix += "/mVH_nominalprime/mainBDT_v_VstarMass_medhigh_official_120214_unrolled/"
 	inputDCfile = prefix+"dataCard_statUnc0_bg0.txt"
 	inputDCfile0P = prefix+"dataCard_0P.txt"
 	inputDCfile0M = prefix+"dataCard_0M.txt"

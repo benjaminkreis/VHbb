@@ -16,7 +16,6 @@ import ROOT
 import sys
 import os
 
-cut = "bdt"
 none = "-"
 one = "1"
 
@@ -60,7 +59,7 @@ def walk_and_copy(inputdir, outputdir, threshold, thresholdBG, binList, processL
             outputdir.cd()
             th1.Write()
             
-            do_shapes = histo.endswith("0P") or histo.endswith("0M") or histo.endswith("W_light") or histo.endswith("W_b") or histo.endswith("W_bb") or histo.endswith("ZJets") or histo.endswith("ttbar") or histo.endswith("singleTop") or histo.endswith("VZ") or histo.endswith("VV")
+            do_shapes = histo.endswith("0P") or histo.endswith("0M") or histo.endswith("W_light") or histo.endswith("W_b") or histo.endswith("W_bb") or histo.endswith("Z_light") or histo.endswith("Z_b") or histo.endswith("Z_bb") or histo.endswith("ttbar") or histo.endswith("singleTop") or histo.endswith("VZ") or histo.endswith("VV")
             if do_shapes:
                 # check all bins to see if they need to be shape-errored
                 log.info("Building stat shapes for %s", histo)
@@ -71,8 +70,8 @@ def walk_and_copy(inputdir, outputdir, threshold, thresholdBG, binList, processL
                         valtotBG = th1totBG.GetBinContent(ibin)
                         # Check if we are above threshold
                         if (error/val > threshold/100 and error/valtotBG > thresholdBG/100):
-                            vtype = histo[histo.find(cut)+4:histo.find(cut)+10]
-                            boost = histo[histo.find(cut)+11:histo.find("__")]
+                            vtype = histo[histo.find("Vtype"):histo.find("Vtype")+6]
+                            boost = histo[histo.find("Vtype")+7:histo.find("__")]
                             process0 = histo[histo.find("__")+2:]
                             process = process0
                             if (process0 == "Wh_125p6_0P"): process = "0P"
@@ -115,10 +114,10 @@ def main(inputRfilename, outputRfilename, inputDCfilename, outputDCfilename, thr
 if __name__ == "__main__":
     logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 
-    threshold = 0 # cut on binError/binContent in %
-    thresholdBG = 0 # cut on binError/binContent_TotalBackground in %
-    prefix = "/uscms_data/d3/ssagir/VHbbAnalysis/CMSSW_5_3_3_patch2/src/VHbb/post/plots"
-    prefix += "/BDT_nominalprime/"
+    threshold = 15 # cut on binError/binContent in %
+    thresholdBG = 7 # cut on binError/binContent_TotalBackground in %
+    prefix = "/uscms_data/d3/ssagir/WlnuHbbAnalysis/CMSSW_5_3_6/src/VHbb/post/plots"
+    prefix += "/mVH_nominalprime/mainBDT_v_VstarMass_medhigh_official_120214_unrolled/"
     inputRfile = prefix+"plots.root"
     outputRfile = prefix+"plots_statUnc%(threshold)s_bg%(thresholdBG)s.root" %locals()
     inputDataCard = prefix+"dataCard.txt"

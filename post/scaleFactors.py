@@ -6,16 +6,25 @@ for i in ['low','med','high']:
 scaleFactors['low']['W_light']=1.03
 scaleFactors['low']['W_b']=2.22
 scaleFactors['low']['W_bb']=1.58
+scaleFactors['low']['Z_light']=1.00
+scaleFactors['low']['Z_b']=1.00
+scaleFactors['low']['Z_bb']=1.00
 scaleFactors['low']['ttbar']=1.03
 
 scaleFactors['med']['W_light']=1.02
 scaleFactors['med']['W_b']=2.90
 scaleFactors['med']['W_bb']=1.30
+scaleFactors['med']['Z_light']=1.00
+scaleFactors['med']['Z_b']=1.00
+scaleFactors['med']['Z_bb']=1.00
 scaleFactors['med']['ttbar']=1.02
 
 scaleFactors['high']['W_light']=1.04
 scaleFactors['high']['W_b']=2.46
 scaleFactors['high']['W_bb']=0.77
+scaleFactors['high']['Z_light']=1.00
+scaleFactors['high']['Z_b']=1.00
+scaleFactors['high']['Z_bb']=1.00
 scaleFactors['high']['ttbar']=1.00
 
 """

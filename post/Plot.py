@@ -102,6 +102,7 @@ class Plot:
         if (self.Vtype==0 or self.Vtype==2) and sample.channel=='el': return True
         if (self.Vtype==1 or self.Vtype==3) and sample.channel=='mu': return True
         if (not doWJetsShapeSys and not doAllSys) and isEqual(sample.type,'WJets') and 'shape' in sample.name: return True
+        if (not doZJetsShapeSys and not doAllSys) and isEqual(sample.type,'ZJets') and 'shape' in sample.name: return True
         if (not doTTbarShapeSys and not doAllSys) and isEqual(sample.type,'ttbar') and 'shape' in sample.name: return True
         else: return False
                     
@@ -154,6 +155,7 @@ class Plot:
                     weight+=' * weightSignalNLO(genWstar.pt)' # SS, 17 Oct 2014
                     weight+=' * weightSignalEWK'
                     weight+=' * weightSignalQCD'
+                    weight+=' / 0.3258' # undo BR to leptons that was included in the x-sec (1/BR(W->lnu)) since official samples
 
                 weight+=' / effectiveLumi'
 
@@ -192,6 +194,42 @@ class Plot:
                 self.extraHists[W_light].Scale(self.lumi)
                 self.extraHists[W_b].Scale(self.lumi)
                 self.extraHists[W_bb].Scale(self.lumi)
+
+            elif isEqual(sample.type,'ZJets'):
+                Z_light='Z_light'
+                Z_b='Z_b'
+                Z_bb='Z_bb'
+                if sample.systematic:
+                    Z_light+='_'+sample.systematic
+                    Z_b+='_'+sample.systematic
+                    Z_bb+='_'+sample.systematic
+
+                self.extraHists[Z_light]=self.newHist(Z_light)
+                self.extraHists[Z_b]=self.newHist(Z_b)
+                self.extraHists[Z_bb]=self.newHist(Z_bb)
+
+                if not applyNormSFs:
+                    scaleFactors[self.boost]['Z_light'] = 1
+                    scaleFactors[self.boost]['Z_b'] = 1
+                    scaleFactors[self.boost]['Z_bb'] = 1
+                
+                sample.chain.Draw(self.distribution+'>>'+self.extraHists[Z_light].GetName(),weight+' * '+str(scaleFactors[self.boost]['Z_light'])+' * ('+theCuts+' && ((abs(hJet_flavour[0])==5)+(abs(hJet_flavour[1])==5))==0)','GOFF')
+                sample.chain.Draw(self.distribution+'>>'+self.extraHists[Z_b].GetName(),weight+' * '+str(scaleFactors[self.boost]['Z_b'])    +' * ('+theCuts+' && ((abs(hJet_flavour[0])==5)+(abs(hJet_flavour[1])==5))==1)','GOFF')
+                sample.chain.Draw(self.distribution+'>>'+self.extraHists[Z_bb].GetName(),weight+' * '+str(scaleFactors[self.boost]['Z_bb'])   +' * ('+theCuts+' && ((abs(hJet_flavour[0])==5)+(abs(hJet_flavour[1])==5))==2)','GOFF')
+
+                if showOverflow:   #if we fix the overflow when drawing all histograms, then all the "extraHists" will automatically have overflow taken care of
+                    for hName in [Z_light,Z_b,Z_bb]:
+                        h=self.extraHists[hName]
+                        self.overflow(h)
+                
+                sample.h.Add(self.extraHists[Z_light])
+                sample.h.Add(self.extraHists[Z_b])
+                sample.h.Add(self.extraHists[Z_bb])
+
+                #Inclusive Z sample will be scaled below
+                self.extraHists[Z_light].Scale(self.lumi)
+                self.extraHists[Z_b].Scale(self.lumi)
+                self.extraHists[Z_bb].Scale(self.lumi)
 
             else:
                 if isEqual(sample.type,'ttbar') and applyNormSFs: scaleFactor=str(scaleFactors[self.boost]['ttbar'])
@@ -269,7 +307,7 @@ class Plot:
                 if sampleName=='ttbar': self.extraHists[sampleName+'_ttbarShapeDown']=down
                 else: self.extraHists[sampleName+'_WJetsShapeDown']=down
                             
-        #Force W+Jets and ttbar systematic integrals to nominal values
+        #Force W+Jets, Z+Jets and ttbar systematic integrals to nominal values
         for histName in self.extraHists.keys():
             try:
 				if self.extraHists.has_key('WJets'):  #Sometimes I skip WJets for speed - JS
@@ -332,7 +370,7 @@ class Plot:
         if blind == True:
             uMargin = 0.15
              
-        rMargin=.08
+        rMargin=.13
         
         self.uPad=TPad("uPad","",0,yDiv,1,1) #for actual plots
         self.uPad.SetTopMargin(0.07)
@@ -361,7 +399,8 @@ class Plot:
             begin=self.xTitle.find('[')+1
             end=self.xTitle.find(']')
             yTitle+=' / '+str(binWidth)+' '+self.xTitle[begin:end]
-        self.extraHists['Data'].GetYaxis().SetTitle(yTitle)
+        #self.extraHists['Data'].GetYaxis().SetTitle(yTitle)
+        self.extraHists['Data'].GetYaxis().SetTitle("Events")
 
         self.formatUpperHist(self.extraHists['Data'])
 
@@ -381,18 +420,18 @@ class Plot:
         
             #calculate stat+sys uncertainty band
             self.uncBand=self.extraHists['Total Background'].Clone("unc")
-            for binNo in range(0,self.nBinsX+2):
-                lumiUnc=0
-                statUnc=0
-                sigmaUnc=0
-                for sample in samples:
-                    if sample.systematic or (not sample.isBackground) or self.skip(sample): continue
-                    lumiUnc+=(sample.h.GetBinContent(binNo)*lumiFracUnc)**2
-                    sigmaUnc+=(sample.h.GetBinContent(binNo)*sigmaFracUnc[sample.type])**2
-                    statUnc+=sample.h.GetBinError(binNo)**2
-                totalUnc=sqrt(lumiUnc+sigmaUnc+statUnc)
-                self.uncBand.SetBinError(binNo,totalUnc)
-                self.extraHists['Total Background'].SetBinError(binNo,totalUnc)
+            #for binNo in range(0,self.nBinsX+2):
+            #    lumiUnc=0
+            #    statUnc=0
+            #    sigmaUnc=0
+            #    for sample in samples:
+            #        if sample.systematic or (not sample.isBackground) or self.skip(sample): continue
+            #        lumiUnc+=(sample.h.GetBinContent(binNo)*lumiFracUnc)**2
+            #        sigmaUnc+=(sample.h.GetBinContent(binNo)*sigmaFracUnc[sample.type])**2
+            #        statUnc+=sample.h.GetBinError(binNo)**2
+            #    totalUnc=sqrt(lumiUnc+sigmaUnc+statUnc)
+            #    self.uncBand.SetBinError(binNo,totalUnc)
+            #    self.extraHists['Total Background'].SetBinError(binNo,totalUnc)
             self.uncBand.SetFillStyle(3344)
             self.uncBand.SetFillColor(1)
             self.uncBand.SetLineColor(1)
@@ -400,15 +439,17 @@ class Plot:
             gStyle.SetHatchesLineWidth(1)
             self.uncBand.Draw("SAME E2")
 
-            legend=TLegend(0.6,0.6,0.90,0.90)
+            legend=TLegend(0.43,0.64,0.84,0.90)
             SetOwnership( legend, 0 )   # 0 = release (not keep), 1 = keep
+            legend.SetNColumns(2)
             legend.SetShadowColor(0)
             legend.SetFillColor(0)
+            legend.SetFillStyle(0)
             legend.SetLineColor(0)
             legend.SetTextFont(42)
             if blind == False:
                 legend.AddEntry(self.extraHists['Data'],"Data")
-            for bName,bLabel in zip(reversed(['QCD','ZJets','WJets','singleTop','ttbar','VV','VZ']),reversed(['QCD','Z+jets','W+jets','single top','ttbar','VV','VZ'])):
+            for bName,bLabel in zip(reversed(['ZJets','WJets','singleTop','ttbar','VV','VZ']),reversed(['Z+jets','W+jets','single top','ttbar','VV','VZ'])):
                 try: legend.AddEntry(self.extraHists[bName],bLabel,"f")
                 except: pass
 
@@ -416,7 +457,7 @@ class Plot:
                 if signal in samplesForPlotting:
                     legend.AddEntry(signal.h, signal.altName + " x" + str(signalMagFrac), "l")
 
-            legend.AddEntry(self.uncBand , "Uncertainty" , "f")
+            legend.AddEntry(self.uncBand , "MC uncert. (stat.)" , "f")
             legend.Draw("SAME")
 
             prelimTex=TLatex()
@@ -426,7 +467,7 @@ class Plot:
             prelimTex.SetTextFont(42)
             lumi=self.lumi/1000.
             lumi=round(lumi,2)
-            prelimTex.DrawLatex(0.9, 0.95, "CMS Preliminary, "+str(lumi)+" fb^{-1} at #sqrt{s} = 8 TeV");
+            prelimTex.DrawLatex(0.88, 0.95, "CMS Preliminary, "+str(lumi)+" fb^{-1} at #sqrt{s} = 8 TeV");
 
             channelTex = TLatex()
             channelTex.SetNDC()
@@ -437,26 +478,50 @@ class Plot:
             elif self.Vtype==1: text='Z #rightarrow ee'
             elif self.Vtype==2: text='W #rightarrow #mu#nu'
             else: text='W #rightarrow e#nu'
-            channelTex.DrawLatex(0.5, 0.83, text);
+            channelTex.DrawLatex(0.38, 0.81, text);
 
             if blind == False:
                 self.lPad.cd()
                 self.pull=self.extraHists['Data'].Clone("pull")
-                for binNo in range(0,self.nBinsX+2):
-                    if self.extraHists['Total Background'].GetBinError(binNo)!=0:
-                        self.pull.SetBinContent(binNo,(self.extraHists['Data'].GetBinContent(binNo)-self.extraHists['Total Background'].GetBinContent(binNo))/sqrt(self.extraHists['Total Background'].GetBinError(binNo)**2+self.extraHists['Data'].GetBinError(binNo)**2))
+                self.pull.Divide(self.extraHists['Data'], self.extraHists['Total Background'])
+                #for binNo in range(0,self.nBinsX+2):
+                #    if self.extraHists['Total Background'].GetBinError(binNo)!=0:
+                #        self.pull.SetBinContent(binNo,(self.extraHists['Data'].GetBinContent(binNo)-self.extraHists['Total Background'].GetBinContent(binNo))/sqrt(self.extraHists['Total Background'].GetBinError(binNo)**2+self.extraHists['Data'].GetBinError(binNo)**2))
                 self.pull.SetMaximum(3)
-                self.pull.SetMinimum(-3)
-                self.pull.SetFillColor(2)
-                self.pull.SetLineColor(2)
+                self.pull.SetMinimum(0)
+                self.pull.SetFillColor(1)
+                self.pull.SetLineColor(1)
                 self.formatLowerHist(self.pull)
-                self.pull.GetYaxis().SetTitle('Pull')
-                self.pull.Draw("HIST")
+                self.pull.GetYaxis().SetTitle('Data/MC')
+                #self.pull.Draw("HIST")
+                self.pull.Draw("E1")
+                
+                self.pullUncBand=self.pull.Clone("pullunc")
+                self.pullUncBand.Divide(self.extraHists['Total Background'], self.extraHists['Total Background'])
+                self.pullUncBand.SetFillStyle(3344)
+                self.pullUncBand.SetFillColor(1)
+                self.pullUncBand.SetLineColor(1)
+                self.pullUncBand.SetMarkerSize(0)
+                gStyle.SetHatchesLineWidth(1)
+                self.pullUncBand.Draw("SAME E2")
+                
+                pullLegend=TLegend(0.19,0.92,0.37,0.99)
+                SetOwnership( pullLegend, 0 )   # 0 = release (not keep), 1 = keep
+                pullLegend.SetShadowColor(0)
+                pullLegend.SetFillColor(0)
+                pullLegend.SetLineColor(0)
+                pullLegend.SetTextFont(42)
+                pullLegend.AddEntry(self.pullUncBand , "MC uncert. (stat.)" , "f")
+                pullLegend.Draw("SAME")
 
             self.canvas.Write()
             self.canvas.SaveAs(outputDir+'/'+self.name+'.pdf')
             self.canvas.SaveAs(outputDir+'/'+self.name+'.eps')
             self.canvas.SaveAs(outputDir+'/'+self.name+'.png')
+
+        for signal in self.signals:
+            if signal in samplesForPlotting:
+                signal.h.Scale(1./signalMagFrac)
 
         if unroll2D:
             for sample in allSamples:

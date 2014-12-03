@@ -18,7 +18,7 @@ except:
 try: distribution=argv[2]
 except: distribution=None
 
-for signal in ['Wh_125p6_0P','Wh_125p6_0M','Wh_125p6_0Mf05ph0']:
+for signal in ['Wh_125p6_0P','Wh_125p6_0M']:
 
     theCard=DataCard(signalNames=[signal])
     theCard.fromPickle(inputDir+'/yields.p')
