@@ -20,7 +20,7 @@ defaultBackgroundNames=['Z_light','Z_b','Z_bb',
 
 none='-'
 lumiSys='1.026'
-leptonEffSys='1.03'
+leptonEffSys='1.06'
 signalEWKSys0P='1.02'
 signalEWKSys0M='1.10'
 signalQCDSys='1.05'
@@ -29,50 +29,56 @@ backgroundNormSys='1.1'
 #singleTopSys='1.15'
 dibosonSys='1.15'
 #QCDSys='2'
+QCDscale_VHSys='1.04'
+QCDscale_VVSys='1.04'
+QCDscale_ttbarSys='1.06'
 qqbarPDFSys='1.01'
 ggPDFSys='1.01'
 METSys='1.03'  #FIX ME - should this be a shape uncertainty?
-ggZhSys='1.2'
+ggZHNormSys='.75/1.35'
 
 #FIX ME - Should there be QCD scale uncertainties?
-flatSystematics=[('lumi',{'Zh_125p6_0P':lumiSys,'Zh_125p6_0M':lumiSys,'VZ':lumiSys,'VV':lumiSys}),
-                 ('leptonEff',{'Zh_125p6_0P':leptonEffSys,'Zh_125p6_0M':leptonEffSys,'VZ':leptonEffSys,'VV':leptonEffSys}),
+flatSystematics=[('lumi',{'Zh_125p6_0P':lumiSys,'Zh_125p6_0M':lumiSys,'VZ':lumiSys,'VV':lumiSys,'ggh':lumiSys}),
+                 ('elEff',{'Zh_125p6_0P':leptonEffSys,'Zh_125p6_0M':leptonEffSys,'VZ':leptonEffSys,'VV':leptonEffSys,'ggh':leptonEffSys}),
+                 ('muEff',{'Zh_125p6_0P':leptonEffSys,'Zh_125p6_0M':leptonEffSys,'VZ':leptonEffSys,'VV':leptonEffSys,'ggh':leptonEffSys}),
                  #('MET',{'Wh_OA125p6_0P':METSys,'Wh_125p6_0M':METSys,'ZJets':METSys,'singleTop':METSys,'QCD':METSys,'VZ':METSys,'VV':METSys}),
                  ('qqbarPDF',{'Zh_125p6_0P':qqbarPDFSys,'Zh_125p6_0M':qqbarPDFSys,'VZ':qqbarPDFSys,'VV':qqbarPDFSys}),
-                 ('ggPDF',{'singleTop':ggPDFSys,'QCD':ggPDFSys}),
+                 ('ggPDF',{'singleTop':ggPDFSys,'QCD':ggPDFSys,'ggh':ggPDFSys}),
                  ('signalBoostEWK',{'Zh_125p6_0P':signalEWKSys0P,'Zh_125p6_0M':signalEWKSys0M}),
                  ('signalBoostQCD',{'Zh_125p6_0P':signalQCDSys,'Zh_125p6_0M':signalQCDSys}),
-                 ('ZlightNorm',{'Z_light':backgroundNormSys}),
-                 ('ZbNorm',{'Z_b':backgroundNormSys}),
-                 ('ZbbNorm',{'Z_bb':backgroundNormSys}),
+                 ('ZlightNorm_ZH',{'Z_light':backgroundNormSys}),
+                 ('ZbNorm_ZH',{'Z_b':backgroundNormSys}),
+                 ('ZbbNorm_ZH',{'Z_bb':backgroundNormSys}),
                  #('ZjetsNorm',{'ZJets':ZJetsSys}),
-                 ('ttbarNorm',{'ttbar':backgroundNormSys}),
+                 ('ttbarNorm_ZH',{'ttbar':backgroundNormSys}),
                  #('singleTopNorm',{'singleTop':singleTopSys}),
+                 ('QCDscale_VH',{'Zh_125p6_0P':QCDscale_VHSys,'Zh_125p6_0M':QCDscale_VHSys}),
+                 ('QCDscale_VV',{'VZ':QCDscale_VVSys,'VV':QCDscale_VVSys}),
+                 #('QCDscale_ttbar',{'singleTop':QCDscale_ttbarSys}),
                  #('QCDNorm',{'QCD':QCDSys}),
                  ('dibosonNorm',{'VZ':dibosonSys,'VV':dibosonSys}),
-                 ('ggZhSys',{'ggh':ggZhSys}),
+                 ('ggZHNorm',{'ggh':ggZHNormSys}),
                  ]
 
 #FIX ME - we need systematic samples for signal
 one='1'
-shapeSystematics=[('JEC',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one}),
-                  ('JER',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one}),
-                  ('btag',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one}),
-                  ('mistag',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one}),
-                  #('stat_0P',{'Zh_125p6_0P':one}),
-                  #('stat_0M',{'Zh_125p6_0M':one}),
-                  #('stat_Z_light',{'Z_light':one}),
-                  #('stat_Z_b',{'Z_b':one}),
-                  #('stat_Z_bb',{'Z_bb':one}),
+shapeSystematics=[('JEC',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggh':one}),
+                  ('JER',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggh':one}),
+                  ('btag',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggh':one}),
+                  ('mistag',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggh':one}),
+                  ('stat_0P',{'Zh_125p6_0P':one}),
+                  ('stat_0M',{'Zh_125p6_0M':one}),
+                  ('stat_Z_light',{'Z_light':one}),
+                  ('stat_Z_b',{'Z_b':one}),
+                  ('stat_Z_bb',{'Z_bb':one}),
                   #('stat_ZJets',{'ZJets':one}),
-                  #('stat_ttbar',{'ttbar':one}),
+                  ('stat_ttbar',{'ttbar':one}),
                   #('stat_singleTop',{'singleTop':one}),
                   #('stat_QCD',{'QCD':one}),
-                  #('stat_VZ',{'VZ':one}),
-                  #('stat_VV',{'VV':one}),
-                  #('ttbarShape',{'ttbar':one}),
-                  #('WJetsShape',{'W_light':one,'W_b':one,'W_bb':one}),
-                  #('stat_ggZh',{'ggh':one}),
+                  ('stat_VZ',{'VZ':one}),
+                  ('stat_VV',{'VV':one}),
+                  ('ttbarShape_ZH',{'ttbar':one}),
+                  ('ZJetsShape',{'Z_light':one,'Z_b':one,'Z_bb':one}),
                   ]
                     
 ########################################################################
@@ -212,8 +218,19 @@ class DataCard:
             row=[systematic,'lnN']
             for channel in self.channels:
                 for process in self.processNames:
-                    try: row.append(values[process])
-                    except: row.append(none)
+                    if systematic == 'elEff' and channel.name.startswith('Vtype1'):
+                    	try: row.append(values[process])
+                    	except: row.append(none)
+                    elif systematic == 'elEff' and channel.name.startswith('Vtype0'):
+                    	row.append(none)
+                    elif systematic == 'muEff' and channel.name.startswith('Vtype0'):
+                    	try: row.append(values[process])
+                    	except: row.append(none)
+                    elif systematic == 'muEff' and channel.name.startswith('Vtype1'):
+                    	row.append(none)
+                    else:
+                    	try: row.append(values[process])
+                    	except: row.append(none)
             self.data.append(row)
 
         self.data.append(line)

@@ -68,8 +68,11 @@ class Sample:
 
 #name,sampleType,inputDir,fileIdentifier,altName,channel):
 
-Zh_125p6_0P=Sample('Zh_125p6_0P','signal','/','ZHiggs0P_M-125p6_8TeV-JHUGenV4-private_nominal','Zh (CP = 0^{+})')
-Zh_125p6_0M=Sample('Zh_125p6_0M','signal','/','ZHiggs0M_M-125p6_8TeV-JHUGenV4-private_nominal','Zh (CP = 0^{-})')
+#Zh_125p6_0P=Sample('Zh_125p6_0P','signal','/','ZHiggs0P_M-125p6_8TeV-JHUGenV4-private_nominal','Zh (CP = 0^{+})')
+#Zh_125p6_0M=Sample('Zh_125p6_0M','signal','/','ZHiggs0M_M-125p6_8TeV-JHUGenV4-private_nominal','Zh (CP = 0^{-})')
+
+Zh_125p6_0P=Sample('Zh_125p6_0P','signal','/','ZHiggs0P_M-125p6_8TeV-JHUGenV4-official_nominal','Zh (CP = 0^{+})')
+Zh_125p6_0M=Sample('Zh_125p6_0M','signal','/','ZHiggs0M_M-125p6_8TeV-JHUGenV4-official_nominal','Zh (CP = 0^{-})')
 
 ggZeeh=Sample('ggZeeh','ggh','/','ZeeHiggsbb_PHG_nominal')
 ggZmmh=Sample('ggZmmh','ggh','/','ZmmHiggsbb_PHG_nominal')
@@ -102,27 +105,6 @@ TTbar_Hadronic=Sample('TTbar_Hadronic','ttbar','/','TTJets_HadronicMGDecays_8TeV
 
 ttbar=[TTbar_FullLept,TTbar_SemiLept,TTbar_Hadronic]
 
-
-#Wh_125p6_0P=Sample('Wh_125p6_0P','signal','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal','WHiggs0P_M-125p6','Wh (CP = 0^{+})')
-#Wh_125p6_0PH=Sample('Wh_125p6_0PH','signal','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal','WHiggs0PH_M-125p6')
-#Wh_125p6_0M=Sample('Wh_125p6_0M','signal','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal','WHiggs0M_M-125p6','Wh (CP = 0^{-})')
-#Wh_125p6_0Mf05ph0=Sample('Wh_125p6_0Mf05ph0','signal','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal','WHiggs0Mf05ph0_M-125p6','Wh (CP mixed 50/50)')
-#signals=[Wh_125p6_0P,Wh_125p6_0PH,Wh_125p6_0M,Wh_125p6_0Mf05ph0]
-
-#WJets=Sample('WJetsInclusive','WJets','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/WJets_boostedMG_lumiWeighted')#not in ZH
-
-#singleTop_sChannel=Sample('singleTop_sChannel','singleTop','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/SingleTop_sChannel_lumiWeighted')
-#singleTop_tChannel=Sample('singleTop_tChannel','singleTop','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/SingleTop_tChannel_lumiWeighted')
-#singleTop_tW=Sample('singleTop_tW','singleTop','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/SingleTop_tW_lumiWeighted')
-
-#singleTop=[singleTop_sChannel,singleTop_tChannel,singleTop_tW]
-
-#QCD_BCtoE=Sample('QCD_BCtoE','QCD','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/QCD_BCtoE_80toInf_lumiWeighted',channel='el')
-#QCD_Inclusive=Sample('QCD_Inclusive','QCD','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/QCD_Inclusive_50toInf_lumiWeighted',channel='el')   #FIXME - Is this correct?
-#QCD_MuEnriched=Sample('QCD_MuEnriched','QCD','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/QCD_MuEnrichedPt5_80toInf_lumiWeighted',channel='mu')
-
-#QCD=[QCD_BCtoE,QCD_MuEnriched]
-
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 dataEl=Sample('DataEl','Data','/','Zee_nominal',channel='el')
@@ -134,20 +116,14 @@ data=[dataEl,dataMu]
 
 samplesForPlotting=[Zh_125p6_0P,Zh_125p6_0M,ggZeeh,ggZmmh]+diboson+Zjets+ttbar+data
 
-#samplesForPlotting=[Wh_125p6_0P,Wh_125p6_0M,Wh_125p6_0Mf05ph0]+diboson+[WJets,ZJets]+ttbar+singleTop+QCD+data
-#samplesForPlotting=[Wh_125p6_0P,Wh_125p6_0M,Wh_125p6_0Mf05ph0]+diboson+[ZJets]+ttbar+singleTop+QCD+data   #no W+Jets
-
 allSamples=samplesForPlotting
-#allSamples=samplesForPlotting+[Wh_125p6_0PH]
-
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 
-#These are not used for Zll
-#WJetsHW=Sample('WJets_shapeSys','WJets','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/WJets_boostedHW_lumiWeighted',systematic='WJetsShapeUp')
-#ttbarMCatNLO=Sample('ttbar_shapeSys','ttbar','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/TTbar_mcAtNLO_lumiWeighted',systematic='ttbarShapeUp')
-#systematicSamples=[WJetsHW,ttbarMCatNLO]
-systematicSamples=[]
+ZJetsHW=Sample('ZJets_shapeSys','ZJets','/','merged_DY_alt',systematic='ZJetsShapeUp')
+ttbarMCatNLO=Sample('ttbar_shapeSys','ttbar','/','TT_CT10_TuneZ2star_8TeV-powheg-tauola_merged_nominal',systematic='ttbarShape_ZHUp')
+systematicSamples=[ZJetsHW,ttbarMCatNLO]
+#systematicSamples=[]
 
 systematics=['JECDown','JECUp','JERDown','JERUp','btagDown','btagUp','mistagDown','mistagUp']
 for sample in allSamples:

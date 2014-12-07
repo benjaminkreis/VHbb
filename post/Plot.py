@@ -36,13 +36,11 @@ class Plot:
         self.is1D=not self.is2D
 
         if self.binsX:
-            print "binsX =",binsX
             self.nBinsX=len(self.binsX)-1
             self.xMin=self.binsX[0]
             self.xMax=self.binsX[-1]
 
             if self.is2D:
-                print "binsY =",binsY
                 self.nBinsY=len(self.binsY)-1
                 self.yMin=self.binsY[0]
                 self.yMax=self.binsY[-1]
@@ -135,17 +133,19 @@ class Plot:
                 weight+=' * '+PUWeight 
                 weight+=' * '+self.trigWeight
                 weight+=' * weightMueEff'
-                weight+=' * lheWeight'
+                if sample.name=='ZJets_shapeSys' or sample.name=='ttbar_shapeSys': weight+=' * 1'
+                else: 
+                	weight+=' * lheWeight'
+                	weight+=' * weightDYZpT'
                 weight+=' * weightSignalQCD'
                 weight+=' * weightEWKSignalATLAS'
-                weight+=' * weightDYZpT'
                 weight+=' / effectiveLumi'
 
                 #if isEqual(sample.type,'WJets'): weight+=' * weightWpt_WJets'
                 #if isEqual(sample.type,'ttbar'): weight+=' * weightWpt_TTbar'
                 #weight+=' * weightEleTrigger'  #Why are we applying this weight to muon channel? JS
 
-                if doBDT and not sample.isSignal:
+                if doBDT and not sample.isSignal and not (sample.name=='ZJets_shapeSys' or sample.name=='ttbar_shapeSys'):
                     weight+=' * 2'
                     theCuts+=' && EventForTraining==0'#' && EVENT.event%2==0'
 
@@ -266,7 +266,7 @@ class Plot:
                 ID=histName
                 self.makeStat(self.extraHists[histName],ID)
 
-        #W+Jets and ttbar shape
+        #Z+Jets and ttbar shape
         if doZJetsShapeSys or doTTbarShapeSys or doAllSys:
             shapeSamples=[]
             if doZJetsShapeSys or doAllSys and self.extraHists.has_key('ZJets'):
@@ -277,7 +277,7 @@ class Plot:
             for sampleName in shapeSamples:
                 nominal=self.extraHists[sampleName]
                 print sampleName
-                if sampleName=='ttbar': up=self.extraHists[sampleName+'_ttbarShapeUp']
+                if sampleName=='ttbar': up=self.extraHists[sampleName+'_ttbarShape_ZHUp']
                 else: up=self.extraHists[sampleName+'_ZJetsShapeUp']
                 down=up.Clone(up.GetName().replace('Up','Down'))
 
@@ -288,10 +288,10 @@ class Plot:
                     for xBin in range(0,self.nBinsX+2):
                         for yBin in range(0,self.nBinsY+2):
                             down.SetBinContent(yBin,max(0,nominal.GetBinContent(xBin,yBin)-(up.GetBinContent(xBin,yBin)-nominal.GetBinContent(xBin,yBin))))
-                if sampleName=='ttbar': self.extraHists[sampleName+'_ttbarShapeDown']=down
+                if sampleName=='ttbar': self.extraHists[sampleName+'_ttbarShape_ZHDown']=down
                 else: self.extraHists[sampleName+'_ZJetsShapeDown']=down
                             
-        #Force W+Jets and ttbar systematic integrals to nominal values
+        #Force Z+Jets and ttbar systematic integrals to nominal values
         for histName in self.extraHists.keys():
             try:
 				if self.extraHists.has_key('ZJets'):  #Sometimes I skip WJets for speed - JS
@@ -355,7 +355,7 @@ class Plot:
         if blind == True:
             uMargin = 0.15
              
-        rMargin=.11
+        rMargin=.13
         
         self.uPad=TPad("uPad","",0,yDiv,1,1) #for actual plots
         self.uPad.SetTopMargin(0.07)
@@ -384,7 +384,8 @@ class Plot:
             begin=self.xTitle.find('[')+1
             end=self.xTitle.find(']')
             yTitle+=' / '+str(binWidth)+' '+self.xTitle[begin:end]
-        self.extraHists['Data'].GetYaxis().SetTitle(yTitle)
+        #self.extraHists['Data'].GetYaxis().SetTitle(yTitle)
+        self.extraHists['Data'].GetYaxis().SetTitle("Events")
 
         self.formatUpperHist(self.extraHists['Data'])
 
@@ -395,7 +396,7 @@ class Plot:
             if signal in samplesForPlotting:
                 signal.h.Scale(signalMagFrac)
                 signal.h.Draw("SAME HIST")
-                #signal.h.Scale(1./signalMagFrac) ## UNCOMMENT THIS WHEN MAKING DATA CARDS!!!!!!!!!
+                #signal.h.Scale(1./signalMagFrac)
 
         self.extraHists['Data'].Draw("SAME E1 X0") #redraw data so its not hidden
         self.uPad.RedrawAxis()
@@ -423,7 +424,7 @@ class Plot:
             gStyle.SetHatchesLineWidth(1)
             self.uncBand.Draw("SAME E2")
 
-            legend=TLegend(0.43,0.6,0.88,0.90)
+            legend=TLegend(0.43,0.64,0.84,0.90)
             SetOwnership( legend, 0 )   # 0 = release (not keep), 1 = keep
             legend.SetNColumns(2)
             legend.SetShadowColor(0)
@@ -441,7 +442,7 @@ class Plot:
                 if signal in samplesForPlotting:
                     legend.AddEntry(signal.h, signal.altName + " x" + str(signalMagFrac), "l")
 
-            legend.AddEntry(self.uncBand , "MC unc. (stat.)" , "f")
+            legend.AddEntry(self.uncBand , "MC uncert. (stat.)" , "f")
             legend.Draw("SAME")
 
             prelimTex=TLatex()
@@ -451,7 +452,7 @@ class Plot:
             prelimTex.SetTextFont(42)
             lumi=self.lumi/1000.
             lumi=round(lumi,2)
-            prelimTex.DrawLatex(0.9, 0.95, "CMS Preliminary, "+str(lumi)+" fb^{-1} at #sqrt{s} = 8 TeV");
+            prelimTex.DrawLatex(0.88, 0.95, "CMS Preliminary, "+str(lumi)+" fb^{-1} at #sqrt{s} = 8 TeV");
 
             channelTex = TLatex()
             channelTex.SetNDC()
@@ -478,17 +479,12 @@ class Plot:
                 self.pull.SetFillColor(1)
                 self.pull.SetLineColor(1)
                 self.formatLowerHist(self.pull)
-                #self.pull.GetYaxis().SetTitle('Pull')
                 self.pull.GetYaxis().SetTitle('Data/MC')
                 #self.pull.Draw("HIST")
                 self.pull.Draw("E1")
                 
                 self.pullUncBand=self.pull.Clone("pullunc")
                 self.pullUncBand.Divide(self.extraHists['Total Background'], self.extraHists['Total Background'])
-                #for binNo in range(0,self.nBinsX+2):
-                #	self.pullUncBand.SetBinContent(binNo,1.)
-                #	self.pullUncBand.SetBinError(binNo,self.extraHists['Total Background'].GetBinContent(binNo))
-                #	print self.pullUncBand.GetBinContent(binNo)
                 self.pullUncBand.SetFillStyle(3344)
                 self.pullUncBand.SetFillColor(1)
                 self.pullUncBand.SetLineColor(1)
@@ -509,6 +505,10 @@ class Plot:
             self.canvas.SaveAs(outputDir+'/'+self.name+'.pdf')
             self.canvas.SaveAs(outputDir+'/'+self.name+'.eps')
             self.canvas.SaveAs(outputDir+'/'+self.name+'.png')
+            
+        for signal in self.signals:
+        	if signal in samplesForPlotting:
+        		signal.h.Scale(1./signalMagFrac)
 
         if unroll2D:
             for sample in allSamples:

@@ -2,7 +2,7 @@
 theDir=$1
 condorDir=$PWD
 
-source /uscmst1/prod/sw/cms/shrc prod
+source /cvmfs/cms.cern.ch/cmsset_default.sh
 
 cd $theDir
 eval `scramv1 runtime -sh`

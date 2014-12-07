@@ -28,7 +28,7 @@ else:
 if len(argv)>2:
     inputDir=argv[2]
 else:
-    inputDir='/eos/uscms/store/user/lpcmbja/noreplica/ntran/Zllstep4/111014'
+    inputDir='/eos/uscms/store/user/lpcmbja/noreplica/ntran/Zllstep4/112614'
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 #SETTINGS
@@ -38,7 +38,7 @@ DEBUG=False
 fillEmptyBins=False
 blind=True
 applyNormSFs=True
-unroll2D=False
+unroll2D=True#False
 
 doBDT=True
 do1stHalfBDT=False
@@ -48,20 +48,20 @@ doCutTable=False
 doTheta=False
 makeDataCard=True
 
-doAllSys=False#True
-doJECSys=True#False
-doJERSys=True#False
-doBTagSys=True#False
-doMisTagSys=True#False
+doAllSys=True
+doJECSys=False
+doJERSys=False
+doBTagSys=False
+doMisTagSys=False
 doZJetsShapeSys=False
 doTTbarShapeSys=False
 doStatSys=False
 
 doCuts=[
     'bdt',
-    #'ZLight',
-    #'Zbb',
-    #'TTbar'
+    #'ZLF',
+    #'ZHF',
+    #'ttbar'
     ]
 
 doVtypes=[
@@ -73,47 +73,6 @@ doBoosts=[
     'med',
     'high'
     ]
-'''
-# Cascading BDT implementation 1
-offset=1; cutTTbar=-0.35; cutWJet=0.0; cutVV=0.2
-BDTMin=-1+offset
-BDTMax=-1+offset+8
-BDTStitching="""(({3}+BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4)*(BDT_8TeV_H125Sig_NewTTbarBkg_newCuts4<{0}))+\
-((2+{3}+BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4)*((BDT_8TeV_H125Sig_NewTTbarBkg_newCuts4>{0})*(BDT_8TeV_H125Sig_0b1b2bWjetsBkg_newCuts4<{1})))+\
-((4+{3}+BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4)*((BDT_8TeV_H125Sig_NewTTbarBkg_newCuts4>{0})*(BDT_8TeV_H125Sig_0b1b2bWjetsBkg_newCuts4>{1})*(BDT_8TeV_H125Sig_VVBkg_newCuts4<{2})))+\
-((6+{3}+BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4)*((BDT_8TeV_H125Sig_NewTTbarBkg_newCuts4>{0})*(BDT_8TeV_H125Sig_0b1b2bWjetsBkg_newCuts4>{1})*(BDT_8TeV_H125Sig_VVBkg_newCuts4>{2})))\
-""".format(cutTTbar,cutWJet,cutVV,offset)
-
-medBoostBDTBins =linspace(-1+offset, -1+offset+0.7, 15).tolist() + [-1+offset+2] + linspace(-1+offset+2+0.45,-1+offset+2+0.9, 10).tolist() +[-1+offset+4] + linspace(-1+offset+4+0.55,-1+offset+4+1, 10).tolist() + [-1+offset+6] + linspace(-1+offset+6+0.6, -1+offset+6+1.1, 11).tolist() + [BDTMax]
-highBoostBDTBins=linspace(-1+offset, -1+offset+0.7, 15).tolist() + [-1+offset+2] + linspace(-1+offset+2+0.45,-1+offset+2+1, 12).tolist() +[-1+offset+4] + linspace(-1+offset+4+0.55,-1+offset+4+1.05, 11).tolist() + [-1+offset+6] + linspace(-1+offset+6+0.6, -1+offset+6+1.2, 13).tolist() + [BDTMax]
-'''
-# Cascading BDT implementation 2
-offset=1; cutTTbar=-0.35; cutWJet=0.0; cutVV=0.2
-BDTMin=-1+offset
-BDTMax=-1+offset+4
-BDTStitching="""(({3}+BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4)*(BDT_8TeV_H125Sig_NewTTbarBkg_newCuts4<{0}))+\
-((1+0.4+BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4)*((BDT_8TeV_H125Sig_NewTTbarBkg_newCuts4>{0})*(BDT_8TeV_H125Sig_0b1b2bWjetsBkg_newCuts4<{1})))+\
-((2+BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4)*((BDT_8TeV_H125Sig_NewTTbarBkg_newCuts4>{0})*(BDT_8TeV_H125Sig_0b1b2bWjetsBkg_newCuts4>{1})*(BDT_8TeV_H125Sig_VVBkg_newCuts4<{2})))+\
-((2+0.65+BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4)*((BDT_8TeV_H125Sig_NewTTbarBkg_newCuts4>{0})*(BDT_8TeV_H125Sig_0b1b2bWjetsBkg_newCuts4>{1})*(BDT_8TeV_H125Sig_VVBkg_newCuts4>{2})))\
-""".format(cutTTbar,cutWJet,cutVV,offset)
-
-medBoostBDTBins =linspace(0, 3, 49).tolist()
-highBoostBDTBins=linspace(0, 3, 49).tolist()
-
-kPSlow=4722955.231 #After averaging over e/mu and 0P/0M for lowBoost
-kHOlow=1862001.840 #After averaging over e/mu and 0P/0M for lowBoost
-kPSmed=7131743.071 #After averaging over e/mu and 0P/0M for medBoost
-kHOmed=2410258.959 #After averaging over e/mu and 0P/0M for medBoost
-kPShigh=13499645.703 #After averaging over e/mu and 0P/0M for highBoost
-kHOhigh=3883419.8068 #After averaging over e/mu and 0P/0M for highBoost
-MELA_SMvPSlow='MELA_PS/(({0}*MELA_SM) + MELA_PS)'.format(kPSlow)  #This arbitrary factor needs to be optimized
-MELA_SMvHOlow='MELA_HO/(({0}*MELA_SM) + MELA_HO)'.format(kHOlow)
-MELA_SMvPSmed='MELA_PS/(({0}*MELA_SM) + MELA_PS)'.format(kPSmed)
-MELA_SMvHOmed='MELA_HO/(({0}*MELA_SM) + MELA_HO)'.format(kHOmed)
-MELA_SMvPShigh='MELA_PS/(({0}*MELA_SM) + MELA_PS)'.format(kPShigh)
-MELA_SMvHOhigh='MELA_HO/(({0}*MELA_SM) + MELA_HO)'.format(kHOhigh)
-
-#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 showOverflow=True
 
@@ -133,7 +92,7 @@ sigmaFracUnc['QCD']=0.25
 sigmaFracUnc['ggh']=0.2
 lumiFracUnc=.026   #2.6% for 8 TeV, 2.2% for 7 TeV (Jia Fu)
 
-signalMagFrac=1#20
+signalMagFrac=20
 
 plotBackgrounds=['ZJets','ttbar','VV','VZ','ggh']
 backgroundFillColors={'QCD':ROOT.kMagenta,'ZJets':ROOT.kYellow-7,'WJets':ROOT.kGreen-3,'singleTop':ROOT.kCyan-7,'ttbar':ROOT.kBlue-7,'VV':ROOT.kGray+2,'VZ':ROOT.kRed-7,'ggh':kOrange+1}
@@ -177,39 +136,42 @@ if __name__=='__main__':
     if makeDataCard:
     	for cuts in doCuts:
 			plots+=[
+				
+				#Plot(name='V_pT',distribution='V.pt',nBinsX=25,xMin=0,xMax=500,xTitle='p_{T}(V) [GeV]',yLog=False,cuts=cuts,Vtype=1,boost='high'),
+				
 				#Plot(name='h_mass',distribution='H.mass',binsX=[0]+linspace(40,240,21).tolist()+[500],xTitle='m(h) [GeV]',yLog=True,cuts=cuts,Vtype=Vtype,boost='med'),  
 				#Plot(name='h_mass',distribution='H.mass',binsX=[0]+linspace(60,240,19).tolist()+[500],xTitle='m(h) [GeV]',yLog=True,cuts=cuts,Vtype=Vtype,boost='high'),
 
-				# mVh for AN
+				# mVh uniform binning
 				#Plot(name='x_mVh',distribution='h_MVHCorr',nBinsX=30,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=0,boost='med'),
 				#Plot(name='x_mVh',distribution='h_MVHCorr',nBinsX=30,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=1,boost='med'),
 				#Plot(name='x_mVh',distribution='h_MVHCorr',nBinsX=30,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=0,boost='high'),
 				#Plot(name='x_mVh',distribution='h_MVHCorr',nBinsX=30,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=1,boost='high'),
 			
-				# BDT for AN
+				# BDT uniform binning
 				#Plot(name='h_bdtCorr',distribution='h_bdtmCorr',binsX=linspace(-1,1,20).tolist(),xTitle='BDT',yLog=True,cuts=cuts,Vtype=0,boost='med'),
 				#Plot(name='h_bdtCorr',distribution='h_bdtmCorr',binsX=linspace(-1,1,20).tolist(),xTitle='BDT',yLog=True,cuts=cuts,Vtype=1,boost='med'),			
 				#Plot(name='h_bdtCorr',distribution='h_bdttCorr',binsX=linspace(-1,1,20).tolist(),xTitle='BDT',yLog=True,cuts=cuts,Vtype=0,boost='high'),
 				#Plot(name='h_bdtCorr',distribution='h_bdttCorr',binsX=linspace(-1,1,20).tolist(),xTitle='BDT',yLog=True,cuts=cuts,Vtype=1,boost='high'),
 
-				# mVh for AN, new binning after full stat report request
+				# mVh hypothesis testing binning
 				#Plot(name='x_mVh',distribution='h_MVHCorr',binsX=[0.0, 200.0, 250.0, 300.0, 350.0, 400.0, 450.0, 500.0, 1200.0],xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=0,boost='med'),
 				#Plot(name='x_mVh',distribution='h_MVHCorr',binsX=[0.0, 200.0, 250.0, 300.0, 350.0, 1200.0],xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=1,boost='med'),
 				#Plot(name='x_mVh',distribution='h_MVHCorr',binsX=[0.0, 350.0, 400.0, 450.0, 500.0, 550.0, 1200.0],xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=0,boost='high'),
 				#Plot(name='x_mVh',distribution='h_MVHCorr',binsX=[0.0, 300.0, 350.0, 400.0, 450.0, 500.0, 550.0, 600.0, 1200.0],xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=1,boost='high'),
 			
-				# BDT for AN, new binning after full stat report request
-				Plot(name='h_bdtCorr',distribution='h_bdtmCorr',binsX=[-1.0, -0.75, -0.6666666666666666, -0.5833333333333334, -0.5, -0.4166666666666667, -0.33333333333333337, -0.25, -0.16666666666666674, -0.08333333333333337, 0.0, 1.0],xTitle='BDT',yLog=True,cuts=cuts,Vtype=0,boost='med'),
-				Plot(name='h_bdtCorr',distribution='h_bdtmCorr',binsX=[-1.0, -0.75, -0.6666666662151164, -0.5833333324302327, -0.499999998645349, -0.41666666486046533, -0.33333333107558166, -0.249999997290698, -0.16666666350581427, -0.08333332972093066, 4.063952951938177e-09, 0.08333333784883667, 0.1666666716337204, 1.0],xTitle='BDT',yLog=True,cuts=cuts,Vtype=1,boost='med'),			
-				Plot(name='h_bdtCorr',distribution='h_bdttCorr',binsX=[-1.0, -0.5833333134651184, -0.49999998103488574, -0.4166666486046531, -0.33333331617442047, -0.2499999837441878, -0.16666665131395514, -0.08333331888372253, 1.3546510135853396e-08, 0.0833333459767428, 0.16666667840697547, 0.25000001083720813, 0.3333333432674408, 1.0],xTitle='BDT',yLog=True,cuts=cuts,Vtype=0,boost='high'),
-				Plot(name='h_bdtCorr',distribution='h_bdttCorr',binsX=[-1.0, -0.5833333134651184, -0.4999999821186066, -0.41666665077209475, -0.33333331942558286, -0.24999998807907103, -0.1666666567325592, -0.08333332538604732, 5.960464455334602e-09, 0.08333333730697634, 0.16666666865348823, 0.25, 1.0],xTitle='BDT',yLog=True,cuts=cuts,Vtype=1,boost='high'),
+				# BDT hypothesis testing binning
+				#Plot(name='h_bdtCorr',distribution='h_bdtmCorr',binsX=[-1.0, -0.75, -0.6666666666666666, -0.5833333333333334, -0.5, -0.4166666666666667, -0.33333333333333337, -0.25, -0.16666666666666674, -0.08333333333333337, 0.0, 1.0],xTitle='BDT',yLog=True,cuts=cuts,Vtype=0,boost='med'),
+				#Plot(name='h_bdtCorr',distribution='h_bdtmCorr',binsX=[-1.0, -0.75, -0.6666666662151164, -0.5833333324302327, -0.499999998645349, -0.41666666486046533, -0.33333333107558166, -0.249999997290698, -0.16666666350581427, -0.08333332972093066, 4.063952951938177e-09, 0.08333333784883667, 0.1666666716337204, 1.0],xTitle='BDT',yLog=True,cuts=cuts,Vtype=1,boost='med'),			
+				#Plot(name='h_bdtCorr',distribution='h_bdttCorr',binsX=[-1.0, -0.5833333134651184, -0.49999998103488574, -0.4166666486046531, -0.33333331617442047, -0.2499999837441878, -0.16666665131395514, -0.08333331888372253, 1.3546510135853396e-08, 0.0833333459767428, 0.16666667840697547, 0.25000001083720813, 0.3333333432674408, 1.0],xTitle='BDT',yLog=True,cuts=cuts,Vtype=0,boost='high'),
+				#Plot(name='h_bdtCorr',distribution='h_bdttCorr',binsX=[-1.0, -0.5833333134651184, -0.4999999821186066, -0.41666665077209475, -0.33333331942558286, -0.24999998807907103, -0.1666666567325592, -0.08333332538604732, 5.960464455334602e-09, 0.08333333730697634, 0.16666666865348823, 0.25, 1.0],xTitle='BDT',yLog=True,cuts=cuts,Vtype=1,boost='high'),
 
 
 				# BDT for significance, etc
-				#Plot(name='h_bdtCorr',distribution='h_bdtmCorr',binsX=[-1]+linspace(-0.7,0.25,11).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=0,boost='med'),
-				#Plot(name='h_bdtCorr',distribution='h_bdtmCorr',binsX=[-1]+linspace(-0.7,0.25,11).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=1,boost='med'),			
-				#Plot(name='h_bdtCorr',distribution='h_bdttCorr',binsX=[-1]+linspace(-0.85,0.45,14).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=0,boost='high'),
-				#Plot(name='h_bdtCorr',distribution='h_bdttCorr',binsX=[-1]+linspace(-0.85,0.45,14).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=1,boost='high'),
+				Plot(name='h_bdtCorr',distribution='h_bdtmCorr',binsX=[-1]+linspace(-0.7,0.25,11).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=0,boost='med'),
+				Plot(name='h_bdtCorr',distribution='h_bdtmCorr',binsX=[-1]+linspace(-0.7,0.25,11).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=1,boost='med'),			
+				Plot(name='h_bdtCorr',distribution='h_bdttCorr',binsX=[-1]+linspace(-0.85,0.45,14).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=0,boost='high'),
+				Plot(name='h_bdtCorr',distribution='h_bdttCorr',binsX=[-1]+linspace(-0.85,0.45,14).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=1,boost='high'),
 
 				#Plot(name='Z_mass',distribution='V.mass',nBinsX=20,xMin=75,xMax=105,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=0,boost='med'),
 				#Plot(name='Z_mass',distribution='V.mass',nBinsX=20,xMin=75,xMax=105,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=1,boost='med'),
@@ -252,9 +214,6 @@ if __name__=='__main__':
                         plots+=[Plot(name='dummy',distribution='H.pt',nBinsX=1,xMin=0,xMax=500000,cuts=cuts,Vtype=Vtype,boost=boost)]
                     else:
                         plots+=[
-                        	# for AN, use makeDataCard version
-							Plot(name='x_mVh',distribution='x_mVH',nBinsX=50,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=Vtype,boost=boost),	
-							Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=linspace(-1,-0.76,4).tolist()+linspace(-0.72,0.04,20).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=Vtype,boost=boost),
 
                             #Plot(name='h_mass',distribution='H.mass',nBinsX=25,xMin=0,xMax=500,xTitle='m(h) [GeV]',yLog=False,cuts=cuts,Vtype=Vtype,boost=boost),
                             #Plot(name='x_mVH',distribution='x_mVH',nBinsX=40,xMin=0,xMax=1200,xTitle='m(VH) [GeV]',yLog=False,cuts=cuts,Vtype=Vtype,boost=boost),

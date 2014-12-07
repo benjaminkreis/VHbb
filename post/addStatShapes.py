@@ -59,7 +59,7 @@ def walk_and_copy(inputdir, outputdir, threshold, thresholdBG, binList, processL
             outputdir.cd()
             th1.Write()
             
-            do_shapes = histo.endswith("0P") or histo.endswith("0M") or histo.endswith("Z_light") or histo.endswith("Z_b") or histo.endswith("Z_bb") or histo.endswith("ttbar") or histo.endswith("VZ") or histo.endswith("VV")
+            do_shapes = histo.endswith("0P") or histo.endswith("0M") or histo.endswith("Z_light") or histo.endswith("Z_b") or histo.endswith("Z_bb") or histo.endswith("ttbar") or histo.endswith("VZ") or histo.endswith("VV") or histo.endswith("ggh")
             if do_shapes:
                 # check all bins to see if they need to be shape-errored
                 log.info("Building stat shapes for %s", histo)
@@ -115,10 +115,10 @@ def main(inputRfilename, outputRfilename, inputDCfilename, outputDCfilename, thr
 if __name__ == "__main__":
     logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 
-    threshold = 0 # cut on binError/binContent in %
-    thresholdBG = 0 # cut on binError/binContent_TotalBackground in %
-    prefix = "/uscms_data/d3/ssagir/ZllHbbAnalysis/CMSSW_5_3_3_patch2/src/VHbb/post"
-    prefix += "/plots/BDT_approximateSMbinning_141123/"
+    threshold = 15 # cut on binError/binContent in %
+    thresholdBG = 7 # cut on binError/binContent_TotalBackground in %
+    prefix = "/uscms_data/d3/ssagir/ZllHbbAnalysis/CMSSW_5_3_6/src/VHbb/post"
+    prefix += "/plots/BDTvsMVh_uniformCoarserp_globalbox_rebinned2_official_120414_unrolled_fixed/"
     inputRfile = prefix+"plots.root"
     outputRfile = prefix+"plots_statUnc%(threshold)s_bg%(thresholdBG)s.root" %locals()
     inputDataCard = prefix+"dataCard.txt"
