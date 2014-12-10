@@ -37,8 +37,8 @@ maxBtag = 'max(hJet_csvCorr[0],hJet_csvCorr[1])'
 tcBtag = maxBtag + ' > ' + CSVT + ' && ' + minBtag + ' > ' + CSVC
 ntBtag = '(hJet_csvCorr[0] > ' + CSVT + ' || hJet_csvCorr[1] > ' + CSVT + ')'
 
-cuts[1]['ZLF']= preselection + ' && ' + max1AddJet + ' && ' + minBtag + '>0' + ' && ' + maxBtag + '>0' + ' && ' + maxBtag + '<' + CSVT + ' && ' + dPhiVH + ' && ' + ' && H.pt > 100.' + ' && Vtype == 1' # ee
-cuts[0]['ZLF']= preselection + ' && ' + max1AddJet + ' && ' + minBtag + '>0' + ' && ' + maxBtag + '>0' + ' && ' + maxBtag + '<' + CSVT + ' && ' + dPhiVH + ' && ' + ' && H.pt > 100.' + ' && Vtype == 0' # mumu
+cuts[1]['ZLF']= preselection + ' && ' + max1AddJet + ' && ' + minBtag + '>0' + ' && ' + maxBtag + '>0' + ' && ' + maxBtag + '<' + CSVT + ' && ' + dPhiVH + ' && H.pt > 100.' + ' && Vtype == 1' # ee
+cuts[0]['ZLF']= preselection + ' && ' + max1AddJet + ' && ' + minBtag + '>0' + ' && ' + maxBtag + '>0' + ' && ' + maxBtag + '<' + CSVT + ' && ' + dPhiVH + ' && H.pt > 100.' + ' && Vtype == 0' # mumu
 cuts[1]['ttbar'] = preselection + ' && ' + tcBtag + ' && ' + '(V.mass > 120 || V.mass < 75.)' + ' && H.pt > 100.' + ' && Vtype == 1'
 cuts[0]['ttbar'] = preselection + ' && ' + tcBtag + ' && ' + '(V.mass > 120 || V.mass < 75.)' + ' && H.pt > 100.' + ' && Vtype == 0'
 cuts[1]['ZHF']   = preselection + ' && ' + vetoHMass + ' && ' + tcBtag + ' && ' + max1AddJet + ' && ' + dPhiVH + ' && Vtype == 1'

@@ -57,13 +57,43 @@ def unroll(h):
 
 ##############################################################################
 
-def rebin(h):
-    min=0.5
-    
-    #if type(h)!=type(TH1F()): return h
+def normByBinWidth(h):
 
-    #if 
+    result=h.Clone("h")
 
+    if issubclass(h.__class__,TH2):
+        # Over/underflow ill-defined
+        result.SetBinContent(0,0,0)
+        result.SetBinContent(h.GetNbinsX()+1,0,0)
+        result.SetBinContent(0,h.GetNbinsY()+1,0)
+        result.SetBinContent(h.GetNbinsX()+1,h.GetNbinsY()+1,0)
+
+        for xBin in range(1,h.GetNbinsX()+1):
+            for yBin in range(1,h.GetNbinsY()+1):
+                area=h.GetXaxis().GetBinWidth(xBin)*h.GetYaxis().GetBinWidth(yBin)
+                content=h.GetBinContent(xBin,yBin)
+                error=h.GetBinError(xBin,yBin)
+                
+                result.SetBinContent(xBin, yBin, content/area)
+                result.SetBinError(xBin, yBin, error/area)
+    else:
+        # Over/underflow ill-defined
+        result.SetBinContent(0,0);
+        result.SetBinContent(h.GetNbinsX()+1,0);
+
+        for bin in range(1,h.GetNbinsX()+1):
+                width=h.GetBinWidth(bin);
+                content=h.GetBinContent(bin);
+                error=h.GetBinError(bin);
+                
+                result.SetBinContent(bin, content/width);
+                result.SetBinError(bin, error/width);
+        
+    name=h.GetName();
+    h.Delete();
+    result.SetName(name);
+
+    return result;
     
 ##############################################################################
 #Printing tables
