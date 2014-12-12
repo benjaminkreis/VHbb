@@ -52,11 +52,13 @@ void renormalize_by_factor(TFile * myFile, double factor, TString changeHistName
   hChange->Write();
 }
 
-void convertRootFile(TString sigName = "Wh_125p6_0P", TString sigAltName = "Wh_125p6_0M", double altMu=-1.0) {
+void convertRootFile(TString sigName = "Wh_125p6_0P", TString sigAltName = "Wh_125p6_0M", double altMu=-1.0, 
+		     TString sigNewName = "sig", TString sigAltNewName = "sig_ALT", TString fileName = "plots.root") {
 
-  TFile * myFile = new TFile("plots.root", "update");
+  TFile * myFile = new TFile(fileName, "update");
+  assert(myFile);
   cout << "Changing file " << myFile << endl;
-  cout << sigName << " is sig, and " << sigAltName << " is sig_ALT" << endl;
+  cout << sigName << " is " << sigNewName << ", and " << sigAltName << " is " << sigAltNewName << endl;
   cout << endl;
 
   TList * list = myFile->GetListOfKeys();
@@ -69,14 +71,14 @@ void convertRootFile(TString sigName = "Wh_125p6_0P", TString sigAltName = "Wh_1
     
     if( oldName.Contains(sigName) ) {
       if( !(sigName=="Wh_125p6_0P" && oldName.Contains("0PH")) ){ //dirty hack
-	newName.ReplaceAll(sigName,"sig");
+	newName.ReplaceAll(sigName,sigNewName);
 	cout << oldName << " -> " << newName << endl;
 	makeNew(myFile, oldName, newName);
       }//dirty hack
     }
     if( oldName.Contains(sigAltName) ) {
       if( !(sigAltName=="Wh_125p6_0M" && oldName.Contains("0Mf05ph0")) ){ //dirty hack
-	newName.ReplaceAll(sigAltName,"sig_ALT");
+	newName.ReplaceAll(sigAltName,sigAltNewName);
 	cout << oldName << " -> " << newName << endl;
 	makeNew(myFile, oldName, newName);
 	
