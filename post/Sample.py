@@ -74,8 +74,8 @@ class Sample:
 Zh_125p6_0P=Sample('Zh_125p6_0P','signal','/','ZHiggs0P_M-125p6_8TeV-JHUGenV4-official_nominal','Zh (CP = 0^{+})')
 Zh_125p6_0M=Sample('Zh_125p6_0M','signal','/','ZHiggs0M_M-125p6_8TeV-JHUGenV4-official_nominal','Zh (CP = 0^{-})')
 
-ggZeeh=Sample('ggZeeh','ggh','/','ZeeHiggsbb_PHG_nominal')
-ggZmmh=Sample('ggZmmh','ggh','/','ZmmHiggsbb_PHG_nominal')
+ggZeeh=Sample('ggZeeh','ggZh','/','ZeeHiggsbb_PHG_nominal')
+ggZmmh=Sample('ggZmmh','ggZh','/','ZmmHiggsbb_PHG_nominal')
 
 WZ=Sample('WZ','VZ','/','WZ_TuneZ2star_8TeV_pythia6_tauola_nominal')
 ZZ=Sample('ZZ','VZ','/','ZZ_TuneZ2star_8TeV_pythia6_tauola_nominal')

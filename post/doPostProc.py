@@ -61,8 +61,8 @@ doStatSys=False
 doCuts=[
     #'bdt',
     'ZLF',
-    #'ZHF',
-    #'ttbar'
+    'ZHF',
+    'ttbar'
     ]
 
 doVtypes=[
@@ -90,14 +90,14 @@ sigmaFracUnc['ZJets']=0.2
 sigmaFracUnc['ttbar']=0.15
 sigmaFracUnc['singleTop']=0.15
 sigmaFracUnc['QCD']=0.25
-sigmaFracUnc['ggh']=0.2
+sigmaFracUnc['ggZh']=0.2
 lumiFracUnc=.026   #2.6% for 8 TeV, 2.2% for 7 TeV (Jia Fu)
 
 signalMagFrac=20
 
-plotBackgrounds=['ZJets','ttbar','VV','VZ','ggh']
-backgroundFillColors={'QCD':ROOT.kMagenta,'ZJets':ROOT.kYellow-7,'WJets':ROOT.kGreen-3,'singleTop':ROOT.kCyan-7,'ttbar':ROOT.kBlue-7,'VV':ROOT.kGray+2,'VZ':ROOT.kRed-7,'ggh':kOrange+1}
-backgroundLineColors={'QCD':ROOT.kMagenta+1,'ZJets':ROOT.kYellow-4,'WJets':ROOT.kGreen-2,'singleTop':ROOT.kCyan-3,'ttbar':ROOT.kBlue-3,'VV':ROOT.kGray+3,'VZ':ROOT.kRed-4,'ggh':kOrange+2}
+plotBackgrounds=['ZJets','ttbar','VV','VZ','ggZh']
+backgroundFillColors={'QCD':ROOT.kMagenta,'ZJets':ROOT.kYellow-7,'WJets':ROOT.kGreen-3,'singleTop':ROOT.kCyan-7,'ttbar':ROOT.kBlue-7,'VV':ROOT.kGray+2,'VZ':ROOT.kRed-7,'ggZh':kOrange+1}
+backgroundLineColors={'QCD':ROOT.kMagenta+1,'ZJets':ROOT.kYellow-4,'WJets':ROOT.kGreen-2,'singleTop':ROOT.kCyan-3,'ttbar':ROOT.kBlue-3,'VV':ROOT.kGray+3,'VZ':ROOT.kRed-4,'ggZh':kOrange+2}
 
 treeName='tree'
                 
@@ -180,8 +180,8 @@ if __name__=='__main__':
 				#Plot(name='Z_mass',distribution='V.mass',nBinsX=20,xMin=75,xMax=105,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=1,boost='high'),
 
 				#Zll nominal -- 
-				#Plot(name='mainBDT_v_VstarMass', distribution='h_bdtmCorr:h_MVHCorr',binsX=[0]+linspace(185,465,8).tolist()+[1200],xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.7, -0.05, 13).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=0,boost='med'),
-				#Plot(name='mainBDT_v_VstarMass', distribution='h_bdtmCorr:h_MVHCorr',binsX=[0]+linspace(175,455,8).tolist()+[1200],xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.7, -0.05, 13).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=1,boost='med'),
+                                #Plot(name='mainBDT_v_VstarMass', distribution='h_bdtmCorr:h_MVHCorr',nBinsX=12,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',nBinsY=10,yMin=-1,yMax=1,yTitle='BDT',yLog=False,cuts=cuts,Vtype=0,boost='med'),
+				#Plot(name='mainBDT_v_VstarMass', distribution='h_bdtmCorr:h_MVHCorr',nBinsX=12,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',nBinsY=10,yMin=-1,yMax=1,yTitle='BDT',yLog=False,cuts=cuts,Vtype=1,boost='med'),
 				#Plot(name='mainBDT_v_VstarMass', distribution='h_bdttCorr:h_MVHCorr',binsX=[0]+linspace(280,560,7).tolist()+[1200],xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.6, 0.0, 12).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=0,boost='high'),
 				#Plot(name='mainBDT_v_VstarMass', distribution='h_bdttCorr:h_MVHCorr',binsX=[0]+linspace(270,515,8).tolist()+[1200],xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.65, 0.1, 15).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=1,boost='high'),
 
