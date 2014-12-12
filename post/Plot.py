@@ -183,8 +183,12 @@ class Plot:
 
                 if showOverflow:   #if we fix the overflow when drawing all histograms, then all the "extraHists" will automatically have overflow taken care of
                     for hName in [W_light,W_b,W_bb]:
-                        h=self.extraHists[hName]
-                        self.overflow(h)
+                        self.overflow(self.extraHists[hName])
+
+                if normalizeByBinWidth:
+                    for hName in [W_light,W_b,W_bb]:
+                        self.extraHists[hName]=normByBinWidth(self.extraHists[hName])
+                        print self.extraHists[hName].GetName()
                 
                 sample.h.Add(self.extraHists[W_light])
                 sample.h.Add(self.extraHists[W_b])
@@ -219,9 +223,13 @@ class Plot:
 
                 if showOverflow:   #if we fix the overflow when drawing all histograms, then all the "extraHists" will automatically have overflow taken care of
                     for hName in [Z_light,Z_b,Z_bb]:
-                        h=self.extraHists[hName]
-                        self.overflow(h)
+                        self.overflow(self.extraHists[hName])
                 
+                if normalizeByBinWidth:
+                    for hName in [Z_light,Z_b,Z_bb]:
+                        self.extraHists[hName]=normByBinWidth(self.extraHists[hName])
+                        print self.extraHists[hName].GetName()
+
                 sample.h.Add(self.extraHists[Z_light])
                 sample.h.Add(self.extraHists[Z_b])
                 sample.h.Add(self.extraHists[Z_bb])
@@ -256,6 +264,8 @@ class Plot:
             #output.cd()
             if sample.isMC: sample.h.Scale(self.lumi)
             if showOverflow: self.overflow(sample.h)
+            if normalizeByBinWidth: 
+                sample.h=normByBinWidth(sample.h)
             if fillEmptyBins and sample.isBackground: fillBins(sample.h)
 
             #Make histograms for background combinations and fill yield table
@@ -392,15 +402,17 @@ class Plot:
         self.extraHists['Data'].SetMaximum(2*max(self.extraHists['Data'].GetMaximum(),self.extraHists['Total Background'].GetMaximum()))
         self.extraHists['Data'].SetMinimum(0.025)
 
-        binWidth=round(self.extraHists['Data'].GetBinWidth(1),5)
-        if binWidth-round(binWidth)<.001*binWidth: binWidth=int(round(binWidth))
+        #binWidth=round(self.extraHists['Data'].GetBinWidth(1),5)
+        #if binWidth-round(binWidth)<.001*binWidth: binWidth=int(round(binWidth))
         yTitle="Events"
+        if normalizeByBinWidth:
+            yTitle+=' / 1'
         if '[' in self.xTitle and ']' in self.xTitle: #get units from x axis title
             begin=self.xTitle.find('[')+1
             end=self.xTitle.find(']')
-            yTitle+=' / '+str(binWidth)+' '+self.xTitle[begin:end]
-        #self.extraHists['Data'].GetYaxis().SetTitle(yTitle)
-        self.extraHists['Data'].GetYaxis().SetTitle("Events")
+            yTitle+=self.xTitle[begin:end]
+        self.extraHists['Data'].GetYaxis().SetTitle(yTitle)
+        #self.extraHists['Data'].GetYaxis().SetTitle("Events")
 
         self.formatUpperHist(self.extraHists['Data'])
 
