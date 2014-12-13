@@ -7,7 +7,7 @@
 #include "TList.h"
 #include "TKey.h"
 #include "TObject.h"
-
+#include <vector>
 //
 // NOTE: Contains dirty hacks for things like 0P and 0PH so thy don't interfere.  not completely general!!
 //
@@ -61,6 +61,32 @@ void convertRootFile(TString sigName = "Wh_125p6_0P", TString sigAltName = "Wh_1
   cout << sigName << " is " << sigNewName << ", and " << sigAltName << " is " << sigAltNewName << endl;
   cout << endl;
 
+  std::vector<TString> bad,good;
+  bad.push_back("JEC");
+  good.push_back("CMS_scale_j");
+  bad.push_back("JER");
+  good.push_back("CMS_res_j");
+  bad.push_back("btag");
+  good.push_back("CMS_eff_b");
+  bad.push_back("mistag");
+  good.push_back("CMS_FakeRate_b");
+  bad.push_back("ttbarShape_ZH");
+  good.push_back("CMS_vhbb_zh_ttbar_shape");
+  bad.push_back("ttbarShape");
+  good.push_back("CMS_vhbb_wh_ttbar_shape");
+  bad.push_back("W_light_WJetsShape");
+  bad.push_back("W_b_WJetsShape");
+  bad.push_back("W_bb_WJetsShape");
+  good.push_back("W_light_CMS_vhbb_wh_W_light_shape");
+  good.push_back("W_b_CMS_vhbb_wh_W_b_shape");
+  good.push_back("W_bb_CMS_vhbb_wh_W_bb_shape");
+  bad.push_back("Z_light_ZJetsShape");
+  bad.push_back("Z_b_ZJetsShape");
+  bad.push_back("Z_bb_ZJetsShape");
+  good.push_back("Z_light_CMS_vhbb_zh_Z_light_shape");
+  good.push_back("Z_b_CMS_vhbb_zh_Z_b_shape");
+  good.push_back("Z_bb_CMS_vhbb_zh_Z_bb_shape");
+
   TList * list = myFile->GetListOfKeys();
   for (int i = 0; i < list->GetSize(); i++) {
     TKey *key = dynamic_cast<TKey*>(list->At(i));
@@ -68,6 +94,14 @@ void convertRootFile(TString sigName = "Wh_125p6_0P", TString sigAltName = "Wh_1
 
     TString oldName = obj->GetName(); 
     TString newName = oldName;
+
+    for(int lp=0; lp<bad.size(); lp++){
+      if (oldName.Contains(bad[lp])){
+        newName.ReplaceAll(bad[lp],good[lp]);
+        cout << oldName << " -> " << newName << endl;
+        makeNew(myFile, oldName, newName);
+      }
+    }
     
     if( oldName.Contains(sigName) ) {
       if( !(sigName=="Wh_125p6_0P" && oldName.Contains("0PH")) ){ //dirty hack
