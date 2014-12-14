@@ -13,25 +13,25 @@ def readDataCard(filename):
     	elif (line.startswith("bin") or line.startswith("process") or line.startswith("rate")): 
     		data.append([line.strip().split()[0],'']+line.strip().split()[1:])
     		if line.startswith("bin"): dict1=line.strip().split()[1:]
-    		if (line.startswith("process") and line.strip().split()[1].startswith("Wh")): dict2=line.strip().split()[1:]
+    		if (line.startswith("process") and not line.strip().split()[1].startswith("-2") and not line.strip().split()[1].startswith("-1") and not line.strip().split()[1].startswith("0")): dict2=line.strip().split()[1:]
     	elif line.startswith("stat_"): continue
     	else: data.append(line.strip().split())
     dict = [item1+'_'+item2 for item1,item2 in zip(dict1,dict2)]
     return data, dict
 
-def addStatShapes(filename, dictOld):
+def addStatShapes(filename, dictOld, oldDataLastLine):
     f = open(filename, 'rU')
     lines = f.readlines()
     f.close()
     for line in lines[:50]:
     	if line.startswith("bin"): dict1=line.strip().split()[1:]
-    	elif (line.startswith("process") and line.strip().split()[1].startswith("Wh")): dict2=line.strip().split()[1:]
+    	elif (line.startswith("process") and not line.strip().split()[1].startswith("-2") and not line.strip().split()[1].startswith("-1") and not line.strip().split()[1].startswith("0")): dict2=line.strip().split()[1:]
     	else: continue
     dict = [item1+'_'+item2 for item1,item2 in zip(dict1,dict2)]
     data = []
     start = False
     for line in lines:
-    	if line.startswith("WJetsShape"): 
+    	if line.startswith(oldDataLastLine[0]): 
     		start = True
     		continue
     	if start:
@@ -50,7 +50,7 @@ def main(inputDCfile, inputDCfile0P, outputDCfile0P, inputDCfile0M, outputDCfile
 	data0P = []
 	dataOld0P, dictOld0P = readDataCard(inputDCfile0P)
 	data0P += dataOld0P
-	dataNew0P = addStatShapes(inputDCfile, dictOld0P)
+	dataNew0P = addStatShapes(inputDCfile, dictOld0P, dataOld0P[-1])
 	data0P += dataNew0P
 	out0P=open(outputDCfile0P,'w')
 	printTable(data0P,out0P)
@@ -58,14 +58,14 @@ def main(inputDCfile, inputDCfile0P, outputDCfile0P, inputDCfile0M, outputDCfile
 	data0M = []
 	dataOld0M, dictOld0M = readDataCard(inputDCfile0M)
 	data0M += dataOld0M
-	dataNew0M = addStatShapes(inputDCfile, dictOld0M)
+	dataNew0M = addStatShapes(inputDCfile, dictOld0M, dataOld0M[-1])
 	data0M += dataNew0M
 	out0M=open(outputDCfile0M,'w')
 	printTable(data0M,out0M)
 
 if __name__ == "__main__":
 	prefix = "/uscms_data/d3/ssagir/WlnuHbbAnalysis/CMSSW_5_3_6/src/VHbb/post/plots"
-	prefix += "/mVH_nominalprime/mainBDT_v_VstarMass_medhigh_official_120214_unrolled/"
+	prefix += "/BDT_nominalprime_official_141202/"
 	inputDCfile = prefix+"dataCard_statUnc0_bg0.txt"
 	inputDCfile0P = prefix+"dataCard_0P.txt"
 	inputDCfile0M = prefix+"dataCard_0M.txt"

@@ -34,7 +34,7 @@ def readOldDataCard(filename):
     	elif (line.startswith("bin") or line.startswith("process") or line.startswith("rate")): 
     		data.append([line.strip().split()[0],'']+line.strip().split()[1:])
     		if line.startswith("bin"): bin=line.strip().split()
-    		if (line.startswith("process") and line.strip().split()[1].startswith("Wh")): process=line.strip().split()
+    		if (line.startswith("process") and not line.strip().split()[1].startswith("-2") and not line.strip().split()[1].startswith("-1") and not line.strip().split()[1].startswith("0")): process=line.strip().split()
     	elif line.startswith("stat_"): continue
     	else: data.append(line.strip().split())
     return data, bin, process
@@ -59,7 +59,8 @@ def walk_and_copy(inputdir, outputdir, threshold, thresholdBG, binList, processL
             outputdir.cd()
             th1.Write()
             
-            do_shapes = histo.endswith("0P") or histo.endswith("0M") or histo.endswith("W_light") or histo.endswith("W_b") or histo.endswith("W_bb") or histo.endswith("Z_light") or histo.endswith("Z_b") or histo.endswith("Z_bb") or histo.endswith("ttbar") or histo.endswith("singleTop") or histo.endswith("VZ") or histo.endswith("VV")
+            #do_shapes = histo.endswith("0P") or histo.endswith("0M") or histo.endswith("W_light") or histo.endswith("W_b") or histo.endswith("W_bb") or histo.endswith("Z_light") or histo.endswith("Z_b") or histo.endswith("Z_bb") or histo.endswith("ttbar") or histo.endswith("singleTop") or histo.endswith("VZ") or histo.endswith("VV")
+            do_shapes = histo[histo.find("__")+2:] in processList
             if do_shapes:
                 # check all bins to see if they need to be shape-errored
                 log.info("Building stat shapes for %s", histo)
@@ -68,14 +69,17 @@ def walk_and_copy(inputdir, outputdir, threshold, thresholdBG, binList, processL
                         error = th1.GetBinError(ibin)
                         val = th1.GetBinContent(ibin)
                         valtotBG = th1totBG.GetBinContent(ibin)
+                        checkTotBG = False
+                        if valtotBG == 0: checkTotBG = True
+                        if valtotBG != 0: checkTotBG = error/valtotBG > thresholdBG/100
                         # Check if we are above threshold
-                        if (error/val > threshold/100 and error/valtotBG > thresholdBG/100):
+                        if (error/val > threshold/100 and checkTotBG):
                             vtype = histo[histo.find("Vtype"):histo.find("Vtype")+6]
                             boost = histo[histo.find("Vtype")+7:histo.find("__")]
                             process0 = histo[histo.find("__")+2:]
                             process = process0
-                            if (process0 == "Wh_125p6_0P"): process = "0P"
-                            if (process0 == "Wh_125p6_0M"): process = "0M"
+                            if process0.endswith("_0P"): process = "0P"
+                            if process0.endswith("_0M"): process = "0M"
                             err_up = th1.Clone(
                                 th1.GetName() + '_' + vtype + '_' + boost + '_' + process + "_ss_bin_%iUp" % ibin)
                             err_down = th1.Clone(
@@ -117,7 +121,7 @@ if __name__ == "__main__":
     threshold = 15 # cut on binError/binContent in %
     thresholdBG = 7 # cut on binError/binContent_TotalBackground in %
     prefix = "/uscms_data/d3/ssagir/WlnuHbbAnalysis/CMSSW_5_3_6/src/VHbb/post/plots"
-    prefix += "/mVH_nominalprime/mainBDT_v_VstarMass_medhigh_official_120214_unrolled/"
+    prefix += "/dataCardsForBen/templates_3H/"
     inputRfile = prefix+"plots.root"
     outputRfile = prefix+"plots_statUnc%(threshold)s_bg%(thresholdBG)s.root" %locals()
     inputDataCard = prefix+"dataCard.txt"
