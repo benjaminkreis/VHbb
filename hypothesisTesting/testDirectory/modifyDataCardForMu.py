@@ -18,9 +18,10 @@ def modifyfile(filename):
 		if line.startswith("imax"):
 			data.append(line.strip().split())
 			imax = int(line.strip().split()[1])
-			ColumnsToModify = linspace(2,(imax-1)*10+2,imax)
 		elif line.startswith("rate"):
 			rateList = ['rate','']
+			nprocess = len(line.strip().split()[1:])/imax
+			ColumnsToModify = linspace(2,(imax-1)*nprocess+2,imax)
 			i=1
 			for item in line.strip().split()[1:]:
 				if i in ColumnsToModify:
