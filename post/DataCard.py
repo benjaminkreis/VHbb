@@ -51,7 +51,7 @@ flatSystematics=[('lumi_8TeV',{'Zh_125p6_0P':lumiSys,'Zh_125p6_0M':lumiSys,'VZ':
                  ('QCDscale_VH',{'Zh_125p6_0P':QCDscale_VHSys,'Zh_125p6_0M':QCDscale_VHSys}),
                  ('QCDscale_VV',{'VZ':QCDscale_VVSys,'VV':QCDscale_VVSys}),
                  ('CMS_vhbb_dibosonNorm',{'VZ':dibosonSys,'VV':dibosonSys}),
-                 ('CMS_vhbb_ggZHNorm',{'ggZh':ggZHNormSys}),
+                 ('CMS_vhbb_ggZhNorm',{'ggZh':ggZHNormSys}),
                  ]
 
 one='1'
@@ -199,7 +199,10 @@ class DataCard:
         self.data.append(line)
 
         for systematic,values in flatSystematics:
-            row=[systematic,'lnN']
+            type='lnN'
+            #if 'ggZh' in systematic: type='gmN'
+            row=[systematic,type]
+
             for channel in self.channels:
                 for process in self.processNames:
                     if systematic == 'elEff' and channel.name.startswith('Vtype1'):

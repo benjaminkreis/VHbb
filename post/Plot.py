@@ -253,7 +253,7 @@ class Plot:
 
         #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #Systematics
-        
+        """
         #Statistical
         if doStatSys or doAllSys:
             for sample in samples:
@@ -269,7 +269,7 @@ class Plot:
                 if contains(histName,'data') or contains(histName,'total back') or contains(histName,'up') or contains(histName,'down') or contains(histName,'shape'): continue   #Only calculate for nominal backgrounds - this is dangerous, 'up' could accidentally match a lot of things
                 ID=histName
                 self.makeStat(self.extraHists[histName],ID)
-
+        """
         #Z+Jets and ttbar shape
         if doZJetsShapeSys or doTTbarShapeSys or doAllSys:
             shapeSamples=[]
@@ -285,16 +285,20 @@ class Plot:
                 else: up=self.extraHists[sampleName+'_ZJetsShapeUp']
                 down=up.Clone(up.GetName().replace('Up','Down'))
 
+                #Force Z+Jets and ttbar systematic integrals to nominal values
+                up.Scale(self.integral(nominal)/self.integral(up))
+
+                #symmeterize
                 if self.is1D:
                     for xBin in range(0,self.nBinsX+2):
                         down.SetBinContent(xBin,max(0,nominal.GetBinContent(xBin)-(up.GetBinContent(xBin)-nominal.GetBinContent(xBin))))
                 else:
                     for xBin in range(0,self.nBinsX+2):
                         for yBin in range(0,self.nBinsY+2):
-                            down.SetBinContent(yBin,max(0,nominal.GetBinContent(xBin,yBin)-(up.GetBinContent(xBin,yBin)-nominal.GetBinContent(xBin,yBin))))
+                            down.SetBinContent(xBin,yBin,max(0,nominal.GetBinContent(xBin,yBin)-(up.GetBinContent(xBin,yBin)-nominal.GetBinContent(xBin,yBin))))
                 if sampleName=='ttbar': self.extraHists[sampleName+'_ttbarShape_ZHDown']=down
                 else: self.extraHists[sampleName+'_ZJetsShapeDown']=down
-                            
+        """                    
         #Force Z+Jets and ttbar systematic integrals to nominal values
         for histName in self.extraHists.keys():
             try:
@@ -310,7 +314,7 @@ class Plot:
 						self.extraHists[histName].Scale(self.integral(self.extraHists['ttbar'])/self.integral(self.extraHists[histName]))
             except:
 				print histName, self.extraHists[histName], self.integral(self.extraHists[histName])
-                                                                                                      
+        """                                                                                           
         #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #Signals and total background - yes it shouldn't really be here but I want to return the total background yield - JS
 
@@ -475,22 +479,25 @@ class Plot:
                 self.lPad.cd()
                 self.pull=self.extraHists['Data'].Clone("pull")
                 self.pull.Divide(self.extraHists['Data'], self.extraHists['Total Background'])
+                #I think this would be correct - JS
                 #for binNo in range(0,self.nBinsX+2):
-                #    if self.extraHists['Total Background'].GetBinError(binNo)!=0:
-                #        #self.pull.SetBinContent(binNo,(self.extraHists['Data'].GetBinContent(binNo)-self.extraHists['Total Background'].GetBinContent(binNo))/sqrt(self.extraHists['Total Background'].GetBinError(binNo)**2+self.extraHists['Data'].GetBinError(binNo)**2))
-                #        self.pull.SetBinContent(binNo,self.extraHists['Data'].GetBinContent(binNo)/self.extraHists['Total Background'].GetBinContent(binNo))
-                #        #self.pull.SetBinError(binNo,(self.extraHists['Total Background'].GetBinContent(binNo)*self.extraHists['Data'].GetBinError(binNo)-self.extraHists['Data'].GetBinContent(binNo)*self.extraHists['Total Background'].GetBinError(binNo))/self.extraHists['Total Background'].GetBinContent(binNo)*self.extraHists['Total Background'].GetBinContent(binNo))
+                #    if self.extraHists['Total Background'].GetBinContent(binNo)!=0:
+                #        self.pullUncBand.SetBinErorr(binNo,self.extraHists['Total Background'].GetBinError(binNo)/self.extraHists['Total Background'].GetBinContent(binNo)))
                 self.pull.SetMaximum(3)
                 self.pull.SetMinimum(0)
                 self.pull.SetFillColor(1)
                 self.pull.SetLineColor(1)
                 self.formatLowerHist(self.pull)
-                self.pull.GetYaxis().SetTitle('Data/MC')
+                self.pull.GetYaxis().SetTitle('Data/Bkgd')
                 #self.pull.Draw("HIST")
                 self.pull.Draw("E1")
                 
                 self.pullUncBand=self.pull.Clone("pullunc")
                 self.pullUncBand.Divide(self.extraHists['Total Background'], self.extraHists['Total Background'])
+                #I think this would be correct - JS
+                #for binNo in range(0,self.nBinsX+2):
+                #    if self.extraHists['Total Background'].GetBinContent(binNo)!=0:
+                #        self.pullUncBand.SetBinErorr(binNo,self.extraHists['Total Background'].GetBinError(binNo)/self.extraHists['Total Background'].GetBinContent(binNo)))
                 self.pullUncBand.SetFillStyle(3344)
                 self.pullUncBand.SetFillColor(1)
                 self.pullUncBand.SetLineColor(1)
