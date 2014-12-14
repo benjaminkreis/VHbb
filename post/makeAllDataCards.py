@@ -18,14 +18,18 @@ except:
 try: distribution=argv[2]
 except: distribution=None
 
-for signal in ['Wh_125p6_0P','Wh_125p6_0M']:
+#            0P signif/excl          0M signif/exlc         fa3 (combo)
+signals=    [['Wh_125p6_0P']       ,['Wh_125p6_0M']       ,defaultSignalNames+['Zh_125p6_0P','Zh_125p6_0M']]
+backgrounds=[defaultBackgroundNames,defaultBackgroundNames,[x for x in defaultBackgroundNames if x != 'Zh_125p6_0P']]
+cardNames=  ['dataCard_0P'         ,'dataCard_0M'         ,'dataCard_combo']
 
-    theCard=DataCard(signalNames=[signal])
+for signal,background,cardName in zip(signals,backgrounds,cardNames):
+
+    theCard=DataCard(signalNames=signal, backgroundNames=background)
     theCard.fromPickle(inputDir+'/yields.p')
     if distribution: theCard.distribution=distribution
     theCard.construct()
 
-    shortName=signal.split('_')[-1]
-    theCard.toTxt(inputDir+'/dataCard_'+shortName+'.txt')
+    theCard.toTxt(inputDir+'/'+cardName+'.txt')
 
     

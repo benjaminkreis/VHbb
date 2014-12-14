@@ -14,6 +14,7 @@ from array import array
 
 d=os.environ['CMSSW_BASE']
 gROOT.ProcessLine('.L '+d+'/src/VHbb/post/weightSignalNLO.C+')
+gROOT.ProcessLine('.L '+d+'/src/VHbb/post/weightZHSignalNLO.C+')
 
 PUWeight='PUweight'
 #trigWeightEl='weightTrig2012SingleEle'
@@ -152,10 +153,13 @@ class Plot:
                     theCuts+=' && EVENT.event%2!=0 && EVENT.event%4!=1'
 
                 if sample.isSignal:
-                    weight+=' * weightSignalNLO(genWstar.pt)' # SS, 17 Oct 2014
+                    if isEqual(sample.type,'signal'): weight+=' * weightSignalNLO(genWstar.pt)' # SS, 17 Oct 2014
+                    elif isEqual(sample.type,'ZHsignal'): weight+=' * weightZHSignalNLO(genZ.pt)'
+                    else: print "ERROR: unknown signal type"
+
                     weight+=' * weightSignalEWK'
                     weight+=' * weightSignalQCD'
-                    weight+=' / 0.3258' # undo BR to leptons that was included in the x-sec (1/BR(W->lnu)) since official samples
+                    if isEqual(sample.type,'signal'): weight+=' / 0.3258' # undo BR to leptons that was included in the x-sec (1/BR(W->lnu)) since official samples
 
                 weight+=' / effectiveLumi'
 
@@ -276,7 +280,7 @@ class Plot:
 
         #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #Systematics
-        
+        """
         #Statistical
         if doStatSys or doAllSys:
             for sample in samples:
@@ -292,7 +296,7 @@ class Plot:
                 if contains(histName,'data') or contains(histName,'total back') or contains(histName,'up') or contains(histName,'down') or contains(histName,'shape'): continue   #Only calculate for nominal backgrounds - this is dangerous, 'up' could accidentally match a lot of things
                 ID=histName
                 self.makeStat(self.extraHists[histName],ID)
-
+        """
         #W+Jets and ttbar shape
         if doWJetsShapeSys or doTTbarShapeSys or doAllSys:
             shapeSamples=[]
@@ -307,16 +311,20 @@ class Plot:
                 else: up=self.extraHists[sampleName+'_WJetsShapeUp']
                 down=up.Clone(up.GetName().replace('Up','Down'))
 
+                #Force W+Jets, Z+Jets and ttbar systematic integrals to nominal values
+                up.Scale(self.integral(nominal)/self.integral(up))
+
+                #symmetereize
                 if self.is1D:
                     for xBin in range(0,self.nBinsX+2):
                         down.SetBinContent(xBin,max(0,nominal.GetBinContent(xBin)-(up.GetBinContent(xBin)-nominal.GetBinContent(xBin))))
                 else:
                     for xBin in range(0,self.nBinsX+2):
                         for yBin in range(0,self.nBinsY+2):
-                            down.SetBinContent(yBin,max(0,nominal.GetBinContent(xBin,yBin)-(up.GetBinContent(xBin,yBin)-nominal.GetBinContent(xBin,yBin))))
+                            down.SetBinContent(xBin,yBin,max(0,nominal.GetBinContent(xBin,yBin)-(up.GetBinContent(xBin,yBin)-nominal.GetBinContent(xBin,yBin))))
                 if sampleName=='ttbar': self.extraHists[sampleName+'_ttbarShapeDown']=down
                 else: self.extraHists[sampleName+'_WJetsShapeDown']=down
-                            
+        """
         #Force W+Jets, Z+Jets and ttbar systematic integrals to nominal values
         for histName in self.extraHists.keys():
             try:
@@ -332,7 +340,7 @@ class Plot:
 						self.extraHists[histName].Scale(self.integral(self.extraHists['ttbar'])/self.integral(self.extraHists[histName]))
             except:
 				print histName, self.extraHists[histName], self.integral(self.extraHists[histName])
-                                                                                                      
+        """                                                                                           
         #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #Signals and total background - yes it shouldn't really be here but I want to return the total background yield - JS
 
@@ -341,7 +349,7 @@ class Plot:
             if self.skip(sample): continue
             
             sample.h.SetLineWidth(4)
-            if sample.isSignal:
+            if isEqual(sample.type,'signal'):
                 sample.h.SetLineColor(1)
                 sample.h.SetLineStyle(2+len(self.signals))
                 self.signals.append(sample)
@@ -496,20 +504,25 @@ class Plot:
                 self.lPad.cd()
                 self.pull=self.extraHists['Data'].Clone("pull")
                 self.pull.Divide(self.extraHists['Data'], self.extraHists['Total Background'])
+                #I think this would be correct - JS
                 #for binNo in range(0,self.nBinsX+2):
-                #    if self.extraHists['Total Background'].GetBinError(binNo)!=0:
-                #        self.pull.SetBinContent(binNo,(self.extraHists['Data'].GetBinContent(binNo)-self.extraHists['Total Background'].GetBinContent(binNo))/sqrt(self.extraHists['Total Background'].GetBinError(binNo)**2+self.extraHists['Data'].GetBinError(binNo)**2))
+                #    if self.extraHists['Total Background'].GetBinContent(binNo)!=0:
+                #        self.pull.SetBinError(binNo,(self.extraHists['Data'].GetBinError(binNo)/self.extraHists['Total Background'].GetBinContent(binNo)))
                 self.pull.SetMaximum(3)
                 self.pull.SetMinimum(0)
                 self.pull.SetFillColor(1)
                 self.pull.SetLineColor(1)
                 self.formatLowerHist(self.pull)
-                self.pull.GetYaxis().SetTitle('Data/MC')
+                self.pull.GetYaxis().SetTitle('Data/Bkgd')
                 #self.pull.Draw("HIST")
                 self.pull.Draw("E1")
                 
                 self.pullUncBand=self.pull.Clone("pullunc")
                 self.pullUncBand.Divide(self.extraHists['Total Background'], self.extraHists['Total Background'])
+                #I think this would be correct - JS
+                #for binNo in range(0,self.nBinsX+2):
+                #    if self.extraHists['Total Background'].GetBinContent(binNo)!=0:
+                #        self.pullUncBand.SetBinErorr(binNo,self.extraHists['Total Background'].GetBinError(binNo)/self.extraHists['Total Background'].GetBinContent(binNo)))
                 self.pullUncBand.SetFillStyle(3344)
                 self.pullUncBand.SetFillColor(1)
                 self.pullUncBand.SetLineColor(1)

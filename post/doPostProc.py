@@ -168,7 +168,7 @@ if __name__=='__main__':
 
     if makeDataCard:
         dataCard=DataCard()
-        cardFile=outputDir+'/dataCard.txt'
+        cardFile=outputDir+'/dataCard_WhOnly.txt'
 
     yields={}
     plots=[]
@@ -521,7 +521,7 @@ if __name__=='__main__':
             print "".ljust(nameWidth),
             for boost in doBoosts: print boost.ljust(cWidth),
             print
-            for histName in ['W_light','W_b','W_bb','Z_light','Z_b','Z_bb','ttbar','singleTop','QCD','VZ','VV']:
+            for histName in ['W_light','W_b','W_bb','Z_light','Z_b','Z_bb','ttbar','singleTop','QCD','VZ','VV','ggZh']:
                 print histName.ljust(nameWidth),
                 try:
                     for boost in doBoosts:

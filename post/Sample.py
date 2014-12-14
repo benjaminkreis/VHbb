@@ -24,7 +24,7 @@ class Sample:
         self.isData=False; self.isMC=False; self.isSignal=False; self.isBackground=False;
         if isEqual(self.type,'data'):
             self.isData=True
-        elif isEqual(self.type,'signal'):
+        elif isEqual(self.type,'signal') or isEqual(self.type,'ZHsignal'):
             self.isMC=True
             self.isSignal=True
         else:
@@ -75,11 +75,16 @@ if not useOfficial:
 	Wh_125p6_0Mf05ph0=Sample('Wh_125p6_0Mf05ph0','signal','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal','WHiggs0Mf05ph0_M-125p6','Wh (CP mixed 50/50)')
 
 if useOfficial:
-	Wh_125p6_0P=Sample('Wh_125p6_0P','signal','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/WHiggs0P_M-125p6_lumiWeighted','WHiggs0P_M-125p6','Wh (CP = 0^{+})')
-	Wh_125p6_0M=Sample('Wh_125p6_0M','signal','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/WHiggs0M_M-125p6_lumiWeighted','WHiggs0M_M-125p6','Wh (CP = 0^{-})')
+	Wh_125p6_0P=Sample('Wh_125p6_0P','signal','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/WHiggs0P_M-125p6_lumiWeighted','WHiggs0P_M-125p6','WH (CP = 0^{+})')
+	Wh_125p6_0M=Sample('Wh_125p6_0M','signal','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/WHiggs0M_M-125p6_lumiWeighted','WHiggs0M_M-125p6','WH (CP = 0^{-})')
 	#Wh_125p6_0Mf05ph0=Sample('Wh_125p6_0Mf05ph0','signal','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/WHiggs0Mf05ph0_M-125p6_lumiWeighted','WHiggs0Mf05ph0_M-125p6','Wh (CP mixed 50/50)')
 
-signals=[Wh_125p6_0P,Wh_125p6_0M]#,Wh_125p6_0Mf05ph0]
+Zh_125p6_0P=Sample('Zh_125p6_0P','ZHsignal','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/ZHiggs0P_M-125p6_lumiWeighted','','ZH (CP = 0^{+})')
+Zh_125p6_0M=Sample('Zh_125p6_0M','ZHsignal','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/ZHiggs0M_M-125p6_lumiWeighted','','ZH (CP = 0^{-})')
+ggZh_ee=Sample('ggZeeh','ggZh','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/ZeeHiggsbb_PHG_lumiWeighted','','ggZH')
+ggZh_mm=Sample('ggZmmh','ggZh','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/ZmmHiggsbb_PHG_lumiWeighted','','ggZH')
+
+signals=[Wh_125p6_0P,Wh_125p6_0M,Zh_125p6_0P,Zh_125p6_0M,ggZh_ee,ggZh_mm]#,Wh_125p6_0Mf05ph0]
 
 WZ=Sample('WZ','VZ','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/WZ_lumiWeighted')
 ZZ=Sample('ZZ','VZ','Ntuple_Step1V42_Step2Tag_EDMV42_Step2_V6_MC_varsAddedSummed_v19/nominal/ZZ_lumiWeighted')

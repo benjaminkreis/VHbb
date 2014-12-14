@@ -12,9 +12,11 @@ defaultDistribution='mainBDT_v_VstarMass_bdt'
 #defaultDistribution='x_mVH_bdt'
 
 defaultSignalNames=['Wh_125p6_0P','Wh_125p6_0M']
-defaultBackgroundNames=['W_light','W_b','W_bb','Z_light','Z_b','Z_bb','ttbar','singleTop',
-                 #'QCD',
-                 'VZ','VV']
+defaultBackgroundNames=['W_light','W_b','W_bb',
+                        'Z_light','Z_b','Z_bb',
+                        'ttbar','singleTop',
+                        'VZ','VV',
+                        'Zh_125p6_0P','ggZh']
 
 none='-'
 lumiSys='1.026'
@@ -33,15 +35,16 @@ QCDscale_ttbarSys='1.06'
 qqbarPDFSys='1.01'
 ggPDFSys='1.01'
 METSys='1.03'
+ggZHNormSys='.75/1.35'
 
-flatSystematics=[('lumi_8TeV',{'Wh_125p6_0P':lumiSys,'Wh_125p6_0M':lumiSys,'singleTop':lumiSys,'QCD':lumiSys,'VZ':lumiSys,'VV':lumiSys}),
-                 ('CMS_vhbb_eff_e',{'Wh_125p6_0P':leptonEffSys,'Wh_125p6_0M':leptonEffSys,'singleTop':leptonEffSys,'QCD':leptonEffSys,'VZ':leptonEffSys,'VV':leptonEffSys}),
-                 ('CMS_vhbb_eff_m',{'Wh_125p6_0P':leptonEffSys,'Wh_125p6_0M':leptonEffSys,'singleTop':leptonEffSys,'QCD':leptonEffSys,'VZ':leptonEffSys,'VV':leptonEffSys}),
-                 ('CMS_vhbb_MET',{'Wh_125p6_0P':METSys,'Wh_125p6_0M':METSys,'singleTop':METSys,'VZ':METSys,'VV':METSys}),
-                 ('pdf_qqbar',{'Wh_125p6_0P':qqbarPDFSys,'Wh_125p6_0M':qqbarPDFSys,'VZ':qqbarPDFSys,'VV':qqbarPDFSys}),
-                 ('pdf_gg',{'singleTop':ggPDFSys,'QCD':ggPDFSys}),
-                 ('CMS_vhbb_boost_EWK',{'Wh_125p6_0P':signalEWKSys0P,'Wh_125p6_0M':signalEWKSys0M}),
-                 ('CMS_vhbb_boost_QCD',{'Wh_125p6_0P':signalQCDSys,'Wh_125p6_0M':signalQCDSys}),
+flatSystematics=[('lumi_8TeV',{'Wh_125p6_0P':lumiSys,'Wh_125p6_0M':lumiSys,'Zh_125p6_0P':lumiSys,'Zh_125p6_0M':lumiSys,'ggZh':lumiSys,'singleTop':lumiSys,'QCD':lumiSys,'VZ':lumiSys,'VV':lumiSys}),
+                 ('CMS_vhbb_eff_e',{'Wh_125p6_0P':leptonEffSys,'Wh_125p6_0M':leptonEffSys,'Zh_125p6_0P':leptonEffSys,'Zh_125p6_0M':leptonEffSys,'ggZh':leptonEffSys,'singleTop':leptonEffSys,'QCD':leptonEffSys,'VZ':leptonEffSys,'VV':leptonEffSys}),
+                 ('CMS_vhbb_eff_m',{'Wh_125p6_0P':leptonEffSys,'Wh_125p6_0M':leptonEffSys,'Zh_125p6_0P':leptonEffSys,'Zh_125p6_0M':leptonEffSys,'ggZh':leptonEffSys,'singleTop':leptonEffSys,'QCD':leptonEffSys,'VZ':leptonEffSys,'VV':leptonEffSys}),
+                 ('CMS_vhbb_MET',{'Wh_125p6_0P':METSys,'Wh_125p6_0M':METSys,'Zh_125p6_0P':METSys,'Zh_125p6_0M':METSys,'ggZh':METSys,'singleTop':METSys,'VZ':METSys,'VV':METSys}),
+                 ('pdf_qqbar',{'Wh_125p6_0P':qqbarPDFSys,'Wh_125p6_0M':qqbarPDFSys,'Zh_125p6_0P':qqbarPDFSys,'Zh_125p6_0M':qqbarPDFSys,'VZ':qqbarPDFSys,'VV':qqbarPDFSys}),
+                 ('pdf_gg',{'ggZh':ggPDFSys,'singleTop':ggPDFSys,'QCD':ggPDFSys}),
+                 ('CMS_vhbb_boost_EWK',{'Wh_125p6_0P':signalEWKSys0P,'Wh_125p6_0M':signalEWKSys0M,'Zh_125p6_0P':signalEWKSys0P,'Zh_125p6_0M':signalEWKSys0M}),
+                 ('CMS_vhbb_boost_QCD',{'Wh_125p6_0P':signalQCDSys,'Wh_125p6_0M':signalQCDSys,'Zh_125p6_0P':signalQCDSys,'Zh_125p6_0M':signalQCDSys}),
                  ('CMS_vhbb_wh_WlightNorm',{'W_light':backgroundNormSys}),
                  ('CMS_vhbb_wh_WbNorm',{'W_b':backgroundNormSys}),
                  ('CMS_vhbb_wh_WbbNorm',{'W_bb':backgroundNormSys}),
@@ -50,17 +53,18 @@ flatSystematics=[('lumi_8TeV',{'Wh_125p6_0P':lumiSys,'Wh_125p6_0M':lumiSys,'sing
                  ('CMS_vhbb_wh_ZbbNorm',{'Z_bb':ZJetsSys}),
                  ('CMS_vhbb_wh_ttbarNorm',{'ttbar':backgroundNormSys}),
                  ('CMS_vhbb_singleTopNorm',{'singleTop':singleTopSys}),
-                 ('QCDscale_VH',{'Wh_125p6_0P':QCDscale_VHSys,'Wh_125p6_0M':QCDscale_VHSys}),
+                 ('QCDscale_VH',{'Wh_125p6_0P':QCDscale_VHSys,'Wh_125p6_0M':QCDscale_VHSys,'Zh_125p6_0P':QCDscale_VHSys,'Zh_125p6_0M':QCDscale_VHSys}),
                  ('QCDscale_VV',{'VZ':QCDscale_VVSys,'VV':QCDscale_VVSys}),
                  ('QCDscale_ttbar',{'singleTop':QCDscale_ttbarSys}),
                  ('CMS_vhbb_dibosonNorm',{'VZ':dibosonSys,'VV':dibosonSys}),
+                 ('CMS_vhbb_ggZhNorm',{'ggZh':ggZHNormSys}),
                  ]
 
 one='1'
-shapeSystematics=[('CMS_scale_j',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
-                  ('CMS_res_j',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
-                  ('CMS_eff_b',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
-                  ('CMS_FakeRate_b',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
+shapeSystematics=[('CMS_scale_j',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
+                  ('CMS_res_j',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
+                  ('CMS_eff_b',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
+                  ('CMS_FakeRate_b',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
                   ('CMS_vhbb_wh_ttbar_shape',{'ttbar':one}),
                   ('CMS_vhbb_wh_W_light_shape',{'W_light':one}),
                   ('CMS_vhbb_wh_W_b_shape',{'W_b':one}),
@@ -201,7 +205,10 @@ class DataCard:
         self.data.append(line)
 
         for systematic,values in flatSystematics:
-            row=[systematic,'lnN']
+            type='lnN'
+            #if 'ggZh' in systematic: type='gmN'
+            row=[systematic,type]
+            
             for channel in self.channels:
                 for process in self.processNames:
                     if systematic == 'elEff' and channel.name.startswith('Vtype3'):
