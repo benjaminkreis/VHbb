@@ -117,7 +117,8 @@ class DataCard:
         for SR in yields.keys():
             for Vtype in yields[SR].keys():
                 for boost in yields[SR][Vtype].keys():
-                    self.appendChannel('Vtype'+str(Vtype)+'_'+boost+'Boost',yields[SR][Vtype][boost])
+                    try: self.appendChannel('Vtype'+str(Vtype)+'_'+boost+'Boost',yields[SR][Vtype][boost])
+                    except: print "Busted channel:",'Vtype'+str(Vtype)+'_'+boost+'Boost'
         
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

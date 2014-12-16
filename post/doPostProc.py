@@ -37,9 +37,9 @@ else:
 DEBUG=False
 
 fillEmptyBins=False
-blind=False#True
+blind=True
 applyNormSFs=True
-unroll2D=False#True
+unroll2D=True
 normalizeByBinWidth=False
 
 doBDT=True
@@ -50,7 +50,7 @@ doCutTable=False
 doTheta=False
 makeDataCard=True
 
-doAllSys=False#True
+doAllSys=True
 doJECSys=False
 doJERSys=False
 doBTagSys=False
@@ -61,11 +61,11 @@ doTTbarShapeSys=False
 doStatSys=False
 
 doCuts=[
-    #'bdt',
+    'bdt',
     #'mjj',
-    'WLF',
-    'WHF',
-    'ttbar'
+    #'WLF',
+    #'WHF',
+    #'ttbar'
     ]
 
 doVtypes=[
@@ -220,10 +220,10 @@ if __name__=='__main__':
 				# BDT hypothesis testing binning
 				#Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=linspace(-1,-0.76,4).tolist()+linspace(-0.72,0.04,20).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=2,boost='low'),
 				#Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=linspace(-1,-0.76,4).tolist()+linspace(-0.72,0.04,20).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=3,boost='low'),
-				Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=2,boost='med'),
-				Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=3,boost='med'),			
-				Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=[-1]+linspace(-0.75, 0.05, 9).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=2,boost='high'),
-				Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=[-1]+linspace(-0.75, 0.05, 9).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=3,boost='high'),
+				#Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=2,boost='med'),
+				#Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=3,boost='med'),			
+				#Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=[-1]+linspace(-0.75, 0.05, 9).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=2,boost='high'),
+				#Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=[-1]+linspace(-0.75, 0.05, 9).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=3,boost='high'),
 
 
 				# For Significance, nominal prime binning
@@ -390,13 +390,13 @@ if __name__=='__main__':
 				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,25).tolist(),xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.95, 0.95, 20).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='high'),
 				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=linspace(0,1200,25).tolist(),xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.95, 0.95, 20).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='high'),
 
-				#nominal prime
+				#nominal prime (the real deal)
 				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0]+linspace(275,450,8).tolist()+[550,1200],xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=Vtype,boost='low'),
 				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0]+linspace(275,450,8).tolist()+[550,1200],xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=Vtype,boost='low'),
-                                #Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0]+linspace(300,500,9).tolist()+[550,1200],xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='med'),
+                                Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0]+linspace(300,500,9).tolist()+[550,1200],xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='med'),
 				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0]+linspace(300,500,9).tolist()+[550,1200],xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.75, -0.15, 7).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='med'),
 				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0]+linspace(400,900,11).tolist()+[1050,1200],xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.75, 0.05, 9).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='high'),
-				#Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0]+linspace(400,900,11).tolist()+[1050,1200],xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.75, 0.05, 9).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='high'),
+                                #Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',binsX=[0]+linspace(400,900,11).tolist()+[1050,1200],xTitle='m(Vh) [GeV]',binsY=[-1]+linspace(-0.75, 0.05, 9).tolist()+[1],yTitle='BDT',yLog=False,cuts=cuts,Vtype=3,boost='high'),
 
                                 #JS - uniform binning
                                 #Plot(name='mainBDT_v_VstarMass', distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4:x_mVH',nBinsX=12,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',nBinsY=10,yMin=-1,yMax=1,yTitle='BDT',yLog=False,cuts=cuts,Vtype=2,boost='med'),
@@ -498,6 +498,10 @@ if __name__=='__main__':
                             ]
 
     for plot in plots:
+        if not plot.cuts in  yields.keys():                        yields[plot.cuts]={}
+        if not plot.Vtype in yields[plot.cuts].keys():             yields[plot.cuts][plot.Vtype]={}
+        if not plot.boost in yields[plot.cuts][plot.Vtype].keys(): yields[plot.cuts][plot.Vtype][plot.boost]={}
+
         y=plot.Prepare()
         print plot.cuts, plot.Vtype, plot.boost
         try: yields[plot.cuts][plot.Vtype][plot.boost]=y
