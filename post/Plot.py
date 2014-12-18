@@ -479,10 +479,10 @@ class Plot:
                 self.lPad.cd()
                 self.pull=self.extraHists['Data'].Clone("pull")
                 self.pull.Divide(self.extraHists['Data'], self.extraHists['Total Background'])
-                #I think this would be correct - JS
-                #for binNo in range(0,self.nBinsX+2):
-                #    if self.extraHists['Total Background'].GetBinContent(binNo)!=0:
-                #        self.pullUncBand.SetBinErorr(binNo,self.extraHists['Data'].GetBinError(binNo)/self.extraHists['Total Background'].GetBinContent(binNo)))
+                #I think this is correct - JS
+                for binNo in range(0,self.nBinsX+2):
+                    if self.extraHists['Total Background'].GetBinContent(binNo)!=0:
+                        self.pull.SetBinError(binNo,self.extraHists['Data'].GetBinError(binNo)/self.extraHists['Total Background'].GetBinContent(binNo)))
                 self.pull.SetMaximum(3)
                 self.pull.SetMinimum(0)
                 self.pull.SetFillColor(1)
@@ -494,10 +494,10 @@ class Plot:
                 
                 self.pullUncBand=self.pull.Clone("pullunc")
                 self.pullUncBand.Divide(self.extraHists['Total Background'], self.extraHists['Total Background'])
-                #I think this would be correct - JS
-                #for binNo in range(0,self.nBinsX+2):
-                #    if self.extraHists['Total Background'].GetBinContent(binNo)!=0:
-                #        self.pullUncBand.SetBinErorr(binNo,self.extraHists['Total Background'].GetBinError(binNo)/self.extraHists['Total Background'].GetBinContent(binNo)))
+                #I think this is correct - JS
+                for binNo in range(0,self.nBinsX+2):
+                    if self.extraHists['Total Background'].GetBinContent(binNo)!=0:
+                        self.pullUncBand.SetBinError(binNo,self.extraHists['Total Background'].GetBinError(binNo)/self.extraHists['Total Background'].GetBinContent(binNo)))
                 self.pullUncBand.SetFillStyle(3344)
                 self.pullUncBand.SetFillColor(1)
                 self.pullUncBand.SetLineColor(1)
