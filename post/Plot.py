@@ -268,7 +268,7 @@ class Plot:
             #output.cd()
             if sample.isMC: sample.h.Scale(self.lumi)
             if showOverflow: self.overflow(sample.h)
-            if normalizeByBinWidth: 
+            if normalizeByBinWidth  and not isEqual(sample.type,'ZJets')  and not isEqual(sample.type,'WJets'): 
                 sample.h=normByBinWidth(sample.h)
             if fillEmptyBins and sample.isBackground: fillBins(sample.h)
 
@@ -469,7 +469,7 @@ class Plot:
             legend.SetTextFont(42)
             if blind == False:
                 legend.AddEntry(self.extraHists['Data'],"Data")
-            for bName,bLabel in zip(reversed(['ZJets','WJets','singleTop','ttbar','VV','VZ']),reversed(['Z+jets','W+jets','single top','ttbar','VV','VZ'])):
+            for bName,bLabel in zip(reversed(['ZJets','W_light','W_b','W_bb','singleTop','ttbar','VV','VZ']),reversed(['Z+Jets','W+udscg','W+b','W+bb','W+jets','single top','ttbar','VV','VZ'])):
                 try: legend.AddEntry(self.extraHists[bName],bLabel,"f")
                 except: pass
 

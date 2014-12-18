@@ -140,9 +140,9 @@ lumiFracUnc=.026   #2.6% for 8 TeV, 2.2% for 7 TeV (Jia Fu)
 signalMagFrac=20
 
 #plotBackgrounds=['QCD','ZJets','WJets','singleTop','ttbar','VV','VZ']
-plotBackgrounds=['ZJets','WJets','singleTop','ttbar','VV','VZ']
-backgroundFillColors={'QCD':ROOT.kMagenta,'ZJets':ROOT.kYellow-7,'WJets':ROOT.kGreen-3,'singleTop':ROOT.kCyan-7,'ttbar':ROOT.kBlue-7,'VV':ROOT.kGray+2,'VZ':ROOT.kRed-7}
-backgroundLineColors={'QCD':ROOT.kMagenta+1,'ZJets':ROOT.kYellow-4,'WJets':ROOT.kGreen-2,'singleTop':ROOT.kCyan-3,'ttbar':ROOT.kBlue-3,'VV':ROOT.kGray+3,'VZ':ROOT.kRed-4}
+plotBackgrounds=['ZJets','W_light','W_b','W_bb','singleTop','ttbar','VV','VZ']
+backgroundFillColors={'QCD':ROOT.kMagenta,'ZJets':ROOT.kYellow-7,'W_light':kGreen+2,'W_b':ROOT.kGreen-3,'W_bb':ROOT.kGreen-7,'singleTop':ROOT.kCyan-7,'ttbar':ROOT.kBlue-7,'VV':ROOT.kGray+2,'VZ':ROOT.kRed-7}
+backgroundLineColors={'QCD':ROOT.kMagenta+1,'ZJets':ROOT.kYellow-4,'W_light':kGreen+3,'W_b':ROOT.kGreen-2,'W_bb':ROOT.kGreen-6,'singleTop':ROOT.kCyan-3,'ttbar':ROOT.kBlue-3,'VV':ROOT.kGray+3,'VZ':ROOT.kRed-4}
 
 treeName='tree'
                 
