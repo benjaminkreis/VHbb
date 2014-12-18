@@ -25,7 +25,7 @@ if not os.path.isdir(outputDir): os.system("mkdir -p "+outputDir)
 output=TFile(outputDir+'/plots.root',"RECREATE")
 
 TH1.SetDefaultSumw2(True)
-TGaxis.SetMaxDigits(3)
+TGaxis.SetMaxDigits(4)
 
 class Plot:
 
@@ -187,7 +187,7 @@ class Plot:
                 if showOverflow:   #if we fix the overflow when drawing all histograms, then all the "extraHists" will automatically have overflow taken care of
                     for hName in [Z_light,Z_b,Z_bb]:
                         self.overflow(self.extraHists[hName])
-                
+
                 if normalizeByBinWidth:
                     for hName in [Z_light,Z_b,Z_bb]:
                         self.extraHists[hName]=normByBinWidth(self.extraHists[hName])
@@ -242,7 +242,7 @@ class Plot:
             #output.cd()
             if sample.isMC: sample.h.Scale(self.lumi)
             if showOverflow: self.overflow(sample.h)
-            if normalizeByBinWidth: sample.h=normByBinWidth(sample.h)
+            if normalizeByBinWidth and not isEqual(sample.type,'ZJets'): sample.h=normByBinWidth(sample.h)
             if fillEmptyBins and sample.isBackground: fillBins(sample.h)
 
             #Make histograms for background combinations and fill yield table
@@ -444,7 +444,7 @@ class Plot:
             legend.SetTextFont(42)
             if blind == False:
                 legend.AddEntry(self.extraHists['Data'],"Data")
-            for bName,bLabel in zip(reversed(['QCD','ZJets','WJets','singleTop','ttbar','VV','VZ','ggh']),reversed(['QCD','Z+jets','W+jets','single top','ttbar','VV','VZ','ggZh'])):
+            for bName,bLabel in zip(reversed(['QCD','Z_light','Z_b','Z_bb','WJets','singleTop','ttbar','VV','VZ','ggZh']),reversed(['QCD','Z+udscg','Z+b','Z+bb','W+jets','single top','ttbar','VV','VZ','ggZh'])):
                 try: legend.AddEntry(self.extraHists[bName],bLabel,"f")
                 except: pass
 
@@ -482,7 +482,7 @@ class Plot:
                 #I think this would be correct - JS
                 #for binNo in range(0,self.nBinsX+2):
                 #    if self.extraHists['Total Background'].GetBinContent(binNo)!=0:
-                #        self.pullUncBand.SetBinErorr(binNo,self.extraHists['Total Background'].GetBinError(binNo)/self.extraHists['Total Background'].GetBinContent(binNo)))
+                #        self.pullUncBand.SetBinErorr(binNo,self.extraHists['Data'].GetBinError(binNo)/self.extraHists['Total Background'].GetBinContent(binNo)))
                 self.pull.SetMaximum(3)
                 self.pull.SetMinimum(0)
                 self.pull.SetFillColor(1)
