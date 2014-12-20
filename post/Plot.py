@@ -442,16 +442,15 @@ class Plot:
             legend.SetFillStyle(0)
             legend.SetLineColor(0)
             legend.SetTextFont(42)
-            if blind == False:
-                legend.AddEntry(self.extraHists['Data'],"Data")
             for bName,bLabel in zip(reversed(['QCD','Z_light','Z_b','Z_bb','WJets','singleTop','ttbar','VV','VZ','ggZh']),reversed(['QCD','Z+udscg','Z+b','Z+bb','W+jets','single top','ttbar','VV','VZ','ggZh'])):
                 try: legend.AddEntry(self.extraHists[bName],bLabel,"f")
                 except: pass
-
             for signal in self.signals:
                 if signal in samplesForPlotting:
                     legend.AddEntry(signal.h, signal.altName + " x" + str(signalMagFrac), "l")
-
+            if blind == False:
+                legend.AddEntry(self.extraHists['Data'],"Data")
+                
             legend.AddEntry(self.uncBand , "MC uncert. (stat.)" , "f")
             legend.Draw("SAME")
 
@@ -497,7 +496,7 @@ class Plot:
                 #I think this is correct - JS
                 for binNo in range(0,self.nBinsX+2):
                     if self.extraHists['Total Background'].GetBinContent(binNo)!=0:
-                        self.pullUncBand.SetBinError(binNo,self.extraHists['Total Background'].GetBinError(binNo)/self.extraHists['Total Background'].GetBinContent(binNo)))
+                        self.pullUncBand.SetBinError(binNo,self.extraHists['Total Background'].GetBinError(binNo)/self.extraHists['Total Background'].GetBinContent(binNo))
                 self.pullUncBand.SetFillStyle(3344)
                 self.pullUncBand.SetFillColor(1)
                 self.pullUncBand.SetLineColor(1)
