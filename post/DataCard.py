@@ -61,10 +61,10 @@ flatSystematics=[('lumi_8TeV',{'Wh_125p6_0P':lumiSys,'Wh_125p6_0M':lumiSys,'Zh_1
                  ]
 
 one='1'
-shapeSystematics=[('CMS_scale_j',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
-                  ('CMS_res_j',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
-                  ('CMS_eff_b',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
-                  ('CMS_FakeRate_b',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
+shapeSystematics=[('CMS_vhbb_scale_j',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
+                  ('CMS_vhbb_res_j',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
+                  ('CMS_vhbb_eff_b',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
+                  ('CMS_vhbb_FakeRate_b',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
                   ('CMS_vhbb_wh_ttbar_shape',{'ttbar':one}),
                   ('CMS_vhbb_wh_W_light_shape',{'W_light':one}),
                   ('CMS_vhbb_wh_W_b_shape',{'W_b':one}),
