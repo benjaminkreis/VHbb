@@ -55,10 +55,10 @@ flatSystematics=[('lumi_8TeV',{'Zh_125p6_0P':lumiSys,'Zh_125p6_0M':lumiSys,'VZ':
                  ]
 
 one='1'
-shapeSystematics=[('CMS_scale_j',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggZh':one}),
-                  ('CMS_res_j',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggZh':one}),
-                  ('CMS_eff_b',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggZh':one}),
-                  ('CMS_FakeRate_b',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggZh':one}),
+shapeSystematics=[('CMS_vhbb_scale_j',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggZh':one}),
+                  ('CMS_vhbb_res_j',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggZh':one}),
+                  ('CMS_vhbb_eff_b',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggZh':one}),
+                  ('CMS_vhbb_FakeRate_b',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggZh':one}),
                   ('CMS_vhbb_zh_ttbar_shape',{'ttbar':one}),
                   ('CMS_vhbb_zh_Z_light_shape',{'Z_light':one}),
                   ('CMS_vhbb_zh_Z_b_shape',{'Z_b':one}),

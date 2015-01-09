@@ -481,7 +481,7 @@ class Plot:
                 #I think this is correct - JS
                 for binNo in range(0,self.nBinsX+2):
                     if self.extraHists['Total Background'].GetBinContent(binNo)!=0:
-                        self.pull.SetBinError(binNo,self.extraHists['Data'].GetBinError(binNo)/self.extraHists['Total Background'].GetBinContent(binNo)))
+                        self.pull.SetBinError(binNo,self.extraHists['Data'].GetBinError(binNo)/self.extraHists['Total Background'].GetBinContent(binNo))
                 self.pull.SetMaximum(3)
                 self.pull.SetMinimum(0)
                 self.pull.SetFillColor(1)
