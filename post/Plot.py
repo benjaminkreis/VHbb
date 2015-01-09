@@ -158,7 +158,8 @@ class Plot:
                     theCuts+=' && EVENT.event%2!=0 && EVENT.event%4!=1'
 
                 if sample.isSignal:
-                    weight+=' * weightSignalNLO(genZ.pt)' # SS, 17 Oct 2014                                                                                                                                                                       
+                    weight+=' * weightSignalNLO(genZ.pt)' # SS, 17 Oct 2014
+                    if doFormFactorWeighting and isEqual(sample.name,'Zh_125p6_0M'): weight+=' * weightSignalFormFactor(genZ.pt,genZ.eta,genZ.phi,genZ.mass,genH.pt,genH.eta,genH.phi,genH.mass,Lambda)'                                                                                                                                                                       
             if isEqual(sample.type,'ZJets'):
                 Z_light='Z_light'
                 Z_b='Z_b'

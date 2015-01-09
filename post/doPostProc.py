@@ -79,6 +79,9 @@ showOverflow=True
 
 doShapeComparison=False   #FIXME - not updated
 
+doFormFactorWeighting=True
+Lambda=100.0
+
 elLumi=18940
 muLumi=18940
 
