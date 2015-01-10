@@ -13,7 +13,7 @@ import os,sys
 from array import array
 
 d=os.environ['CMSSW_BASE']
-gROOT.ProcessLine('.L '+d+'/src/VHbb/post/weightSignalNLO.C+')
+gROOT.ProcessLine('.L '+d+'/src/VHbb/post/weightFunctions.C++')
 
 PUWeight='PUweight'
 #trigWeightEl='weightTrig2012SingleEle'
@@ -159,7 +159,7 @@ class Plot:
 
                 if sample.isSignal:
                     weight+=' * weightSignalNLO(genZ.pt)' # SS, 17 Oct 2014
-                    if doFormFactorWeighting and isEqual(sample.name,'Zh_125p6_0M'): weight+=' * weightSignalFormFactor(genZ.pt,genZ.eta,genZ.phi,genZ.mass,genH.pt,genH.eta,genH.phi,genH.mass,Lambda)'                                                                                                                                                                       
+                    if doFormFactorWeighting and isEqual(sample.name,'Zh_125p6_0M'): weight+=' * weightSignalFormFactor(genZ.pt,genZ.eta,genZ.phi,genZ.mass,genH.pt,genH.eta,genH.phi,genH.mass,{0})'.format(Lambda)
             if isEqual(sample.type,'ZJets'):
                 Z_light='Z_light'
                 Z_b='Z_b'
