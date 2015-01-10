@@ -13,7 +13,7 @@ import os,sys
 from array import array
 
 d=os.environ['CMSSW_BASE']
-gROOT.ProcessLine('.L '+d+'/src/VHbb/post/weightFunctions.C+')
+gROOT.ProcessLine('.L '+d+'/src/VHbb/post/weightFunctions.C++')
 #gROOT.ProcessLine('.L '+d+'/src/VHbb/post/weightSignalNLO.C+')
 #gROOT.ProcessLine('.L '+d+'/src/VHbb/post/weightZHSignalNLO.C+')
 
@@ -157,10 +157,10 @@ class Plot:
                     if isEqual(sample.type,'signal'): 
                     	weight+=' * weightSignalNLO(genWstar.pt)' # SS, 17 Oct 2014
                     	weight+=' / 0.3258' # undo BR to leptons that was included in the x-sec (1/BR(W->lnu)) since official samples
-                    	if doFormFactorWeighting and isEqual(sample.name,'Wh_125p6_0M'): weight+=' * weightSignalFormFactor(V.pt,V.eta,V.phi,V.mass,H.pt,H.eta,H.phi,H.mass,Lambda)'
+                    	if doFormFactorWeighting and isEqual(sample.name,'Wh_125p6_0M'): weight+=' * weightSignalFormFactor(V.pt,V.eta,V.phi,V.mass,H.pt,H.eta,H.phi,H.mass,{0})'.format(Lambda)
                     elif isEqual(sample.type,'ZHsignal'): 
                     	weight+=' * weightZHSignalNLO(genZ.pt)'
-                    	if doFormFactorWeighting and isEqual(sample.name,'Zh_125p6_0M'): weight+=' * weightSignalFormFactor(V.pt,V.eta,V.phi,V.mass,H.pt,H.eta,H.phi,H.mass,Lambda)'
+                    	if doFormFactorWeighting and isEqual(sample.name,'Zh_125p6_0M'): weight+=' * weightSignalFormFactor(V.pt,V.eta,V.phi,V.mass,H.pt,H.eta,H.phi,H.mass,{0})'.format(Lambda)
                     else: print "ERROR: unknown signal type"
 
                     weight+=' * weightSignalEWK'
