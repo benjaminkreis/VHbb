@@ -205,15 +205,15 @@ class DataCard:
 
             for channel in self.channels:
                 for process in self.processNames:
-                    if systematic == 'elEff' and channel.name.startswith('Vtype1'):
+                    if systematic == 'CMS_vhbb_eff_e' and channel.name.startswith('Vtype1'):
                     	try: row.append(values[process])
                     	except: row.append(none)
-                    elif systematic == 'elEff' and channel.name.startswith('Vtype0'):
+                    elif systematic == 'CMS_vhbb_eff_e' and channel.name.startswith('Vtype0'):
                     	row.append(none)
-                    elif systematic == 'muEff' and channel.name.startswith('Vtype0'):
+                    elif systematic == 'CMS_vhbb_eff_m' and channel.name.startswith('Vtype0'):
                     	try: row.append(values[process])
                     	except: row.append(none)
-                    elif systematic == 'muEff' and channel.name.startswith('Vtype1'):
+                    elif systematic == 'CMS_vhbb_eff_m' and channel.name.startswith('Vtype1'):
                     	row.append(none)
                     else:
                     	try: row.append(values[process])
@@ -226,8 +226,14 @@ class DataCard:
             row=[systematic,'shape']
             for channel in self.channels:
                 for process in self.processNames:
-                    try: row.append(values[process])
-                    except: row.append(none)
+                    if systematic == 'CMS_vhbb_zh_Z_light_shape' or systematic == 'CMS_vhbb_zh_Z_b_shape' or systematic == 'CMS_vhbb_zh_Z_bb_shape':
+                    	if 'highBoost' in channel.name:
+                    		try: row.append(values[process])
+                    		except: row.append(none)
+                    	else: row.append(none)
+                    else:
+                    	try: row.append(values[process])
+                    	except: row.append(none)
             self.data.append(row)
 
         """

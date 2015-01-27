@@ -13,7 +13,7 @@ import os,sys
 from array import array
 
 d=os.environ['CMSSW_BASE']
-gROOT.ProcessLine('.L '+d+'/src/VHbb/post/weightFunctions.C++')
+gROOT.ProcessLine('.L '+d+'/src/VHbb/post/weightFunctions.C+')
 
 PUWeight='PUweight'
 #trigWeightEl='weightTrig2012SingleEle'
