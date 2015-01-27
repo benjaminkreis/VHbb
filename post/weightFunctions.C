@@ -26,3 +26,15 @@ double weightZHSignalNLO(double pt){
   if(pt>400) pt=400;
   return p0+p1*pt+p2*pow(pt,2)+p3*pow(pt,3);
 }
+
+double weightWpt_for_WJets(double pt){
+  double wptslope = -1.057e-03;
+
+  return 1.0+wptslope*(pt-170.0);
+}
+
+double weightWpt_for_TTbar(double pt){
+  double ttwptslope = -1.087e-03;
+
+  return 1.0+ttwptslope*(pt-170.0);
+}

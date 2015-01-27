@@ -13,9 +13,7 @@ import os,sys
 from array import array
 
 d=os.environ['CMSSW_BASE']
-gROOT.ProcessLine('.L '+d+'/src/VHbb/post/weightFunctions.C++')
-#gROOT.ProcessLine('.L '+d+'/src/VHbb/post/weightSignalNLO.C+')
-#gROOT.ProcessLine('.L '+d+'/src/VHbb/post/weightZHSignalNLO.C+')
+gROOT.ProcessLine('.L '+d+'/src/VHbb/post/weightFunctions.C+')
 
 PUWeight='PUweight'
 #trigWeightEl='weightTrig2012SingleEle'
@@ -38,13 +36,11 @@ class Plot:
         self.is1D=not self.is2D
 
         if self.binsX:
-            print "binsX =",binsX
             self.nBinsX=len(self.binsX)-1
             self.xMin=self.binsX[0]
             self.xMax=self.binsX[-1]
 
             if self.is2D:
-                print "binsY =",binsY
                 self.nBinsY=len(self.binsY)-1
                 self.yMin=self.binsY[0]
                 self.yMax=self.binsY[-1]
@@ -137,8 +133,8 @@ class Plot:
                 theCuts = theCuts.replace('(!(207883<=EVENT.run && EVENT.run<=208307))','1')
                 weight+=' * '+PUWeight 
                 weight+=' * '+self.trigWeight
-                if isEqual(sample.type,'WJets'): weight+=' * weightWpt_WJets'
-                if isEqual(sample.type,'ttbar'): weight+=' * weightWpt_TTbar'
+                if isEqual(sample.type,'WJets'): weight+=' * weightWpt_for_WJets(genWstar.pt)' # SS, 22 Jan 2015, use gen W_pt
+                if isEqual(sample.type,'ttbar'): weight+=' * weightWpt_for_TTbar(genWstar.pt)' # SS, 22 Jan 2015, use gen W_pt
                 weight+=' * weightEleTrigger'  #Why are we applying this weight to muon channel? JS
 
                 if doBDT and not sample.isSignal:
@@ -157,10 +153,10 @@ class Plot:
                     if isEqual(sample.type,'signal'): 
                     	weight+=' * weightSignalNLO(genWstar.pt)' # SS, 17 Oct 2014
                     	weight+=' / 0.3258' # undo BR to leptons that was included in the x-sec (1/BR(W->lnu)) since official samples
-                    	if doFormFactorWeighting and isEqual(sample.name,'Wh_125p6_0M'): weight+=' * weightSignalFormFactor(V.pt,V.eta,V.phi,V.mass,H.pt,H.eta,H.phi,H.mass,{0})'.format(Lambda)
+                    	if doFormFactorWeighting and isEqual(sample.name,'Wh_125p6_0M'): weight+=' * weightSignalFormFactor(genWstar.pt,genWstar.eta,genWstar.phi,genWstar.mass,genH.pt,genH.eta,genH.phi,genH.mass,{0})'.format(Lambda)
                     elif isEqual(sample.type,'ZHsignal'): 
                     	weight+=' * weightZHSignalNLO(genZ.pt)'
-                    	if doFormFactorWeighting and isEqual(sample.name,'Zh_125p6_0M'): weight+=' * weightSignalFormFactor(V.pt,V.eta,V.phi,V.mass,H.pt,H.eta,H.phi,H.mass,{0})'.format(Lambda)
+                    	if doFormFactorWeighting and isEqual(sample.name,'Zh_125p6_0M'): weight+=' * weightSignalFormFactor(genZ.pt,genZ.eta,genZ.phi,genZ.mass,genH.pt,genH.eta,genH.phi,genH.mass,{0})'.format(Lambda)
                     else: print "ERROR: unknown signal type"
 
                     weight+=' * weightSignalEWK'

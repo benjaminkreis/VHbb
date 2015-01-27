@@ -212,15 +212,15 @@ class DataCard:
             
             for channel in self.channels:
                 for process in self.processNames:
-                    if systematic == 'elEff' and channel.name.startswith('Vtype3'):
+                    if systematic == 'CMS_vhbb_eff_e' and channel.name.startswith('Vtype3'):
                     	try: row.append(values[process])
                     	except: row.append(none)
-                    elif systematic == 'elEff' and channel.name.startswith('Vtype2'):
+                    elif systematic == 'CMS_vhbb_eff_e' and channel.name.startswith('Vtype2'):
                     	row.append(none)
-                    elif systematic == 'muEff' and channel.name.startswith('Vtype2'):
+                    elif systematic == 'CMS_vhbb_eff_m' and channel.name.startswith('Vtype2'):
                     	try: row.append(values[process])
                     	except: row.append(none)
-                    elif systematic == 'muEff' and channel.name.startswith('Vtype3'):
+                    elif systematic == 'CMS_vhbb_eff_m' and channel.name.startswith('Vtype3'):
                     	row.append(none)
                     else:
                     	try: row.append(values[process])
