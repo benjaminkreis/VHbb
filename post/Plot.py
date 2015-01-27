@@ -254,23 +254,23 @@ class Plot:
 
         #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #Systematics
-        """
-        #Statistical
-        if doStatSys or doAllSys:
-            for sample in samples:
-                try: histName=sample.h.GetName()
-                except: continue
-                if contains(histName,'data') or contains(histName,'total back') or contains(histName,'up') or contains(histName,'down') or contains(histName,'shape'): continue   #Only calculate for nominal backgrounds - this is dangerous, 'up' could accidentally match a lot of things
-                if sample.isSignal: ID=sample.name.split('_')[-1]
-                else: ID=sample.name
-                self.makeStat(sample.h,ID)
 
-            for histName in self.extraHists.keys():
-                
-                if contains(histName,'data') or contains(histName,'total back') or contains(histName,'up') or contains(histName,'down') or contains(histName,'shape'): continue   #Only calculate for nominal backgrounds - this is dangerous, 'up' could accidentally match a lot of things
-                ID=histName
-                self.makeStat(self.extraHists[histName],ID)
-        """
+        #Force Z+Jets and ttbar systematic integrals to nominal values
+        for histName in self.extraHists.keys():
+            try:
+                if self.extraHists.has_key('ZJets'):  #Sometimes I skip WJets for speed - JS
+                    if contains(histName,'Z_light_'):
+                        self.extraHists[histName].Scale(self.integral(self.extraHists['Z_light'])/self.integral(self.extraHists[histName]))
+                    elif contains(histName,'Z_b_'):
+                        self.extraHists[histName].Scale(self.integral(self.extraHists['Z_b'])/self.integral(self.extraHists[histName]))
+                    elif contains(histName,'Z_bb_'):
+                        self.extraHists[histName].Scale(self.integral(self.extraHists['Z_bb'])/self.integral(self.extraHists[histName]))
+                if self.extraHists.has_key('ttbar'):
+                    if contains(histName,'ttbar_'):
+                        self.extraHists[histName].Scale(self.integral(self.extraHists['ttbar'])/self.integral(self.extraHists[histName]))
+            except:
+                print histName, self.extraHists[histName], self.integral(self.extraHists[histName])                                                                                         
+                                
         #Z+Jets and ttbar shape
         if doZJetsShapeSys or doTTbarShapeSys or doAllSys:
             shapeSamples=[]
@@ -287,7 +287,7 @@ class Plot:
                 down=up.Clone(up.GetName().replace('Up','Down'))
 
                 #Force Z+Jets and ttbar systematic integrals to nominal values
-                up.Scale(self.integral(nominal)/self.integral(up))
+                #up.Scale(self.integral(nominal)/self.integral(up))
 
                 #symmeterize
                 if self.is1D:
