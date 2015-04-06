@@ -10,13 +10,13 @@ defaultDistribution='mainBDT_v_VstarMass_bdt'
 #defaultDistribution='h_mass_bdt'
 #defaultDistribution='x_mVH_bdt'
 
-defaultSignalNames=['Zh_125p6_0P','Zh_125p6_0M']
+defaultSignalNames=['Zh_125p6_0P','Zh_125p6_0M','ggZh','ggZhTriangleOnly','ggZhBoxOnly']
 defaultBackgroundNames=['Z_light','Z_b','Z_bb',
                  #'ZJets',
                  'ttbar',
                  #'singleTop',
                  #'QCD',
-                 'VZ','VV','ggZh']
+                 'VZ','VV']
 
 none='-'
 lumiSys='1.026'
@@ -37,11 +37,11 @@ ggPDFSys='1.01'
 METSys='1.03' 
 ggZHNormSys='.75/1.35'
 
-flatSystematics=[('lumi_8TeV',{'Zh_125p6_0P':lumiSys,'Zh_125p6_0M':lumiSys,'VZ':lumiSys,'VV':lumiSys,'ggZh':lumiSys}),
-                 ('CMS_vhbb_eff_e',{'Zh_125p6_0P':leptonEffSys,'Zh_125p6_0M':leptonEffSys,'VZ':leptonEffSys,'VV':leptonEffSys,'ggZh':leptonEffSys}),
-                 ('CMS_vhbb_eff_m',{'Zh_125p6_0P':leptonEffSys,'Zh_125p6_0M':leptonEffSys,'VZ':leptonEffSys,'VV':leptonEffSys,'ggZh':leptonEffSys}),
+flatSystematics=[('lumi_8TeV',{'Zh_125p6_0P':lumiSys,'Zh_125p6_0M':lumiSys,'VZ':lumiSys,'VV':lumiSys,'ggZh':lumiSys,'ggZhTriangleOnly':lumiSys,'ggZhBoxOnly':lumiSys}),
+                 ('CMS_vhbb_eff_e',{'Zh_125p6_0P':leptonEffSys,'Zh_125p6_0M':leptonEffSys,'VZ':leptonEffSys,'VV':leptonEffSys,'ggZh':leptonEffSys,'ggZhTriangleOnly':leptonEffSys,'ggZhBoxOnly':leptonEffSys}),
+                 ('CMS_vhbb_eff_m',{'Zh_125p6_0P':leptonEffSys,'Zh_125p6_0M':leptonEffSys,'VZ':leptonEffSys,'VV':leptonEffSys,'ggZh':leptonEffSys,'ggZhTriangleOnly':leptonEffSys,'ggZhBoxOnly':leptonEffSys}),
                  ('pdf_qqbar',{'Zh_125p6_0P':qqbarPDFSys,'Zh_125p6_0M':qqbarPDFSys,'VZ':qqbarPDFSys,'VV':qqbarPDFSys}),
-                 ('pdf_gg',{'singleTop':ggPDFSys,'QCD':ggPDFSys,'ggZh':ggPDFSys}),
+                 ('pdf_gg',{'singleTop':ggPDFSys,'QCD':ggPDFSys,'ggZh':ggPDFSys,'ggZhTriangleOnly':ggPDFSys,'ggZhBoxOnly':ggPDFSys}),
                  ('CMS_vhbb_boost_EWK',{'Zh_125p6_0P':signalEWKSys0P,'Zh_125p6_0M':signalEWKSys0M}),
                  ('CMS_vhbb_boost_QCD',{'Zh_125p6_0P':signalQCDSys,'Zh_125p6_0M':signalQCDSys}),
                  ('CMS_vhbb_zh_ZlightNorm',{'Z_light':backgroundNormSys}),
@@ -51,14 +51,14 @@ flatSystematics=[('lumi_8TeV',{'Zh_125p6_0P':lumiSys,'Zh_125p6_0M':lumiSys,'VZ':
                  ('QCDscale_VH',{'Zh_125p6_0P':QCDscale_VHSys,'Zh_125p6_0M':QCDscale_VHSys}),
                  ('QCDscale_VV',{'VZ':QCDscale_VVSys,'VV':QCDscale_VVSys}),
                  ('CMS_vhbb_dibosonNorm',{'VZ':dibosonSys,'VV':dibosonSys}),
-                 ('CMS_vhbb_ggZhNorm',{'ggZh':ggZHNormSys}),
+                 ('CMS_vhbb_ggZhNorm',{'ggZh':ggZHNormSys,'ggZhTriangleOnly':ggZHNormSys,'ggZhBoxOnly':ggZHNormSys}),
                  ]
 
 one='1'
-shapeSystematics=[('CMS_vhbb_scale_j',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggZh':one}),
-                  ('CMS_vhbb_res_j',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggZh':one}),
-                  ('CMS_vhbb_eff_b',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggZh':one}),
-                  ('CMS_vhbb_FakeRate_b',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggZh':one}),
+shapeSystematics=[('CMS_vhbb_scale_j',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggZh':one,'ggZhTriangleOnly':one,'ggZhBoxOnly':one}),
+                  ('CMS_vhbb_res_j',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggZh':one,'ggZhTriangleOnly':one,'ggZhBoxOnly':one}),
+                  ('CMS_vhbb_eff_b',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggZh':one,'ggZhTriangleOnly':one,'ggZhBoxOnly':one}),
+                  ('CMS_vhbb_FakeRate_b',{'Zh_125p6_0P':one,'Zh_125p6_0M':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'VZ':one,'VV':one,'ggZh':one,'ggZhTriangleOnly':one,'ggZhBoxOnly':one}),
                   ('CMS_vhbb_zh_ttbar_shape',{'ttbar':one}),
                   ('CMS_vhbb_zh_Z_light_shape',{'Z_light':one}),
                   ('CMS_vhbb_zh_Z_b_shape',{'Z_b':one}),
