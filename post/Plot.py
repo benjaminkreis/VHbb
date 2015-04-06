@@ -122,14 +122,17 @@ class Plot:
 
             theCuts=cuts[self.Vtype][self.cuts]+' && Vtype=='+str(self.Vtype)
             #if self.boost=='low': theCuts+=' && 100<V.pt && V.pt<130'
-            if self.boost=='med' and self.cuts=='bdt': theCuts+=' && V.pt > 50. && V.pt < 100. && h_HmCorr > 40. && h_HmCorr < 250.'
-            if self.boost=='high' and self.cuts=='bdt': theCuts+=' && V.pt > 100. && h_HmCorr < 250.'
+            if self.boost=='med' and self.cuts=='bdt': theCuts+=' && max(hJet_csvCorr[0],hJet_csvCorr[1]) > 0.5   && V.pt > 50. && V.pt < 100. && h_HmCorr > 40. && h_HmCorr < 250.'
+            if self.boost=='high' and self.cuts=='bdt': theCuts+=' && max(hJet_csvCorr[0],hJet_csvCorr[1]) > 0.244 && V.pt > 100. && h_HmCorr < 250.'
             
             weight='1'
+            if sample.isData:
+            	theCuts += ' && EVENT.json==1 && ( ( Vtype==1 && (triggerFlags[5]>0 || triggerFlags[6]>0) ) || ( Vtype==0 && ( triggerFlags[22]>0 || triggerFlags[23]>0 || triggerFlags[14]>0 || triggerFlags[21]>0 ) ) )'
+            	
             if sample.isMC:
                 #theCuts = theCuts.replace('((EVENT.run<193834 && (triggerFlags[22]>0 || triggerFlags[23]>0)) || (EVENT.run>=193834 && (triggerFlags[14]>0 ||triggerFlags[21]>0)))','1')
                 #theCuts = theCuts.replace('(triggerFlags[44]>0)','1')
-                theCuts = theCuts.replace('(!(207883<=EVENT.run && EVENT.run<=208307))','1')
+                theCuts = theCuts.replace('(EVENT.run < 207883 || EVENT.run > 208307)','1')
                 weight+=' * '+PUWeight 
                 weight+=' * '+self.trigWeight
                 weight+=' * weightMueEff'
@@ -156,6 +159,10 @@ class Plot:
                 if do2ndHalfBDT:
                     weight+=' * 4'
                     theCuts+=' && EVENT.event%2!=0 && EVENT.event%4!=1'
+                    
+                if do13TeVestimate:
+                	weight+=' * 2'
+                	if isEqual(sample.type,'ttbar'): weight+=' * 2'
 
                 if sample.isSignal:
                     weight+=' * weightSignalNLO(genZ.pt)' # SS, 17 Oct 2014
@@ -392,10 +399,10 @@ class Plot:
         yTitle="Events"
         if normalizeByBinWidth:
             yTitle+=' / 1'
-        if  '[' in self.xTitle and ']' in self.xTitle: #get units from x axis title
-            begin=self.xTitle.find('[')+1
-            end=self.xTitle.find(']')
-            yTitle+=self.xTitle[begin:end]
+            if  '[' in self.xTitle and ']' in self.xTitle: #get units from x axis title
+            	begin=self.xTitle.find('[')+1
+            	end=self.xTitle.find(']')
+            	yTitle+=self.xTitle[begin:end]
         self.extraHists['Data'].GetYaxis().SetTitle(yTitle)
         
         self.formatUpperHist(self.extraHists['Data'])

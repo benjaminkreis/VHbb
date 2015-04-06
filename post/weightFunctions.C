@@ -4,7 +4,7 @@ double weightSignalFormFactor(double Vpt,double Veta,double Vphi,double Vmass,do
    TLorentzVector H;
    V.SetPtEtaPhiM(Vpt,Veta,Vphi,Vmass);
    H.SetPtEtaPhiM(Hpt,Heta,Hphi,Hmass);
-   return 1.0/pow(1.0+pow((V+H).M()/Lambda,2),2);
+   return 1.0/(pow(1.0+pow(V.M()/Lambda,2),2)*pow(1.0+pow((V+H).M()/Lambda,2),2));
 }
 
 double weightSignalNLO(double pt){

@@ -1,5 +1,62 @@
 cuts=[{} for i in range(10)]
 
+#!! --------------------------------
+#!! Variables and values definition
+#!! --------------------------------
+CSVT = '0.898'
+CSVM = '0.679'
+CSVC = '0.5'
+CSVL = '0.244'
+minBtag = 'min(hJet_csvCorr[0],hJet_csvCorr[1])'
+maxBtag = 'max(hJet_csvCorr[0],hJet_csvCorr[1])'
+
+#!! --------------------------------
+#!! Single variable cuts
+#!! --------------------------------
+tcBtag = maxBtag + ' > ' + CSVT + ' && ' + minBtag + ' > ' + CSVC
+ntBtag = '!(hJet_csvCorr[0] > ' + CSVT + ' || hJet_csvCorr[1] > ' + CSVT + ')'
+
+twoCSV0 = 'hJet_csvCorr[0] > 0. && hJet_csvCorr[1] > 0.'
+noAddJet = 'Sum$(aJet_pt > 20 && abs(aJet_eta) < 2.4) == 0'
+max1AddJet = 'Sum$(aJet_pt > 20 && abs(aJet_eta) < 2.4) < 2.'
+pullAngle = 'deltaPullAngle < 10. && deltaPullAngle2 < 10.'
+dPhiVH = 'abs(HVdPhi) > 2.9'
+rTight = 'V.pt > 100.' 
+upperHMass = 'h_HmCorr < 250.'
+#trigger    = '( ( Vtype==1 && (triggerFlags[5]>0 || triggerFlags[6]>0) ) || ( Vtype==0 && ( triggerFlags[22]>0 || triggerFlags[23]>0 || triggerFlags[14]>0 || triggerFlags[21]>0 ) ) )'
+
+#!! ---------------------------------
+#!! Windows and windows veto
+#!! ---------------------------------
+zWindow = 'V.mass > 75. && V.mass < 105'
+zVeto =  '(V.mass > 105 || V.mass < 75.)'
+vetoHMass = '(h_HmCorr < 90. || h_HmCorr > 145.)'
+rMed = 'V.pt > 50. && V.pt < 100.'
+looseHMass = 'h_HmCorr > 40. && h_HmCorr < 250.'
+bad_pixels = '(EVENT.run < 207883 || EVENT.run > 208307)'
+
+
+jetPt_cut   = 'hJet_ptCorr[0]>20 && hJet_ptCorr[1]>20'
+jetEta_cut  = 'abs(hJet_eta[0]) < 2.4 && abs(hJet_eta[1])<2.4'
+jetpuID_cut = 'hJet_puJetIdL[0]>0 && hJet_puJetIdL[1]>0'
+hbhe_cut    = 'hbhe'
+#json       = 'EVENT.json==1'
+higgsFlag  = 'H.HiggsFlag==1'
+
+preselection = jetPt_cut + ' && ' + jetEta_cut + ' && ' + hbhe_cut + ' && ' + jetpuID_cut + ' && ' + bad_pixels + ' && ' + higgsFlag
+
+cuts[1]['ZLF']= preselection + ' && ' + noAddJet + ' && ' + zWindow + ' && ' + ntBtag + ' && ' + upperHMass + ' && ' + twoCSV0 + ' && ' + dPhiVH + ' && ' + maxBtag + '>' + CSVL + ' && V.pt > 50.' + ' && Vtype == 1' # ee
+cuts[0]['ZLF']= preselection + ' && ' + noAddJet + ' && ' + zWindow + ' && ' + ntBtag + ' && ' + upperHMass + ' && ' + twoCSV0 + ' && ' + dPhiVH + ' && ' + maxBtag + '>' + CSVL + ' && V.pt > 50.' + ' && Vtype == 0' # mumu
+cuts[1]['ttbar'] = preselection + ' && ' + upperHMass + ' && ' + tcBtag + ' && ' + zVeto + ' && H.pt > 100.' + ' && Vtype == 1'
+cuts[0]['ttbar'] = preselection + ' && ' + upperHMass + ' && ' + tcBtag + ' && ' + zVeto + ' && H.pt > 100.' + ' && Vtype == 0'
+cuts[1]['ZHF']   = preselection + ' && ' + vetoHMass + ' && ' + zWindow + ' && ' + upperHMass + ' && ' + tcBtag + ' && ' + max1AddJet + ' && ' + dPhiVH + ' && Vtype == 1'
+cuts[0]['ZHF']   = preselection + ' && ' + vetoHMass + ' && ' + zWindow + ' && ' + upperHMass + ' && ' + tcBtag + ' && ' + max1AddJet + ' && ' + dPhiVH + ' && Vtype == 0'
+cuts[1]['bdt']   = preselection + ' && ' + minBtag + ' > ' + CSVL + ' && ' + zWindow + ' && ' + pullAngle + ' && Vtype == 1'
+cuts[0]['bdt']   = preselection + ' && ' + minBtag + ' > ' + CSVL + ' && ' + zWindow + ' && ' + pullAngle + ' && Vtype == 0'
+
+"""
+cuts=[{} for i in range(10)]
+
 jetPt_cut   = 'hJet_ptCorr[0]>20 && hJet_ptCorr[1]>20'
 jetEta_cut  = 'abs(hJet_eta[0]) < 2.4 && abs(hJet_eta[1])<2.4'
 jetpuID_cut = 'hJet_puJetIdL[0]>0 && hJet_puJetIdL[1]>0'
@@ -45,4 +102,4 @@ cuts[1]['ZHF']   = preselection + ' && ' + vetoHMass + ' && ' + tcBtag + ' && ' 
 cuts[0]['ZHF']   = preselection + ' && ' + vetoHMass + ' && ' + tcBtag + ' && ' + max1AddJet + ' && ' + dPhiVH + ' && Vtype == 0'
 cuts[1]['bdt']   = preselection + ' && (( V.pt < 100 && ' + maxBtag + ' > ' + CSVC + ')||( V.pt > 100 && ' + maxBtag + ' > ' + CSVL + ')) && ' + minBtag + ' > ' + CSVL + ' && ' + zWindow + ' && ' + pullAngle + ' && Vtype == 1'
 cuts[0]['bdt']   = preselection + ' && (( V.pt < 100 &&' + maxBtag + ' > ' + CSVC + ')||( V.pt > 100 && ' + maxBtag + ' > ' + CSVL + ')) && ' + minBtag + ' > ' + CSVL + ' && ' + zWindow + ' && ' + pullAngle + ' && Vtype == 0'
-
+"""

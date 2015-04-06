@@ -117,8 +117,8 @@ if __name__ == "__main__":
 
     threshold = 15 # cut on binError/binContent in %
     thresholdBG = 7 # cut on binError/binContent_TotalBackground in %
-    prefix = "/uscms_data/d3/ssagir/ZllHbbAnalysis/CMSSW_5_3_6/src/VHbb/post"
-    prefix += "/plots/BDTvsMVh_uniformCoarserp_globalbox_rebinned2_official_120414_unrolled_fixed/"
+    prefix = "/uscms_data/d3/ssagir/ZllHbbAnalysis/CMSSW_5_3_6/src/VHbb/post/plots"
+    prefix += "/BDT_hypoTestBinning_official_unblinded_022715/"
     inputRfile = prefix+"plots.root"
     outputRfile = prefix+"plots_statUnc%(threshold)s_bg%(thresholdBG)s.root" %locals()
     inputDataCard = prefix+"dataCard.txt"

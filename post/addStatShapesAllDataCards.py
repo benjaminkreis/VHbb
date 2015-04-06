@@ -64,8 +64,8 @@ def main(inputDCfile, inputDCfile0P, outputDCfile0P, inputDCfile0M, outputDCfile
 	printTable(data0M,out0M)
 
 if __name__ == "__main__":
-	prefix = "/uscms_data/d3/ssagir/ZllHbbAnalysis/CMSSW_5_3_6/src/VHbb/post"
-	prefix += "/plots/BDTvsMVh_uniformCoarserp_globalbox_rebinned2_official_120414_unrolled_fixed/"
+	prefix = "/uscms_data/d3/ssagir/ZllHbbAnalysis/CMSSW_5_3_6/src/VHbb/post/plots"
+	prefix += "/BDT_hypoTestBinning_official_unblinded_022715/"
 	inputDCfile = prefix+"dataCard_statUnc15_bg7.txt"
 	inputDCfile0P = prefix+"dataCard_0P.txt"
 	inputDCfile0M = prefix+"dataCard_0M.txt"

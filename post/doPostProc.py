@@ -33,13 +33,13 @@ else:
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 #SETTINGS
 
-DEBUG=False
+DEBUG=True
 
 fillEmptyBins=False
-blind=True#False
+blind=False ###?###
 applyNormSFs=True
-unroll2D=True
-normalizeByBinWidth=False#True
+unroll2D=False ###?###
+normalizeByBinWidth=False ###?###
 
 doBDT=True
 do1stHalfBDT=False
@@ -49,7 +49,7 @@ doCutTable=False
 doTheta=False
 makeDataCard=True
 
-doAllSys=True#False
+doAllSys=True ###?###
 doJECSys=False
 doJERSys=False
 doBTagSys=False
@@ -66,24 +66,32 @@ doCuts=[
     ]
 
 doVtypes=[
-    #0,
-    1,
+    0,
+    1
     ]
 
 doBoosts=[
     'med',
-    #'high'
+    'high'
     ]
 
 showOverflow=True
 
 doShapeComparison=False   #FIXME - not updated
 
-doFormFactorWeighting=False#True
+doFormFactorWeighting=False ###?###
 Lambda=10000
 
-elLumi=18940
-muLumi=18940
+do13TeVestimate=False ###?###
+lumi13TeV=300000
+
+if not do13TeVestimate:
+	elLumi=18940
+	muLumi=18940
+	
+if do13TeVestimate:
+	elLumi=lumi13TeV
+	muLumi=lumi13TeV
 
 sigmaFracUnc={}
 sigmaFracUnc['VZ']=0.2
@@ -96,7 +104,7 @@ sigmaFracUnc['QCD']=0.25
 sigmaFracUnc['ggZh']=0.2
 lumiFracUnc=.026   #2.6% for 8 TeV, 2.2% for 7 TeV (Jia Fu)
 
-signalMagFrac=20
+signalMagFrac=120
 
 plotBackgrounds=['Z_light','Z_b','Z_bb','ttbar','VV','VZ','ggZh']
 backgroundFillColors={'Z_light':ROOT.kYellow-7,'Z_b':ROOT.kYellow-3,'Z_bb':ROOT.kYellow+2,'WJets':ROOT.kGreen-3,'singleTop':ROOT.kCyan-7,'ttbar':ROOT.kBlue-7,'VV':ROOT.kGray+2,'VZ':ROOT.kRed-7,'ggZh':kOrange+1}
@@ -152,12 +160,18 @@ if __name__=='__main__':
 				#Plot(name='x_mVh',distribution='h_MVHCorr',nBinsX=30,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=1,boost='med'),
 				#Plot(name='x_mVh',distribution='h_MVHCorr',nBinsX=30,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=0,boost='high'),
 				#Plot(name='x_mVh',distribution='h_MVHCorr',nBinsX=30,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=1,boost='high'),
+
+				# mVh uniform binning
+				Plot(name='x_mVh',distribution='h_MVHCorr',nBinsX=100,xMin=0,xMax=2000,xTitle='m(Vh) [GeV]',yLog=False,cuts=cuts,Vtype=0,boost='med'),
+				Plot(name='x_mVh',distribution='h_MVHCorr',nBinsX=100,xMin=0,xMax=2000,xTitle='m(Vh) [GeV]',yLog=False,cuts=cuts,Vtype=1,boost='med'),
+				Plot(name='x_mVh',distribution='h_MVHCorr',nBinsX=100,xMin=0,xMax=2000,xTitle='m(Vh) [GeV]',yLog=False,cuts=cuts,Vtype=0,boost='high'),
+				Plot(name='x_mVh',distribution='h_MVHCorr',nBinsX=100,xMin=0,xMax=2000,xTitle='m(Vh) [GeV]',yLog=False,cuts=cuts,Vtype=1,boost='high'),
 			
 				# BDT uniform binning
-				#Plot(name='h_bdtCorr',distribution='h_bdtmCorr',binsX=linspace(-1,1,20).tolist(),xTitle='BDT',yLog=True,cuts=cuts,Vtype=0,boost='med'),
-				#Plot(name='h_bdtCorr',distribution='h_bdtmCorr',binsX=linspace(-1,1,20).tolist(),xTitle='BDT',yLog=True,cuts=cuts,Vtype=1,boost='med'),			
-				#Plot(name='h_bdtCorr',distribution='h_bdttCorr',binsX=linspace(-1,1,20).tolist(),xTitle='BDT',yLog=True,cuts=cuts,Vtype=0,boost='high'),
-				#Plot(name='h_bdtCorr',distribution='h_bdttCorr',binsX=linspace(-1,1,20).tolist(),xTitle='BDT',yLog=True,cuts=cuts,Vtype=1,boost='high'),
+				#Plot(name='h_bdtCorr',distribution='h_bdtmCorr',binsX=linspace(-1,1,16).tolist(),xTitle='BDT',yLog=False,cuts=cuts,Vtype=0,boost='med'),
+				#Plot(name='h_bdtCorr',distribution='h_bdtmCorr',binsX=linspace(-1,1,16).tolist(),xTitle='BDT',yLog=False,cuts=cuts,Vtype=1,boost='med'),			
+				#Plot(name='h_bdtCorr',distribution='h_bdttCorr',binsX=linspace(-1,1,16).tolist(),xTitle='BDT',yLog=False,cuts=cuts,Vtype=0,boost='high'),
+				#Plot(name='h_bdtCorr',distribution='h_bdttCorr',binsX=linspace(-1,1,16).tolist(),xTitle='BDT',yLog=False,cuts=cuts,Vtype=1,boost='high'),
 
 				# mVh hypothesis testing binning
 				#Plot(name='x_mVh',distribution='h_MVHCorr',binsX=[0.0, 200.0, 250.0, 300.0, 350.0, 400.0, 450.0, 500.0, 1200.0],xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=0,boost='med'),
@@ -205,7 +219,7 @@ if __name__=='__main__':
 
 				#Zll mVh uniformCoarser global box rebinned2 (the real deal)
                 #Plot(name='mainBDT_v_VstarMass', distribution='h_bdtmCorr:h_MVHCorr',binsX=[0.0, 200.0, 250.0, 300.0, 350.0, 400.0, 450.0, 500.0, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.75, -0.6666666666666666, -0.5833333333333334, -0.5, -0.4166666666666667, -0.33333333333333337, -0.25, -0.16666666666666674, -0.08333333333333337, 0.0, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=0,boost='med'),
-                Plot(name='mainBDT_v_VstarMass', distribution='h_bdtmCorr:h_MVHCorr',binsX=[0.0, 200.0, 250.0, 300.0, 350.0, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.75, -0.6666666662151164, -0.5833333324302327, -0.499999998645349, -0.41666666486046533, -0.33333333107558166, -0.249999997290698, -0.16666666350581427, -0.08333332972093066, 4.063952951938177e-09, 0.08333333784883667, 0.1666666716337204, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=1,boost='med'),
+                #Plot(name='mainBDT_v_VstarMass', distribution='h_bdtmCorr:h_MVHCorr',binsX=[0.0, 200.0, 250.0, 300.0, 350.0, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.75, -0.6666666662151164, -0.5833333324302327, -0.499999998645349, -0.41666666486046533, -0.33333333107558166, -0.249999997290698, -0.16666666350581427, -0.08333332972093066, 4.063952951938177e-09, 0.08333333784883667, 0.1666666716337204, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=1,boost='med'),
 				#Plot(name='mainBDT_v_VstarMass', distribution='h_bdttCorr:h_MVHCorr',binsX=[0.0, 350.0, 400.0, 450.0, 500.0, 550.0, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.5833333134651184, -0.49999998103488574, -0.4166666486046531, -0.33333331617442047, -0.2499999837441878, -0.16666665131395514, -0.08333331888372253, 1.3546510135853396e-08, 0.0833333459767428, 0.16666667840697547, 0.25000001083720813, 0.3333333432674408, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=0,boost='high'),
 				#Plot(name='mainBDT_v_VstarMass', distribution='h_bdttCorr:h_MVHCorr',binsX=[0.0, 300.0, 350.0, 400.0, 450.0, 500.0, 550.0, 600.0, 1200.0],xTitle='m(Vh) [GeV]',binsY=[-1.0, -0.5833333134651184, -0.4999999821186066, -0.41666665077209475, -0.33333331942558286, -0.24999998807907103, -0.1666666567325592, -0.08333332538604732, 5.960464455334602e-09, 0.08333333730697634, 0.16666666865348823, 0.25, 1.0],yTitle='BDT',yLog=False,cuts=cuts,Vtype=1,boost='high'),
 							
