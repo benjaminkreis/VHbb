@@ -229,8 +229,8 @@ class Plot:
                 logFile.close()
 
             elif isEqual(sample.type,'ggZH'):
-                B=sample.h.GetName().split('__')[1]+'BoxOnly'
-                T=sample.h.GetName().split('__')[1]+'TriangleOnly'
+                B=sample.h.GetName().split('__')[1].replace('ggZeeh','ggZeehBoxOnly').replace('ggZmmh','ggZmmhBoxOnly')
+                T=sample.h.GetName().split('__')[1].replace('ggZeeh','ggZeehTriangleOnly').replace('ggZmmh','ggZmmhTriangleOnly')
 
                 self.extraHists[B]=self.newHist(B)
                 self.extraHists[T]=self.newHist(T)
