@@ -19,8 +19,8 @@ try: distribution=argv[2]
 except: distribution=None
 
 #            0P signif/excl          0M signif/exlc         fa3 (combo)
-signals=    [['Wh_125p6_0P']       ,['Wh_125p6_0M']       ,defaultSignalNames+['Zh_125p6_0P','Zh_125p6_0M']]
-backgrounds=[defaultBackgroundNames,defaultBackgroundNames,[x for x in defaultBackgroundNames if x != 'Zh_125p6_0P']]
+signals=    [['Wh_125p6_0P']       ,['Wh_125p6_0M']       ,defaultSignalNames+['Zh_125p6_0P','Zh_125p6_0M','ggZh','ggZhTriangleOnly','ggZhBoxOnly']]
+backgrounds=[defaultBackgroundNames,defaultBackgroundNames,[x for x in defaultBackgroundNames if x != 'Zh_125p6_0P' and x != 'ggZh']]
 cardNames=  ['dataCard_0P'         ,'dataCard_0M'         ,'dataCard_combo']
 
 for signal,background,cardName in zip(signals,backgrounds,cardNames):

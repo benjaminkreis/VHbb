@@ -15,6 +15,8 @@ from array import array
 d=os.environ['CMSSW_BASE']
 gROOT.ProcessLine('.L '+d+'/src/VHbb/post/weightFunctions.C+')
 
+gROOT.ProcessLine('.L '+d+'/src/VHbb/post/ggZHWeight.C+');
+
 PUWeight='PUweight'
 #trigWeightEl='weightTrig2012SingleEle'
 #trigWeightMu='weightTrig2012SingleMuon'
@@ -244,6 +246,24 @@ class Plot:
                 self.extraHists[Z_b].Scale(self.lumi)
                 self.extraHists[Z_bb].Scale(self.lumi)
 
+            elif isEqual(sample.type,'ggZH'):
+                B=sample.h.GetName().split('__')[1].replace('ggZeeh','ggZeehBoxOnly').replace('ggZmmh','ggZmmhBoxOnly')
+                T=sample.h.GetName().split('__')[1].replace('ggZeeh','ggZeehTriangleOnly').replace('ggZmmh','ggZmmhTriangleOnly')
+                
+                self.extraHists[B]=self.newHist(B)
+                self.extraHists[T]=self.newHist(T)
+                
+                print self.distribution+">>"+sample.h.GetName(),weight+' * '+scaleFactor+' * ('+theCuts+')'
+                val = sample.chain.Draw(self.distribution+">>"+sample.h.GetName(),weight+' * '+scaleFactor+' * ('+theCuts+')','GOFF')
+                print self.distribution+">>"+self.extraHists[B].GetName(),'getBoxWeight(genZ.pt,genZ.eta,genZ.phi,genZ.mass,genH.pt,genH.eta,genH.phi,genH.mass) * '+weight+' * '+scaleFactor+' * ('+theCuts+')'
+                valB = sample.chain.Draw(self.distribution+">>"+self.extraHists[B].GetName(),'getBoxWeight(genZ.pt,genZ.eta,genZ.phi,genZ.mass,genH.pt,genH.eta,genH.phi,genH.mass) * '+weight+' * '+scaleFactor+' * ('+theCuts+')','GOFF')
+                print self.distribution+">>"+self.extraHists[T].GetName(),'getTriangleWeight(genZ.pt,genZ.eta,genZ.phi,genZ.mass,genH.pt,genH.eta,genH.phi,genH.mass) * '+weight+' * '+scaleFactor+' * ('+theCuts+')'
+                valT = sample.chain.Draw(self.distribution+">>"+self.extraHists[T].GetName(),'getTriangleWeight(genZ.pt,genZ.eta,genZ.phi,genZ.mass,genH.pt,genH.eta,genH.phi,genH.mass) * '+weight+' * '+scaleFactor+' * ('+theCuts+')','GOFF')
+                print val,valB,valT
+                
+                self.extraHists[B].Scale(self.lumi)
+                self.extraHists[T].Scale(self.lumi)
+                
             else:
                 if isEqual(sample.type,'ttbar') and applyNormSFs: scaleFactor=str(scaleFactors[self.boost]['ttbar'])
                 else: scaleFactor='1'
@@ -297,6 +317,17 @@ class Plot:
                         self.extraHists[histName].Scale(self.integral(self.extraHists['ttbar'])/self.integral(self.extraHists[histName]))
             except:
                 print histName, self.extraHists[histName], self.integral(self.extraHists[histName])
+
+            if 'ggZmmhTriangleOnly' in histName:
+                name=histName.replace('Zmm','Z')
+                self.extraHists[name]=self.newHist(name)
+                self.extraHists[name].Add(self.extraHists[histName])
+                self.extraHists[name].Add(self.extraHists[histName.replace('Zmm','Zee')])
+            if 'ggZmmhBoxOnly' in histName:
+                name=histName.replace('Zmm','Z')
+                self.extraHists[name]=self.newHist(name)
+                self.extraHists[name].Add(self.extraHists[histName])
+                self.extraHists[name].Add(self.extraHists[histName.replace('Zmm','Zee')])
                                 
         #W+Jets and ttbar shape
         if doWJetsShapeSys or doTTbarShapeSys or doAllSys:
