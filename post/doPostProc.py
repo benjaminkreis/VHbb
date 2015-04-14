@@ -38,10 +38,10 @@ else:
 DEBUG=False
 
 fillEmptyBins=False
-blind=True#False
+blind=False ###?###
 applyNormSFs=True
-unroll2D=True
-normalizeByBinWidth=False#True
+unroll2D=False ###?###
+normalizeByBinWidth=False ###?###
 
 doBDT=True
 do1stHalfBDT=False
@@ -51,7 +51,7 @@ doCutTable=False
 doTheta=False
 makeDataCard=True
 
-doAllSys=True#False
+doAllSys=True ###?###
 doJECSys=False
 doJERSys=False
 doBTagSys=False
@@ -89,7 +89,6 @@ BDTStitching="""(({3}+BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4)*(BDT_8Te
 ((4+{3}+BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4)*((BDT_8TeV_H125Sig_NewTTbarBkg_newCuts4>{0})*(BDT_8TeV_H125Sig_0b1b2bWjetsBkg_newCuts4>{1})*(BDT_8TeV_H125Sig_VVBkg_newCuts4<{2})))+\
 ((6+{3}+BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4)*((BDT_8TeV_H125Sig_NewTTbarBkg_newCuts4>{0})*(BDT_8TeV_H125Sig_0b1b2bWjetsBkg_newCuts4>{1})*(BDT_8TeV_H125Sig_VVBkg_newCuts4>{2})))\
 """.format(cutTTbar,cutWJet,cutVV,offset)
-
 medBoostBDTBins =linspace(-1+offset, -1+offset+0.7, 15).tolist() + [-1+offset+2] + linspace(-1+offset+2+0.45,-1+offset+2+0.9, 10).tolist() +[-1+offset+4] + linspace(-1+offset+4+0.55,-1+offset+4+1, 10).tolist() + [-1+offset+6] + linspace(-1+offset+6+0.6, -1+offset+6+1.1, 11).tolist() + [BDTMax]
 highBoostBDTBins=linspace(-1+offset, -1+offset+0.7, 15).tolist() + [-1+offset+2] + linspace(-1+offset+2+0.45,-1+offset+2+1, 12).tolist() +[-1+offset+4] + linspace(-1+offset+4+0.55,-1+offset+4+1.05, 11).tolist() + [-1+offset+6] + linspace(-1+offset+6+0.6, -1+offset+6+1.2, 13).tolist() + [BDTMax]
 '''
@@ -125,11 +124,19 @@ showOverflow=True
 
 doShapeComparison=False   #FIXME - not updated
 
-doFormFactorWeighting=False#True
+doFormFactorWeighting=False ###?###
 Lambda=10000
 
-elLumi=18940#19040
-muLumi=18940#19040
+do13TeVestimate=False ###?###
+lumi13TeV=1000000000
+
+if not do13TeVestimate:
+	elLumi=18940#19040
+	muLumi=18940#19040
+	
+if do13TeVestimate:
+	elLumi=lumi13TeV
+	muLumi=lumi13TeV
 
 sigmaFracUnc={}
 sigmaFracUnc['VZ']=0.2
@@ -141,7 +148,7 @@ sigmaFracUnc['singleTop']=0.15
 sigmaFracUnc['QCD']=0.25
 lumiFracUnc=.026   #2.6% for 8 TeV, 2.2% for 7 TeV (Jia Fu)
 
-signalMagFrac=20
+signalMagFrac=50
 
 #plotBackgrounds=['QCD','ZJets','WJets','singleTop','ttbar','VV','VZ']
 plotBackgrounds=['ZJets','W_light','W_b','W_bb','singleTop','ttbar','VV','VZ']
@@ -204,6 +211,12 @@ if __name__=='__main__':
 				#Plot(name='x_mVh',distribution='x_mVH',nBinsX=50,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=3,boost='med'),
 				#Plot(name='x_mVh',distribution='x_mVH',nBinsX=50,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=2,boost='high'),
 				#Plot(name='x_mVh',distribution='x_mVH',nBinsX=50,xMin=0,xMax=1200,xTitle='m(Vh) [GeV]',yLog=True,cuts=cuts,Vtype=3,boost='high'),
+
+				# mVh uniform binning
+				#Plot(name='x_mVh',distribution='x_mVH',nBinsX=100,xMin=0,xMax=2000,xTitle='m(Vh) [GeV]',yLog=False,cuts=cuts,Vtype=2,boost='med'),
+				#Plot(name='x_mVh',distribution='x_mVH',nBinsX=100,xMin=0,xMax=2000,xTitle='m(Vh) [GeV]',yLog=False,cuts=cuts,Vtype=3,boost='med'),
+				#Plot(name='x_mVh',distribution='x_mVH',nBinsX=100,xMin=0,xMax=2000,xTitle='m(Vh) [GeV]',yLog=False,cuts=cuts,Vtype=2,boost='high'),
+				#Plot(name='x_mVh',distribution='x_mVH',nBinsX=100,xMin=0,xMax=2000,xTitle='m(Vh) [GeV]',yLog=False,cuts=cuts,Vtype=3,boost='high'),
 			
 				# BDT uniform binning
 				#Plot(name='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg',distribution='BDT_8TeV_H125Sig_LFHFWjetsNewTTbarVVBkg_newCuts4',binsX=linspace(-1,-0.76,4).tolist()+linspace(-0.72,0.04,20).tolist()+[1],xTitle='BDT',yLog=True,cuts=cuts,Vtype=2,boost='low'),
@@ -566,8 +579,6 @@ if __name__=='__main__':
         dataCard.distribution='_'.join(plots[0].name.split('_')[:-2])
         dataCard.construct()
         dataCard.toTxt(cardFile)
-             
-
-
-
-    
+        
+        
+        

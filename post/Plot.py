@@ -148,6 +148,10 @@ class Plot:
                 if do2ndHalfBDT:
                     weight+=' * 4'
                     theCuts+=' && EVENT.event%2!=0 && EVENT.event%4!=1'
+                    
+                if do13TeVestimate: 
+                	weight+=' * 2'
+                	if isEqual(sample.type,'ttbar'): weight+=' * 2'
 
                 if sample.isSignal:
                     if isEqual(sample.type,'signal'): 
@@ -350,7 +354,7 @@ class Plot:
             if self.skip(sample): continue
             
             sample.h.SetLineWidth(4)
-            if isEqual(sample.type,'signal'):
+            if sample.isSignal and not sample.systematic:
                 sample.h.SetLineColor(1)
                 sample.h.SetLineStyle(2+len(self.signals))
                 self.signals.append(sample)
@@ -416,10 +420,10 @@ class Plot:
         yTitle="Events"
         if normalizeByBinWidth:
             yTitle+=' / 1'
-        if '[' in self.xTitle and ']' in self.xTitle: #get units from x axis title
-            begin=self.xTitle.find('[')+1
-            end=self.xTitle.find(']')
-            yTitle+=self.xTitle[begin:end]
+            if '[' in self.xTitle and ']' in self.xTitle: #get units from x axis title
+            	begin=self.xTitle.find('[')+1
+            	end=self.xTitle.find(']')
+            	yTitle+=self.xTitle[begin:end]
         self.extraHists['Data'].GetYaxis().SetTitle(yTitle)
         #self.extraHists['Data'].GetYaxis().SetTitle("Events")
 
