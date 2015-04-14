@@ -37,12 +37,12 @@ ggPDFSys='1.01'
 METSys='1.03'
 ggZHNormSys='.75/1.35'
 
-flatSystematics=[('lumi_8TeV',{'Wh_125p6_0P':lumiSys,'Wh_125p6_0M':lumiSys,'Zh_125p6_0P':lumiSys,'Zh_125p6_0M':lumiSys,'ggZh':lumiSys,'singleTop':lumiSys,'QCD':lumiSys,'VZ':lumiSys,'VV':lumiSys}),
-                 ('CMS_vhbb_eff_e',{'Wh_125p6_0P':leptonEffSys,'Wh_125p6_0M':leptonEffSys,'Zh_125p6_0P':leptonEffSys,'Zh_125p6_0M':leptonEffSys,'ggZh':leptonEffSys,'singleTop':leptonEffSys,'QCD':leptonEffSys,'VZ':leptonEffSys,'VV':leptonEffSys}),
-                 ('CMS_vhbb_eff_m',{'Wh_125p6_0P':leptonEffSys,'Wh_125p6_0M':leptonEffSys,'Zh_125p6_0P':leptonEffSys,'Zh_125p6_0M':leptonEffSys,'ggZh':leptonEffSys,'singleTop':leptonEffSys,'QCD':leptonEffSys,'VZ':leptonEffSys,'VV':leptonEffSys}),
-                 ('CMS_vhbb_MET',{'Wh_125p6_0P':METSys,'Wh_125p6_0M':METSys,'Zh_125p6_0P':METSys,'Zh_125p6_0M':METSys,'ggZh':METSys,'singleTop':METSys,'VZ':METSys,'VV':METSys}),
+flatSystematics=[('lumi_8TeV',{'Wh_125p6_0P':lumiSys,'Wh_125p6_0M':lumiSys,'Zh_125p6_0P':lumiSys,'Zh_125p6_0M':lumiSys,'ggZh':lumiSys,'ggZhTriangleOnly':lumiSys,'ggZhBoxOnly':lumiSys,'singleTop':lumiSys,'QCD':lumiSys,'VZ':lumiSys,'VV':lumiSys}),
+                 ('CMS_vhbb_eff_e',{'Wh_125p6_0P':leptonEffSys,'Wh_125p6_0M':leptonEffSys,'Zh_125p6_0P':leptonEffSys,'Zh_125p6_0M':leptonEffSys,'ggZh':leptonEffSys,'ggZhTriangleOnly':leptonEffSys,'ggZhBoxOnly':leptonEffSys,'singleTop':leptonEffSys,'QCD':leptonEffSys,'VZ':leptonEffSys,'VV':leptonEffSys}),
+                 ('CMS_vhbb_eff_m',{'Wh_125p6_0P':leptonEffSys,'Wh_125p6_0M':leptonEffSys,'Zh_125p6_0P':leptonEffSys,'Zh_125p6_0M':leptonEffSys,'ggZh':leptonEffSys,'ggZhTriangleOnly':leptonEffSys,'ggZhBoxOnly':leptonEffSys,'singleTop':leptonEffSys,'QCD':leptonEffSys,'VZ':leptonEffSys,'VV':leptonEffSys}),
+                 ('CMS_vhbb_MET',{'Wh_125p6_0P':METSys,'Wh_125p6_0M':METSys,'Zh_125p6_0P':METSys,'Zh_125p6_0M':METSys,'ggZh':METSys,'ggZhTriangleOnly':METSys,'ggZhBoxOnly':METSys,'singleTop':METSys,'VZ':METSys,'VV':METSys}),
                  ('pdf_qqbar',{'Wh_125p6_0P':qqbarPDFSys,'Wh_125p6_0M':qqbarPDFSys,'Zh_125p6_0P':qqbarPDFSys,'Zh_125p6_0M':qqbarPDFSys,'VZ':qqbarPDFSys,'VV':qqbarPDFSys}),
-                 ('pdf_gg',{'ggZh':ggPDFSys,'singleTop':ggPDFSys,'QCD':ggPDFSys}),
+                 ('pdf_gg',{'ggZh':ggPDFSys,'ggZhTriangleOnly':ggPDFSys,'ggZhBoxOnly':ggPDFSys,'singleTop':ggPDFSys,'QCD':ggPDFSys}),
                  ('CMS_vhbb_boost_EWK',{'Wh_125p6_0P':signalEWKSys0P,'Wh_125p6_0M':signalEWKSys0M,'Zh_125p6_0P':signalEWKSys0P,'Zh_125p6_0M':signalEWKSys0M}),
                  ('CMS_vhbb_boost_QCD',{'Wh_125p6_0P':signalQCDSys,'Wh_125p6_0M':signalQCDSys,'Zh_125p6_0P':signalQCDSys,'Zh_125p6_0M':signalQCDSys}),
                  ('CMS_vhbb_wh_WlightNorm',{'W_light':backgroundNormSys}),
@@ -57,14 +57,14 @@ flatSystematics=[('lumi_8TeV',{'Wh_125p6_0P':lumiSys,'Wh_125p6_0M':lumiSys,'Zh_1
                  ('QCDscale_VV',{'VZ':QCDscale_VVSys,'VV':QCDscale_VVSys}),
                  ('QCDscale_ttbar',{'singleTop':QCDscale_ttbarSys}),
                  ('CMS_vhbb_dibosonNorm',{'VZ':dibosonSys,'VV':dibosonSys}),
-                 ('CMS_vhbb_ggZhNorm',{'ggZh':ggZHNormSys}),
+                 ('CMS_vhbb_ggZhNorm',{'ggZh':ggZHNormSys,'ggZhTriangleOnly':ggZHNormSys,'ggZhBoxOnly':ggZHNormSys}),
                  ]
 
 one='1'
-shapeSystematics=[('CMS_vhbb_scale_j',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
-                  ('CMS_vhbb_res_j',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
-                  ('CMS_vhbb_eff_b',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
-                  ('CMS_vhbb_FakeRate_b',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
+shapeSystematics=[('CMS_vhbb_scale_j',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'ggZhTriangleOnly':one,'ggZhBoxOnly':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
+                  ('CMS_vhbb_res_j',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'ggZhTriangleOnly':one,'ggZhBoxOnly':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
+                  ('CMS_vhbb_eff_b',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'ggZhTriangleOnly':one,'ggZhBoxOnly':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
+                  ('CMS_vhbb_FakeRate_b',{'Wh_125p6_0P':one,'Wh_125p6_0M':one,'Zh_125p6_0P':one,'Zh_125p6_0M':one,'ggZh':one,'ggZhTriangleOnly':one,'ggZhBoxOnly':one,'W_light':one,'W_b':one,'W_bb':one,'Z_light':one,'Z_b':one,'Z_bb':one,'ttbar':one,'singleTop':one,'QCD':one,'VZ':one,'VV':one}),
                   ('CMS_vhbb_wh_ttbar_shape',{'ttbar':one}),
                   ('CMS_vhbb_wh_W_light_shape',{'W_light':one}),
                   ('CMS_vhbb_wh_W_b_shape',{'W_b':one}),

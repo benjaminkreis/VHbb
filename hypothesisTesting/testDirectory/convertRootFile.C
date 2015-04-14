@@ -17,7 +17,8 @@ void makeNew(TFile * myFile, TString oldname, TString newname) {
   TH1F* h1 = (TH1F*)myFile->Get(oldname);
   TH1F* h2 = (TH1F*)h1->Clone(newname);
   //cout << oldname << " " << h1->Integral() << endl;
-  h2->Write();
+  h2->Write(h2->GetName(),TObject::kOverwrite);
+  h1->Delete();
 }
 
 void renormalize_to_other(TFile * myFile, TString integralHistName, TString changeHistName) {
@@ -26,7 +27,7 @@ void renormalize_to_other(TFile * myFile, TString integralHistName, TString chan
   TH1F* hIntegral = (TH1F*)myFile->Get(integralHistName);
   TH1F* hChange = (TH1F*)myFile->Get(changeHistName);
   hChange->Scale(hIntegral->Integral()/hChange->Integral());
-  hChange->Write();
+  hChange->Write(hChange->GetName(),TObject::kOverwrite);
 }
 
 void renormalize_by_ratio_of_hists(TFile * myFile, TString integralHistName_Numerator, TString integralHistName_Denominator, TString changeHistName) {
@@ -39,7 +40,7 @@ void renormalize_by_ratio_of_hists(TFile * myFile, TString integralHistName_Nume
   TH1F* hChange = (TH1F*)myFile->Get(changeHistName);
   //cout << hChange << endl;
   hChange->Scale(hIntegral_N->Integral()/hIntegral_D->Integral());
-  hChange->Write();
+  hChange->Write(hChange->GetName(),TObject::kOverwrite);
 }
 
 void renormalize_by_factor(TFile * myFile, double factor, TString changeHistName) {
@@ -49,7 +50,7 @@ void renormalize_by_factor(TFile * myFile, double factor, TString changeHistName
   cout << setprecision(15) << " from " << hChange->Integral();
   hChange->Scale(factor);
   cout << setprecision(15) << " to " << hChange->Integral() << endl;
-  hChange->Write();
+  hChange->Write(hChange->GetName(),TObject::kOverwrite);
 }
 
 void convertRootFile(TString sigName = "Wh_125p6_0P", TString sigAltName = "Wh_125p6_0M", double altMu=-1.0, 
@@ -63,13 +64,13 @@ void convertRootFile(TString sigName = "Wh_125p6_0P", TString sigAltName = "Wh_1
 
   std::vector<TString> bad,good;
   bad.push_back("JEC");
-  good.push_back("CMS_scale_j");
+  good.push_back("CMS_vhbb_scale_j");
   bad.push_back("JER");
-  good.push_back("CMS_res_j");
+  good.push_back("CMS_vhbb_res_j");
   bad.push_back("btag");
-  good.push_back("CMS_eff_b");
+  good.push_back("CMS_vhbb_eff_b");
   bad.push_back("mistag");
-  good.push_back("CMS_FakeRate_b");
+  good.push_back("CMS_vhbb_FakeRate_b");
   bad.push_back("ttbarShape_ZH");
   good.push_back("CMS_vhbb_zh_ttbar_shape");
   bad.push_back("ttbarShape");
@@ -94,7 +95,8 @@ void convertRootFile(TString sigName = "Wh_125p6_0P", TString sigAltName = "Wh_1
 
     TString oldName = obj->GetName(); 
     TString newName = oldName;
-
+    
+    /*
     for(int lp=0; lp<bad.size(); lp++){
       if (oldName.Contains(bad[lp])){
         newName.ReplaceAll(bad[lp],good[lp]);
@@ -102,7 +104,8 @@ void convertRootFile(TString sigName = "Wh_125p6_0P", TString sigAltName = "Wh_1
         makeNew(myFile, oldName, newName);
       }
     }
-    
+    */
+
     if( oldName.Contains(sigName) ) {
       if( !(sigName=="Wh_125p6_0P" && oldName.Contains("0PH")) ){ //dirty hack
 	newName.ReplaceAll(sigName,sigNewName);
@@ -122,9 +125,18 @@ void convertRootFile(TString sigName = "Wh_125p6_0P", TString sigAltName = "Wh_1
 	}
       }//dirty hack
     }
+
+    for(int lp=0; lp<bad.size(); lp++){
+      if (oldName.Contains(bad[lp])){
+        newName.ReplaceAll(bad[lp],good[lp]);
+        cout << oldName << " -> " << newName << endl;
+        makeNew(myFile, oldName, newName);
+      }
+    }
     
   }//end loop over keys
-  
+
+  //myFile->Write();
   myFile->Close();
 
 }
